@@ -2,6 +2,7 @@
 Crush it is a time and task management system that is inspired by Franklin-Covey, Free-to-Focus, and Motion planning software. Crush It provides a means of planning each day's tasks, prioritizing work, and giving a history of what has been done.
 
 ## Tech Stack:
+* Main framework: Redwood.js
 * Frontend Framework and Language: React
 * Component Library: Tailwind CSS
 * API (Rest or GraphQL): GraphQL
@@ -15,6 +16,9 @@ Crush it is a time and task management system that is inspired by Franklin-Covey
   * Create branch for every feature --> test changes --> create pull request --> have others review pull request --> merge pull request after approval
   * No committing directly to main!
 * Agile SDLC
-  * Scrum principles with Kanban project boards
+  * Scrum and Kanban principles
+  * Project broken into 4 two-week sprints
+    * Jira timeline, backlog, and board for managing sprint/epic progress and deadlines
+    * GitHub project board for managing code development 
   * High level epics
   * GitHub issue cards for tasks and use cases
