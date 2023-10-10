@@ -11,7 +11,7 @@ Crush it is a time and task management system that is inspired by Franklin-Covey
 * Authentication Model: Firebase
 * Unit Test Frameworks: Jest, Postman (API testing), Playwright (end-to-end testing)
 
-## Project Management:
+## Project Development:
 * GitHub Flow Methodology: [Docs](https://docs.github.com/en/get-started/quickstart/github-flow "GitHub Flow Docs")
   * Create branch for every feature --> test changes --> create pull request --> have others review pull request --> merge pull request after approval
   * No committing directly to main!
