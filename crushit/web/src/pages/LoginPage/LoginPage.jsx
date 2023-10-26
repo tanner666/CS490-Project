@@ -1,5 +1,6 @@
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
+import LoginForm from '../../components/LoginForm/LoginForm';
 
 const LoginPage = () => {
   return (
@@ -7,13 +8,7 @@ const LoginPage = () => {
       <MetaTags title="Login" description="Login page" />
 
       <h1>LoginPage</h1>
-      <p>
-        Find me in <code>./web/src/pages/LoginPage/LoginPage.jsx</code>
-      </p>
-      <p>
-        My default route is named <code>login</code>, link to me with `
-        <Link to={routes.login()}>Login</Link>`
-      </p>
+      <LoginForm/>
     </>
   )
 }
