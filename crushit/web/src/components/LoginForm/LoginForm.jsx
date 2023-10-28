@@ -1,10 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
 
-import { navigate } from '@redwood/router';
-
 import { useAuth } from 'src/auth';
-
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');

@@ -2,7 +2,6 @@
 import React, { useState } from 'react'
 
 import { PrismaClient } from '@prisma/client';
-import { navigate } from '@redwood/router';
 
 import { useAuth } from 'src/auth'
 
