@@ -15,13 +15,22 @@ const RegistrationForm = () => {
   const handleSignUp = async () => {
     try {
       if (email && password && password === confirmPassword) {
-        await signUp({ email, password });
-        await prisma.user.create({
-          data: {
-            email,
+        await signUp({ email, password }); //firebase
+
+        const response = await fetch('/.redwood/functions/userRegistration', { //postgres
+          method: 'POST',
+          body: JSON.stringify({ email, password }),
+          headers: {
+            'Content-Type': 'application/json',
           },
         });
-        navigate('/settings'); // change to home later
+        if (response.ok) {
+
+          const data = await response.json();
+          console.log(data);
+        }
+        console.log('Firebase registration successful');
+        //navigate('/settings'); change to home later
       } else {
         console.error('Invalid form data');
       }

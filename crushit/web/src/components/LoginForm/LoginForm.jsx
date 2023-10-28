@@ -12,7 +12,7 @@ const LoginForm = () => {
     try {
       await signIn({ email, password });
       // Redirect the user to another page after a successful sign-in.
-      navigate('/settings'); // change to home later
+      //navigate('/settings');  change to home later
     } catch (error) {
       console.error('Sign-in error:', error);
     }
