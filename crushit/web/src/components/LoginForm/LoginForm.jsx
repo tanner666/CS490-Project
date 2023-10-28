@@ -1,5 +1,10 @@
+/* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
+
+import { navigate } from '@redwood/router';
+
 import { useAuth } from 'src/auth';
+
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -10,6 +15,7 @@ const LoginForm = () => {
     try {
       await signIn({ email, password });
       // Redirect the user to another page after a successful sign-in.
+      navigate('/settings'); // change to home later
     } catch (error) {
       console.error('Sign-in error:', error);
     }

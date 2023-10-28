@@ -1,34 +1,51 @@
-import { useAuth } from 'src/auth'
+/* eslint-disable prettier/prettier */
 import React, { useState } from 'react'
+
+import { PrismaClient } from '@prisma/client';
+import { navigate } from '@redwood/router';
+
+import { useAuth } from 'src/auth'
 
 const RegistrationForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const { signUp } = useAuth();
+  const prisma = new PrismaClient();
 
   const handleSignUp = async () => {
     try {
-      await signUp({ email, password });
-      // Redirect the user to another page after a successful sign-up.
+      if (email && password && password === confirmPassword) {
+        await signUp({ email, password });
+        await prisma.user.create({
+          data: {
+            email,
+          },
+        });
+        navigate('/settings'); // change to home later
+      } else {
+        console.error('Invalid form data');
+      }
     } catch (error) {
       console.error('Sign-up error:', error);
+    } finally {
+      prisma.$disconnect();
     }
   };
 
-  
-    //break this code down into individual components, like button, text field, etc., adjust tailwind css to get as close 
+
+    //break this code down into individual components, like button, text field, etc., adjust tailwind css to get as close
     //as possible to figma, and write unit tests for everything
     return (
       <div className="min-h-screen bg-gray-100 flex justify-center items-center">
         <div className="bg-white p-8 rounded-lg shadow-md w-96">
           <h1 className="text-3xl font-semibold mb-8 text-center">Sign Up</h1>
-  
+
           <div className="mb-6">
             <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="email">
               Email/username
             </label>
-            <input 
+            <input
               className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
               id="email"
               type="text"
@@ -37,12 +54,12 @@ const RegistrationForm = () => {
               onChange={e => setEmail(e.target.value)}
             />
           </div>
-  
+
           <div className="mb-6">
             <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="password">
               Password
             </label>
-            <input 
+            <input
               className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
               id="password"
               type="password"
@@ -50,12 +67,12 @@ const RegistrationForm = () => {
               onChange={e => setPassword(e.target.value)}
             />
           </div>
-  
+
           <div className="mb-6">
             <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="confirm-password">
               Confirm Password
             </label>
-            <input 
+            <input
               className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
               id="confirm-password"
               type="password"
@@ -63,14 +80,14 @@ const RegistrationForm = () => {
               onChange={e => setConfirmPassword(e.target.value)}
             />
           </div>
-  
+
           <button type="button" className="bg-blue-600 text-white py-2 px-4 rounded w-full mb-6 hover:bg-blue-700 transition duration-150" onClick={handleSignUp}>
             Sign Up
           </button>
-  
+
           <div className="w-80 mx-auto mt-10 border rounded p-4">
             <p className="text-center">
-              Already have an account? 
+              Already have an account?
               <a href="#" className="text-blue-500 ml-1 hover:underline">Sign in Here!</a>
             </p>
           </div>
