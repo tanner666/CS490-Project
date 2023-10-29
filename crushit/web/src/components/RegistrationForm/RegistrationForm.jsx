@@ -1,21 +1,32 @@
 import { useAuth } from 'src/auth'
 import React, { useState } from 'react'
+import { useMutation } from '@redwoodjs/web'
+
+const CREATE_USER_MUTATION = gql`
+  mutation createUser($input: CreateUserInput!) {
+    createUser(input: $input) {
+      email
+      firebaseUid
+    }
+  }`
 
 const RegistrationForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const { signUp } = useAuth();
+  
+  const [createUser] = useMutation(CREATE_USER_MUTATION)
 
   const handleSignUp = async () => {
     try {
-      await signUp({ email, password });
+      const userFB = (await signUp({ email, password })).user
+      const firebaseUid = (await createUser( {variables:{input: { email, firebaseUid: userFB.uid }}} )).data.createUser.firebaseUid
       // Redirect the user to another page after a successful sign-up.
     } catch (error) {
       console.error('Sign-up error:', error);
     }
   };
-
   
     //break this code down into individual components, like button, text field, etc., adjust tailwind css to get as close 
     //as possible to figma, and write unit tests for everything
