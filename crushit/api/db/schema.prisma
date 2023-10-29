@@ -19,10 +19,9 @@ generator client {
 
 model User {
   id        Int             @id @default(autoincrement())
-  username  Int
-  name      String
+  username  String?
+  name      String?
   email     String          @unique
-  passHash  String
   pomodoros PomodoroTimer[]
 }
 
