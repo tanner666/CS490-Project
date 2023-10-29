@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 
-//import { createUser } from 'api/src/services/users/users'
-
 import { useAuth } from 'src/auth'
 
 const RegistrationForm = () => {
@@ -26,6 +24,7 @@ const RegistrationForm = () => {
 
         if (response.ok) {
           console.log('User registration in Prisma successful')
+          //navigate here
         } else {
           console.error('User registration in Prisma failed')
         }
