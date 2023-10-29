@@ -9,17 +9,17 @@ export const handler = async (event) => {
       body: 'Method Not Allowed',
     }
   }
-
   try {
     const data = JSON.parse(event.body)
     const { email } = data
+
+    console.log('Email:', email)
 
     const existingUser = await prisma.user.findFirst({
       where: {
         email: email,
       },
     })
-
     if (existingUser) {
       return {
         statusCode: 400,
@@ -44,5 +44,7 @@ export const handler = async (event) => {
       statusCode: 500,
       body: JSON.stringify({ error: 'Internal Server Error' }),
     }
+  } finally {
+    await prisma.$disconnect()
   }
 }

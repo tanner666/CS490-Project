@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 
+//import { createUser } from 'api/src/services/users/users'
+
 import { useAuth } from 'src/auth'
 
 const RegistrationForm = () => {
@@ -14,9 +16,7 @@ const RegistrationForm = () => {
         // Register with Firebase
         await signUp({ email, password })
         console.log('Firebase registration successful')
-
-        // Insert into the PostgreSQL
-        const response = await fetch('/api/functions/userRegistration', {
+        const response = await fetch('/.redwood/functions/userRegistration', {
           method: 'POST',
           body: JSON.stringify({ email }),
           headers: {
@@ -25,9 +25,9 @@ const RegistrationForm = () => {
         })
 
         if (response.ok) {
-          console.log('PostgreSQL registration successful')
+          console.log('User registration in Prisma successful')
         } else {
-          console.error('PostgreSQL registration failed')
+          console.error('User registration in Prisma failed')
         }
       } else {
         console.error('Invalid form data')
