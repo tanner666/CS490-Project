@@ -1,8 +1,20 @@
+import { signUp } from 'src/auth'
 import React, { useState } from 'react'
+import { useMutation } from '@redwoodjs/web'
+
+const CREATE_USER_MUTATION = gql`
+  mutation createUser($input: CreateUserInput!) {
+    createUser(input: $input) {
+      email
+      firebaseUid
+    }
+  }`
 
 import { useAuth } from 'src/auth'
 
 const RegistrationForm = () => {
+  const [createUser] = useMutation(CREATE_USER_MUTATION)
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [usernameRequired, setUsernameRequired] = useState(false)
@@ -11,7 +23,6 @@ const RegistrationForm = () => {
   const [passwordMatchError, setPasswordMatchError] = useState(false) // New state
   const [registrationSuccess, setRegistrationSuccess] = useState(false)
   const [registrationError, setRegistrationError] = useState(null)
-  const { signUp } = useAuth()
 
   const handleSignUp = async () => {
     // Reset previous messages
@@ -45,7 +56,8 @@ const RegistrationForm = () => {
     }
 
     try {
-      await signUp({ email, password })
+      const userFB = (await signUp(email, password ))
+      const firebaseUid = (await createUser( {variables:{input: { email, firebaseUid: userFB.uid }}} )).data.createUser.firebaseUid
       console.log('Firebase registration successful')
       // Redirect the user to another page after a successful sign-up.
       setRegistrationSuccess(true)
@@ -67,6 +79,7 @@ const RegistrationForm = () => {
         'Registration failed. Please check your credentials.'
       )
     }
+
   }
 
   // Function to check if the password contains characters from two different types
