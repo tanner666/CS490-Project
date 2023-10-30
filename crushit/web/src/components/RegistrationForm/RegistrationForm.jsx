@@ -1,70 +1,86 @@
-import { useAuth } from 'src/auth';
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+
+import { useAuth } from 'src/auth'
 
 const RegistrationForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [usernameRequired, setUsernameRequired] = useState(false);
-  const [passwordRequired, setPasswordRequired] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordMatchError, setPasswordMatchError] = useState(false); // New state
-  const [registrationSuccess, setRegistrationSuccess] = useState(false);
-  const [registrationError, setRegistrationError] = useState(null);
-  const { signUp } = useAuth();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [usernameRequired, setUsernameRequired] = useState(false)
+  const [passwordRequired, setPasswordRequired] = useState(false)
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [passwordMatchError, setPasswordMatchError] = useState(false) // New state
+  const [registrationSuccess, setRegistrationSuccess] = useState(false)
+  const [registrationError, setRegistrationError] = useState(null)
+  const { signUp } = useAuth()
 
   const handleSignUp = async () => {
     // Reset previous messages
-    setUsernameRequired(false);
-    setPasswordRequired(false);
-    setPasswordMatchError(false); // Reset password match error
-    setRegistrationSuccess(false);
-    setRegistrationError(null);
+    setUsernameRequired(false)
+    setPasswordRequired(false)
+    setPasswordMatchError(false) // Reset password match error
+    setRegistrationSuccess(false)
+    setRegistrationError(null)
 
     // Check if email (username) and password are provided
     if (!email) {
-      setUsernameRequired(true);
-      return;
+      setUsernameRequired(true)
+      return
     }
 
     if (!password) {
-      setPasswordRequired(true);
-      return;
+      setPasswordRequired(true)
+      return
     }
 
     // Check if passwords match
     if (password !== confirmPassword) {
-      setPasswordMatchError(true);
-      return;
+      setPasswordMatchError(true)
+      return
     }
 
     // Check password requirements
     if (password.length < 12 || !containsTwoCharacterTypes(password)) {
-      setRegistrationError('Password requirements not met.');
-      return;
+      setRegistrationError('Password requirements not met.')
+      return
     }
 
     try {
-      await signUp({ email, password });
+      await signUp({ email, password })
+      console.log('Firebase registration successful')
       // Redirect the user to another page after a successful sign-up.
-      setRegistrationSuccess(true);
+      setRegistrationSuccess(true)
+      const response = await fetch('/.redwood/functions/userRegistration', {
+        method: 'POST',
+        body: JSON.stringify({ email }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      if (response.ok) {
+        console.log('User registration in Prisma successful')
+      } else {
+        console.error('User registration in Prisma failed')
+      }
     } catch (error) {
-      console.error('Sign-up error:', error);
-      setRegistrationError('Registration failed. Please check your credentials.');
+      console.error('Sign-up error:', error)
+      setRegistrationError(
+        'Registration failed. Please check your credentials.'
+      )
     }
-  };
+  }
 
   // Function to check if the password contains characters from two different types
   const containsTwoCharacterTypes = (password) => {
-    const hasUpper = /[A-Z]/.test(password);
-    const hasLower = /[a-z]/.test(password);
-    const hasNumeric = /[0-9]/.test(password);
-    const hasSpecial = /[!@#$%^&*()_+[\]{};:'",.<>?/\\| -]/.test(password);
+    const hasUpper = /[A-Z]/.test(password)
+    const hasLower = /[a-z]/.test(password)
+    const hasNumeric = /[0-9]/.test(password)
+    const hasSpecial = /[!@#$%^&*()_+[\]{};:'",.<>?/\\| -]/.test(password)
 
-    const characterTypes = [hasUpper, hasLower, hasNumeric, hasSpecial];
-    const typesCount = characterTypes.filter((type) => type).length;
+    const characterTypes = [hasUpper, hasLower, hasNumeric, hasSpecial]
+    const typesCount = characterTypes.filter((type) => type).length
 
-    return typesCount >= 2;
-  };
+    return typesCount >= 2
+  }
 
   return (
     <div className="min-h-screen flex justify-end">
@@ -95,7 +111,10 @@ const RegistrationForm = () => {
         )}
 
         <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="email">
+          <label
+            className="block text-gray-700 text-sm font-medium mb-2"
+            htmlFor="email"
+          >
             Email/username
           </label>
           <input
@@ -112,7 +131,10 @@ const RegistrationForm = () => {
         </div>
 
         <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="password">
+          <label
+            className="block text-gray-700 text-sm font-medium mb-2"
+            htmlFor="password"
+          >
             Password
           </label>
           <input
@@ -128,7 +150,10 @@ const RegistrationForm = () => {
         </div>
 
         <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="confirm-password">
+          <label
+            className="block text-gray-700 text-sm font-medium mb-2"
+            htmlFor="confirm-password"
+          >
             Confirm Password
           </label>
           <input
@@ -161,8 +186,7 @@ const RegistrationForm = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default RegistrationForm;
-
+export default RegistrationForm
