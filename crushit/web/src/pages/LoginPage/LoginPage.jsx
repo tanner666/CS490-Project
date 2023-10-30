@@ -6,8 +6,6 @@ const LoginPage = () => {
   return (
     <>
       <MetaTags title="Login" description="Login page" />
-
-      <h1>LoginPage</h1>
       <LoginForm/>
     </>
   )

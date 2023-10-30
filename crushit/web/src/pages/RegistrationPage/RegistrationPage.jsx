@@ -7,8 +7,6 @@ const RegistrationPage = () => {
   return (
     <>
       <MetaTags title="Registration" description="Registration page" />
-
-      <h1>RegistrationPage</h1>
       
       <div>
         <RegistrationForm/>

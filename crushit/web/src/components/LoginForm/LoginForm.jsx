@@ -1,5 +1,5 @@
 import { useAuth } from 'src/auth';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -9,6 +9,7 @@ const LoginForm = () => {
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [loginError, setLoginError] = useState(null);
   const { signIn } = useAuth();
+  const imageWidth = getImageWidth();
 
   const handleSignUp = async () => {
     // Reset previous messages
@@ -44,6 +45,12 @@ const LoginForm = () => {
     }
   };
 
+  function getImageWidth() {
+    // 850/1440 is approximately 0.59
+    return window.innerWidth * 0.59;
+  }
+
+
   // Function to check if the password contains characters from two different types
   const containsTwoCharacterTypes = (password) => {
     const hasUpper = /[A-Z]/.test(password);
@@ -58,17 +65,20 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-end">
-      <div className="bg-black w-4/5 h-full flex items-center justify-center relative">
-        <img
-          src="https://drive.google.com/uc?id=16-VMhr8wY_qwKfeaHduWZTeB3oFuTc4b"
-          alt="Your Image"
-          className="max-w-32"
-        />
-        <div className="absolute top-0 left-0 w-full text-center text-white">
-          <h2 className="text-3xl font-semibold mt-8">Crush It</h2>
+    <div className="min-h-screen flex justify-start">
+    <div className="bg-custom-gray w-[59%] h-screen flex items-center justify-center relative">
+        <div className="flex flex-col justify-between items-center w-full">
+            <div className="text-center text-white">
+                <h2 className="font-normal leading-none font-fredoka" style={{ fontSize: '4vw' }}>Crush It</h2>
+            </div>
+            <img
+                src="https://drive.google.com/uc?id=16-VMhr8wY_qwKfeaHduWZTeB3oFuTc4b"
+                alt="Your Image"
+                className="w-[63.76%] mt-[10%]"
+            />
         </div>
-      </div>
+    </div>
+
 
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
         <h1 className="text-3xl font-semibold mb-8 text-center">Sign In</h1>
