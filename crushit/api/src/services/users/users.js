@@ -1,3 +1,4 @@
+
 import { db } from 'src/lib/db'
 import { getAuth,deleteUser as deleteFirebaseUser, createUserWithEmailAndPassword } from 'firebase/auth';
 
@@ -69,4 +70,5 @@ export const User = {
     return db.user.findUnique({ where: { id: root?.id } }).pomodoros()
   },
 }
+
 
