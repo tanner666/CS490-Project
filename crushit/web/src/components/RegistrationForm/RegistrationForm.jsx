@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { useAuth } from 'src/auth'
+import { useAuth, signUp, signIn } from 'src/auth'
 
 const RegistrationForm = () => {
   const [email, setEmail] = useState('')
@@ -11,7 +11,7 @@ const RegistrationForm = () => {
   const [passwordMatchError, setPasswordMatchError] = useState(false) // New state
   const [registrationSuccess, setRegistrationSuccess] = useState(false)
   const [registrationError, setRegistrationError] = useState(null)
-  const { signUp } = useAuth()
+  // const { signUp } = useAuth()
 
   const handleSignUp = async () => {
     // Reset previous messages

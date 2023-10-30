@@ -30,3 +30,30 @@ export const firebaseClient = {
 }
 
 export const { AuthProvider, useAuth } = createAuth(firebaseClient)
+
+export const signUp = async (email, password) => {
+const auth = getAuth(firebaseApp);
+try {
+  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  console.log('User created successfully');
+  userCredential.user.sendEmailVerification().then(()=>{console.log('Email sent')}).catch((error)=>{console.log(error.message)});
+  return userCredential.user;
+} catch (error) {
+  throw new Error(error.message);
+}
+};
+
+export const signIn = async (email, password) => {
+const auth = getAuth(firebaseApp);
+try {
+  const userCredential = await signInWithEmailAndPassword(auth, email, password);
+  if(user.emailVerified) {
+    return userCredential.user; 
+  }else{
+    // call sign out function
+    throw new Error("Email not verified");
+  }
+} catch (error) {
+  throw new Error(error.message);
+}
+};
