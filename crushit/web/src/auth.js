@@ -1,4 +1,5 @@
 import { initializeApp, getApp, getApps } from 'firebase/app'
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import * as firebaseAuth from 'firebase/auth'
 
 import { createAuth } from '@redwoodjs/auth-firebase-web'
@@ -36,7 +37,8 @@ const auth = getAuth(firebaseApp);
 try {
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   console.log('User created successfully');
-  userCredential.user.sendEmailVerification().then(()=>{console.log('Email sent')}).catch((error)=>{console.log(error.message)});
+  firebaseAuth.sendEmailVerification(userCredential.user);
+  // userCredential.user.sendEmailVerification().then(()=>{console.log('Email sent')}).catch((error)=>{console.log(error.message)});
   return userCredential.user;
 } catch (error) {
   throw new Error(error.message);
@@ -47,12 +49,7 @@ export const signIn = async (email, password) => {
 const auth = getAuth(firebaseApp);
 try {
   const userCredential = await signInWithEmailAndPassword(auth, email, password);
-  if(user.emailVerified) {
-    return userCredential.user; 
-  }else{
-    // call sign out function
-    throw new Error("Email not verified");
-  }
+  return {user:userCredential.user, emailVerified:userCredential.user.emailVerified};
 } catch (error) {
   throw new Error(error.message);
 }

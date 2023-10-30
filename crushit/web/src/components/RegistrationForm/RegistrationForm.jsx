@@ -45,7 +45,7 @@ const RegistrationForm = () => {
     }
 
     try {
-      await signUp({ email, password })
+      await signUp(email, password)
       console.log('Firebase registration successful')
       // Redirect the user to another page after a successful sign-up.
       setRegistrationSuccess(true)
