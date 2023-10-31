@@ -1,6 +1,8 @@
 import { render } from '@redwoodjs/testing/web'
+import { ThemeProvider } from '../ThemeContext/ThemeContext';
 
-import Settings from './SettingsForm'
+
+import SettingsForm from './SettingsForm'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
@@ -8,7 +10,11 @@ import Settings from './SettingsForm'
 describe('SettingsForm', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<SettingsForm />)
+      render(
+        <ThemeProvider>
+          <SettingsForm userId={1}/>
+        </ThemeProvider>
+      )
     }).not.toThrow()
   })
 })

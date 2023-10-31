@@ -230,19 +230,29 @@ export const SettingsForm = ({ userId }) => {
                     <div className={`pb-5 px-8 w-full mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
                         <div className="grid grid-cols-3 gap-8">
                             <PasswordField 
-                            currentPassword={currentPassword}
-                            newPassword={newPassword}
-                            confirmNewPassword={confirmNewPassword}
-                            handleNewPasswordChange={handleNewPasswordChange}
-                            handleCurrentPasswordChange={handleCurrentPasswordChange}
-                            handleConfirmNewPasswordChange={handleConfirmNewPasswordChange}
-                            theme={theme} />
+
+                                currentPassword={currentPassword}
+                                newPassword={newPassword}
+                                confirmNewPassword={confirmNewPassword}
+                                handleCurrentPasswordChange={handleCurrentPasswordChange}
+                                handleNewPasswordChange={handleNewPasswordChange}
+                                handleConfirmNewPasswordChange={handleNewPasswordChange}
+                                theme={theme}
+                            />
                         </div>
                     </div>
                     <h2 className={`text-xl font-dm font-semibold mt-6 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Podomoro Timer (Minutes)</h2>
                     <div className={`pb-5 px-8 w-full mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
                         <div className="grid grid-cols-3 gap-8">
-                            <TimerField theme={theme} />
+                            <TimerField 
+                                podomoro={podomoro}
+                                shortBreak={shortBreak}
+                                longBreak={longBreak}
+                                handlePodomoroChange={handlePodomoroChange}
+                                handleShortBreakChange={handleShortBreakChange}
+                                handleLongBreakChange={handleLongBreakChange}
+                                theme={theme}
+                            />
                         </div>
                     </div>
                 </div>
