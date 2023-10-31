@@ -20,10 +20,12 @@ export const SettingsForm = () => {
 
     return (
         <div className={`p-8 w-full max-w-5xl mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
-
+                <div className={`p-8 w-full ml-[-30px] max-w-5xl mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
+                    <h2 className={`text-2xl font-dm font-bold mt-4 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Profile</h2>
+                </div>
             <div className="forms">
                 <div className="flex justify-between items-center">
-                    <h2 className={`text-xl font-semibold mt-4 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>User Info</h2>
+                    <h2 className={`text-xl font-dm font-semibold mt-4 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>User Info</h2>
                     <ThemeToggle/>
                 </div>
                 <div className={`p-8 w-full max-w-5xl mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
@@ -31,13 +33,13 @@ export const SettingsForm = () => {
                         <NameField theme={theme}/>
                     </div>
                 </div>
-                <h2 className={`text-xl font-semibold mt-4 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Change Password</h2>
+                <h2 className={`text-xl font-dm font-semibold mt-4 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Change Password</h2>
                 <div className={`p-8 w-full max-w-5xl mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
                     <div className="grid grid-cols-3 gap-8">
                         <PasswordField theme={theme}/>
                     </div>
                 </div>
-                <h2 className={`text-xl font-semibold mt-4 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Podomoro Timer (Minutes)</h2>
+                <h2 className={`text-xl font-dm font-semibold mt-4 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Podomoro Timer (Minutes)</h2>
                 <div className={`p-8 w-full max-w-5xl mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
                     <div className="grid grid-cols-3 gap-8">
                         <TimerField theme={theme}/>
