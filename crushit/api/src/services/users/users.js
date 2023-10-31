@@ -49,10 +49,11 @@ export const createUser = async ({ input }) => {
   }
 }
 
-export const updateUser = ({ id, input }) => {
+export const updateUser = ({ firebaseUid, input }) => {
+  console.log(firebaseUid,input)
   return db.user.update({
     data: input,
-    where: { id },
+    where: { firebaseUid },
   })
 }
 

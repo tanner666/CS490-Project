@@ -4,8 +4,7 @@ import ThemeToggle from '../ThemeToggle/ThemeToggle'
 import PasswordField from '../PasswordField/PasswordField'
 import NameField from '../NameField/NameField'
 import TimerField from '../TimerField/TimerField'
-// import { useMutation, useQuery } from '@redwoodjs/web'
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@redwoodjs/web'
 import { getUserUid, useAuth } from 'src/auth';
 //import { UpdateUserInput } from 'src/graphql/users.sdl';
 
@@ -23,6 +22,14 @@ const GET_USER_QUERY = gql`
 `;
 
 const UPDATE_USER_MUTATION = gql`
+  mutation updateUser($firebaseUid: String!, $input: UpdateUserInput!) {
+    updateUser(firebaseUid: $firebaseUid, input: $input) {
+      firebaseUid
+      firstName
+      lastName
+      email
+    }
+  }
 `
 
 export const SettingsForm = ({ userId }) => {
@@ -30,6 +37,7 @@ export const SettingsForm = ({ userId }) => {
     const { loading, error, data } = useQuery(GET_USER_QUERY, {
         variables: { firebaseUid: userId },
       });
+    const [updateUser] = useMutation(UPDATE_USER_MUTATION)
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('');
     const [currentPassword, setCurrentPassword] = useState('');
@@ -44,7 +52,7 @@ export const SettingsForm = ({ userId }) => {
         // console.log(data)
         if (data && data.user) {
           // Check if data is available and user object exists
-          const { firstName, lastName } = data.user;
+          const { firstName, lastName, email} = data.user;
         //   console.log(firstName, lastName, data.user);
           setFirstName(firstName);
           setLastName(lastName);
@@ -91,13 +99,13 @@ export const SettingsForm = ({ userId }) => {
         try {
             // Here you call your updateUser mutation and password, and podomoro timer
             // Replace `updateUserAPI` with the actual function you would use to call your API
-            await updateUserInput({
-                id: userId,
+            await updateUser({variables:{
+                firebaseUid: userId,
                 input: {
                     firstName,
                     lastName,
                 },
-            });
+            }});
             alert('User updated successfully!');
         } catch (error) {
             console.error('Error updating user:', error);
@@ -107,8 +115,8 @@ export const SettingsForm = ({ userId }) => {
 
     //just clears all of the text boxes, not db stuff needed
     const handleCancel = () => {
-        setFirstName('');
-        setLastName('');
+        setFirstName(data.user.firstName);
+        setLastName(data.user.lastName);
         setCurrentPassword('');
         setNewPassword('');
         setConfirmNewPassword('');
