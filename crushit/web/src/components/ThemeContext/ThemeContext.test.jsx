@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { ThemeProvider } from './ThemeContext';
+import { useTheme } from './ThemeContext';
 
 describe('ThemeProvider', () => {
   it('renders without crashing', () => {

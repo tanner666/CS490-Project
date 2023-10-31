@@ -7,18 +7,21 @@ const PasswordField = ({currentPassword, newPassword, confirmNewPassword, handle
     //need to implement functionality to check if new password matches the confirm new password
     <>
       <SettingsField 
+        id="Current Password"
         label="Current Password" 
         value={currentPassword}
         onChange={handleCurrentPasswordChange}
         theme={theme}
       />
       <SettingsField 
+        id="New Password"
         label="New Password" 
         value={newPassword}
         onChange={handleNewPasswordChange}
         theme={theme}
       />
       <SettingsField 
+        id="Confirm New Password"
         label="Confirm New Password" 
         value={confirmNewPassword}
         onChange={handleConfirmNewPasswordChange}
