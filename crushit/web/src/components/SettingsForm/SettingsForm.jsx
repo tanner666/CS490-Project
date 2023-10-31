@@ -5,7 +5,7 @@ import PasswordField from '../PasswordField/PasswordField'
 import NameField from '../NameField/NameField'
 import TimerField from '../TimerField/TimerField'
 import { useMutation, useQuery } from '@redwoodjs/web'
-import { getUserUid, useAuth } from 'src/auth';
+import {changeUserPassword } from 'src/auth';
 //import { UpdateUserInput } from 'src/graphql/users.sdl';
 
 const GET_USER_QUERY = gql`
@@ -99,13 +99,31 @@ export const SettingsForm = ({ userId }) => {
         try {
             // Here you call your updateUser mutation and password, and podomoro timer
             // Replace `updateUserAPI` with the actual function you would use to call your API
-            await updateUser({variables:{
-                firebaseUid: userId,
-                input: {
-                    firstName,
-                    lastName,
-                },
-            }});
+            await updateUser({
+                variables:{
+                    firebaseUid: userId,
+                    input: {
+                        firstName,
+                        lastName,
+                    },
+                }
+            });
+            if (currentPassword && newPassword && confirmNewPassword) {
+                if (newPassword === confirmNewPassword && newPassword.length > 12 && containsTwoCharacterTypes(newPassword)) {
+                    console.log('Password will be changed');
+                    try {
+                        await changeUserPassword(data.user.email, currentPassword, newPassword);
+                    } catch (error) {
+                        alert('Failed to change password');
+                    }
+                } else {
+                    console.log('Password requirements not met');
+
+                }
+            }else{
+                console.log('passwords empty')
+            }
+            
             alert('User updated successfully!');
         } catch (error) {
             console.error('Error updating user:', error);
@@ -125,7 +143,17 @@ export const SettingsForm = ({ userId }) => {
         setLongBreak('');
         // Reset other states if necessary
     };
-
+    const containsTwoCharacterTypes = (password) => {
+        const hasUpper = /[A-Z]/.test(password)
+        const hasLower = /[a-z]/.test(password)
+        const hasNumeric = /[0-9]/.test(password)
+        const hasSpecial = /[!@#$%^&*()_+[\]{};:'",.<>?/\\| -]/.test(password)
+    
+        const characterTypes = [hasUpper, hasLower, hasNumeric, hasSpecial]
+        const typesCount = characterTypes.filter((type) => type).length
+    
+        return typesCount >= 2
+      }
     return (
         <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
             {/*Sidebar*/}
@@ -196,7 +224,14 @@ export const SettingsForm = ({ userId }) => {
                     <h2 className={`text-xl font-dm font-semibold mt-6 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Change Password</h2>
                     <div className={`pb-5 px-8 w-full mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
                         <div className="grid grid-cols-3 gap-8">
-                            <PasswordField theme={theme} />
+                            <PasswordField 
+                            currentPassword={currentPassword}
+                            newPassword={newPassword}
+                            confirmNewPassword={confirmNewPassword}
+                            handleNewPasswordChange={handleNewPasswordChange}
+                            handleCurrentPasswordChange={handleCurrentPasswordChange}
+                            handleConfirmNewPasswordChange={handleConfirmNewPasswordChange}
+                            theme={theme} />
                         </div>
                     </div>
                     <h2 className={`text-xl font-dm font-semibold mt-6 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Podomoro Timer (Minutes)</h2>

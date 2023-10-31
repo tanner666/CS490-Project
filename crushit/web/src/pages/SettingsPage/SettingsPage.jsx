@@ -10,7 +10,7 @@ const SettingsPage = () => {
   useEffect(() => {
     getUserUid()
       .then((uid) => {
-        console.log(uid)
+        // console.log(uid)
           setUID(uid)
       })
       .catch((error) => {
