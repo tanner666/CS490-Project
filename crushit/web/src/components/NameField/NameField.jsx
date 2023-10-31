@@ -6,12 +6,14 @@ const NameField = ({firstName, lastName, handleFirstNameChange, handleLastNameCh
   return (
     <>
       <SettingsField 
+        id="First Name"
         label="First Name" 
         value={firstName} 
         onChange={handleFirstNameChange} 
         theme={theme} 
       />
       <SettingsField 
+        id="Last Name"
         label="Last Name" 
         value={lastName} 
         onChange={handleLastNameChange} 

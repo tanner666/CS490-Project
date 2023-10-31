@@ -7,11 +7,10 @@ export const standard = defineScenario({
         long: 1518610,
         user: {
           create: {
-            username: 3035209,
+            username: 'String1845731',
             name: 'String',
             email: 'String1845731',
-            firebaseUid: 'String',
-            passHash: 'String',
+            firebaseUid: 'String23234',
           },
         },
       },
@@ -23,11 +22,10 @@ export const standard = defineScenario({
         long: 6964110,
         user: {
           create: {
-            username: 7421756,
+            username: 'String1798862',
             name: 'String',
             email: 'String1798862',
-            firebaseUid: 'String',
-            passHash: 'String',
+            firebaseUid: 'String134124',
           },
         },
       },

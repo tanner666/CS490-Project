@@ -2,6 +2,7 @@ import React from 'react'
 import { render, screen, waitFor, fireEvent } from '@redwoodjs/testing/web'
 import LoginForm from './LoginForm'
 import {useAuth} from 'src/auth'
+import { ThemeProvider } from '../ThemeContext/ThemeContext';
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
@@ -10,6 +11,7 @@ jest.mock('src/auth', () => ({
   useAuth: jest.fn(),
 }));
 
+
 describe('LoginForm', () => {
   it('allows a user to sign in', async () => {
     const signInMock = jest.fn();
@@ -17,7 +19,7 @@ describe('LoginForm', () => {
       signIn: signInMock,
     }));
 
-    const { getByLabelText, getByText } = render(<LoginForm />);
+    const { getByLabelText, getByText } = render(<ThemeProvider><LoginForm /></ThemeProvider>);
 
     // Simulate user input
     fireEvent.change(getByLabelText(/email/i), {
