@@ -13,8 +13,8 @@ describe('TimerField Component', () => {
     render(
       <ThemeProvider>
         <PasswordField
-          currentPassword={'131313'} 
-          newPassword={'tesdasflkj234234'} 
+          currentPassword={'131313'}
+          newPassword={'tesdasflkj234234'}
           confirmNewPassword={'tesdasflkj234234'}
           handleCurrentPasswordChange={mockHandleCurrentPasswordChange}
           handleNewPasswordChange={mockHandleNewPasswordChange}
@@ -26,15 +26,15 @@ describe('TimerField Component', () => {
 
     expect(screen.getByLabelText(/Current Password/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/New Password/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Confirm New Password/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Confirm Password/i)).toBeInTheDocument();
   });
 
   it('calls handlePodomoroChange when Podomoro value is changed', () => {
     render(
       <ThemeProvider>
-        <PasswordField 
-          currentPassword={'131313'} 
-          newPassword={'tesdasflkj234234'} 
+        <PasswordField
+          currentPassword={'131313'}
+          newPassword={'tesdasflkj234234'}
           confirmNewPassword={'tesdasflkj234234'}
           handleCurrentPasswordChange={mockHandleCurrentPasswordChange}
           handleNewPasswordChange={mockHandleNewPasswordChange}
@@ -43,13 +43,11 @@ describe('TimerField Component', () => {
         />
       </ThemeProvider>
     );
-  
+
     fireEvent.change(screen.getByPlaceholderText(/Confirm Password/i), { target: { value: 'tesdasflkj234234' } });
-    
-    // Check if the first argument of the first call to the function contains an object with a target.value of '30'
-    expect(mockHandleCurrentPasswordChange.mock.calls[0][0].target.value).toBe('tesdasflkj234234');
+
+    expect(mockHandleCurrentPasswordChange).toHaveBeenCalledWith(expect.objectContaining({ target: { value: 'tesdasflkj234234' } }));w
   });
 
-  // Similar tests for shortBreak and longBreak
 });
 

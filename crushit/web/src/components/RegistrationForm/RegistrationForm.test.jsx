@@ -4,14 +4,13 @@ import RegistrationForm from './RegistrationForm'; // Adjust the path as needed
 //import { useMutation } from '@redwoodjs/web';
 import { ThemeProvider } from '../ThemeContext/ThemeContext';
 
-// Mocking useMutation and signUp
 jest.mock('@redwoodjs/web', () => {
   const actual = jest.requireActual('@redwoodjs/web');
   return {
     ...actual,
     useMutation: jest.fn().mockImplementation(() => [
-      jest.fn(), // This represents the mutate function itself
-      { loading: false, error: null, data: null }, // This represents the state object
+      jest.fn(),
+      { loading: false, error: null, data: null },
     ]),
   };
 });
@@ -19,7 +18,16 @@ jest.mock('src/auth', () => ({
   signUp: jest.fn()
 }));
 
-// Helper function to setup the test
+jest.mock('../ThemeContext/ThemeContext', () => {
+  return {
+    ThemeProvider: ({ children }) => children,
+    useTheme: () => ({
+      theme: 'light',
+    }),
+  };
+});
+
+
 const setup = () => {
   const utils = render(<ThemeProvider><RegistrationForm /></ThemeProvider>);
   const emailInput = utils.getByLabelText('Email/username');
@@ -57,4 +65,3 @@ test('it shows error message when passwords do not match', () => {
   expect(getByText('Passwords do not match.')).toBeInTheDocument();
 });
 
-// Additional tests can be added here
