@@ -6,6 +6,8 @@ module.exports = {
       backgroundColor: {
         'custom-gray': '#252628',
         'light-gray': '#F5F7F9',
+        'dark-gray': '#3E3F42',
+        
       },
       fontFamily: {
         'fredoka': ['Fredoka One', 'sans-serif'],
