@@ -7,10 +7,17 @@ export const users = () => {
   return db.user.findMany()
 }
 
-export const user = ({ firebaseUid }) => {
-  return db.user.findUnique({
-    where: { firebaseUid },
-  })
+export const user = async ({ firebaseUid }) => {
+  try{
+    const userDB = await db.user.findUnique({
+      where: { firebaseUid },
+    })
+    console.log(userDB)
+    return userDB
+  }catch(e){
+    throw new Error(`User with Firebase UID ${firebaseUid} does not exist: ${e}`)
+  }
+  
 }
 
 /**
@@ -33,7 +40,7 @@ export const createUser = async ({ input }) => {
     console.log(email)
     const userDB = await db.user.create({
       data: {
-        email, firebaseUid, username: email, name: ""
+        email, firebaseUid, username: email, name: "" 
       },
     })
     return userDB
@@ -42,10 +49,11 @@ export const createUser = async ({ input }) => {
   }
 }
 
-export const updateUser = ({ id, input }) => {
+export const updateUser = ({ firebaseUid, input }) => {
+  console.log(firebaseUid,input)
   return db.user.update({
     data: input,
-    where: { id },
+    where: { firebaseUid },
   })
 }
 

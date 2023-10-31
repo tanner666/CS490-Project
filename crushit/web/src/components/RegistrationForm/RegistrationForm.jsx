@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useMutation } from '@redwoodjs/web'
 import { useAuth, signUp, signIn } from 'src/auth'
+import { navigate } from '@redwoodjs/router'
 
 const CREATE_USER_MUTATION = gql`
   mutation createUser($input: CreateUserInput!) {
@@ -60,18 +61,19 @@ const RegistrationForm = () => {
       console.log('Firebase registration successful')
       // Redirect the user to another page after a successful sign-up.
       setRegistrationSuccess(true)
-      const response = await fetch('/.redwood/functions/userRegistration', {
-        method: 'POST',
-        body: JSON.stringify({ email }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      if (response.ok) {
-        console.log('User registration in Prisma successful')
-      } else {
-        console.error('User registration in Prisma failed')
-      }
+      // const response = await fetch('/.redwood/functions/userRegistration', {
+      //   method: 'POST',
+      //   body: JSON.stringify({ email }),
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      // })
+      // if (response.ok) {
+      //   console.log('User registration in Prisma successful')
+      // } else {
+      //   console.error('User registration in Prisma failed')
+      // }
+      navigate('/settings')
     } catch (error) {
       console.error('Sign-up error:', error)
       setRegistrationError(

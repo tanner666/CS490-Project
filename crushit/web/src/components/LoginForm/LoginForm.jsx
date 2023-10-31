@@ -2,6 +2,7 @@ import { useAuth } from 'src/auth';
 import {signIn, forgotPassword} from 'src/auth';
 import React, { useState, useEffect } from 'react';
 import { navigate } from '@redwoodjs/router';
+import { set } from '@redwoodjs/forms';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -10,6 +11,7 @@ const LoginForm = () => {
   const [passwordRequired, setPasswordRequired] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [loginError, setLoginError] = useState(null);
+  // const { setUserUid } = useContext(UserContext);
   //const { signIn } = useAuth();
 
   const handleSignUp = async () => {
@@ -37,9 +39,10 @@ const LoginForm = () => {
     }
 
     try {
-      await signIn( email, password);
+      const uid = await (await signIn( email, password)).uid
       // Redirect the user to another page after a successful sign-up.
       setLoginSuccess(true);
+      // setUserUid(uid);
       navigate('/settings');
     } catch (error) {
       console.error('Sign-in error:', error);

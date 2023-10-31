@@ -1,5 +1,5 @@
 import { signUp, signIn, signOutUser, forgotPassword } from './auth';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification, sendPasswordResetEmail } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, onAuthStateChanged, reauthenticateWithCredential, EmailAuthProvider,updatePassword } from 'firebase/auth';
 
 jest.mock('firebase/auth', () => ({
   getAuth: jest.fn(),
@@ -8,6 +8,7 @@ jest.mock('firebase/auth', () => ({
   signOut: jest.fn(), 
   sendEmailVerification: jest.fn(),
   sendPasswordResetEmail: jest.fn(),
+  EmailAuthProvider: jest.fn(),
 }));
 
 describe('signUpWithEmailAndPassword', () => {

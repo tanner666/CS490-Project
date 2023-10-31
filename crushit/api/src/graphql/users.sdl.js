@@ -10,7 +10,7 @@ export const schema = gql`
 
   type Query {
     users: [User!]! @requireAuth
-    user(id: Int!): User @requireAuth
+    user(firebaseUid: String!): User @requireAuth
   }
 
   input CreateUserInput {
@@ -31,7 +31,7 @@ export const schema = gql`
   }
 
   type Mutation {
-    updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
+    updateUser(firebaseUid: String!, input: UpdateUserInput!): User! @requireAuth
     deleteUser(id: Int!): User! @requireAuth
 
     createUser(input: CreateUserInput!): User @skipAuth
