@@ -9,7 +9,6 @@ const LoginForm = () => {
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [loginError, setLoginError] = useState(null);
   const { signIn } = useAuth();
-  const imageWidth = getImageWidth();
 
   const handleSignUp = async () => {
     // Reset previous messages
@@ -45,12 +44,6 @@ const LoginForm = () => {
     }
   };
 
-  function getImageWidth() {
-    // 850/1440 is approximately 0.59
-    return window.innerWidth * 0.59;
-  }
-
-
   // Function to check if the password contains characters from two different types
   const containsTwoCharacterTypes = (password) => {
     const hasUpper = /[A-Z]/.test(password);
@@ -65,10 +58,11 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="bg-light-gray min-h-screen flex justify-start">
-      <div className="bg-custom-gray w-[59%] h-screen flex items-center justify-center relative rounded-r-lg">
+    <div className="bg-light-gray min-h-screen flex">
+      <div className="bg-custom-gray flex-grow h-screen flex items-center justify-center relative rounded-r-lg" 
+      style={{ flex: '1', maxWidth: '59vw' }}>
           <div className="flex flex-col justify-between items-center w-full">
-              <div className="text-center text-white">
+              <div className="text-center text-white mt-[10%]">
                   <h2 className="font-normal leading-none font-fredoka" style={{ fontSize: '4vw' }}>Crush It</h2>
               </div>
               <img
@@ -79,8 +73,8 @@ const LoginForm = () => {
           </div>
       </div>
       <div className="flex items-center justify-center ml-[-50px]">
-        <div className="relative bg-white p-8 rounded-lg shadow-lg h-[90%]">
-          <h1 className="text-3xl font-semibold mb-8 text-center">Sign In</h1>
+          <div className="relative bg-white p-8 rounded-lg shadow-lg h-[90%] w-[500px]">
+              <h1 className="text-3xl font-semibold mb-8 text-left">Sign In</h1>
 
           {loginSuccess && (
             <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
@@ -129,7 +123,7 @@ const LoginForm = () => {
           <div className="flex items-center justify-center">
             <button
               type="button"
-              className="text-white w-[50%] py-2 rounded-lg mb-6 transition duration-150"
+              className="text-white w-[40%] py-3 rounded-lg mb-6 transition duration-150"
               style={{
                 background: 'linear-gradient(180deg, #6284FF 0%, #4B6DE9 100%)',
                 boxShadow: '0px 4px 80px 0px rgba(98, 132, 255, 0.20)'
@@ -148,7 +142,7 @@ const LoginForm = () => {
               </a>
             </p>
           </div>
-
+        <div className="flex items-center justify-center">      
           <div className="w-80 mx-auto absolute bottom-12 border rounded-lg p-3 bg-light-gray">
             <p className="text-center">
               Need an account?{' '}
@@ -157,6 +151,7 @@ const LoginForm = () => {
               </a>
             </p>
           </div>
+        </div>
         </div>
       </div>
     </div>

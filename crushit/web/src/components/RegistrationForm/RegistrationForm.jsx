@@ -1,6 +1,6 @@
-import { signUp } from 'src/auth'
 import React, { useState } from 'react'
 import { useMutation } from '@redwoodjs/web'
+import { useAuth, signUp, signIn } from 'src/auth'
 
 const CREATE_USER_MUTATION = gql`
   mutation createUser($input: CreateUserInput!) {
@@ -9,8 +9,6 @@ const CREATE_USER_MUTATION = gql`
       firebaseUid
     }
   }`
-
-import { useAuth, signUp, signIn } from 'src/auth'
 
 const RegistrationForm = () => {
   const [createUser] = useMutation(CREATE_USER_MUTATION)
@@ -97,108 +95,119 @@ const RegistrationForm = () => {
   }
 
   return (
-    <div className="min-h-screen flex justify-end">
-      <div className="bg-black w-4/5 h-full flex items-center justify-center relative">
-        <img
-          src="https://drive.google.com/uc?id=16-VMhr8wY_qwKfeaHduWZTeB3oFuTc4b"
-          alt="Your Image"
-          className="max-w-32"
-        />
-        <div className="absolute top-0 left-0 w-full text-center text-white">
-          <h2 className="text-3xl font-semibold mt-8">Crush It</h2>
-        </div>
-      </div>
-
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h1 className="text-3xl font-semibold mb-8 text-center">Sign Up</h1>
-
-        {registrationSuccess && (
-          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
-            Registration successful!
+    <div className="bg-light-gray min-h-screen flex">
+      <div className="bg-custom-gray flex-grow h-screen flex items-center justify-center relative rounded-r-lg" 
+      style={{ flex: '1', maxWidth: '59vw' }}>
+          <div className="flex flex-col justify-between items-center w-full">
+              <div className="text-center text-white mt-[10%]">
+                  <h2 className="font-normal leading-none font-fredoka" style={{ fontSize: '4vw' }}>Crush It</h2>
+              </div>
+              <img
+                  src="https://drive.google.com/uc?id=16-VMhr8wY_qwKfeaHduWZTeB3oFuTc4b"
+                  alt="Your Image"
+                  className="w-[63.76%] mt-[10%]"
+              />
           </div>
-        )}
+      </div>    
+      <div className="flex items-center justify-center ml-[-50px]">
+          <div className="relative bg-white p-8 rounded-lg shadow-lg h-[90%] w-[500px]">
+              <h1 className="text-3xl font-semibold mb-8 text-left">Sign Up</h1>
 
-        {registrationError && (
-          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
-            {registrationError}
+          {registrationSuccess && (
+            <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+              Registration successful!
+            </div>
+          )}
+
+          {registrationError && (
+            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
+              {registrationError}
+            </div>
+          )}
+
+          <div className="mb-6">
+            <label
+              className="block text-gray-700 text-sm font-medium mb-2"
+              htmlFor="email"
+            >
+              Email/username
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
+              id="email"
+              type="text"
+              placeholder="John Doe01"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            {usernameRequired && (
+              <p className="text-red-500 text-sm mt-2">Username is required.</p>
+            )}
           </div>
-        )}
 
-        <div className="mb-6">
-          <label
-            className="block text-gray-700 text-sm font-medium mb-2"
-            htmlFor="email"
-          >
-            Email/username
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
-            id="email"
-            type="text"
-            placeholder="John Doe01"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          {usernameRequired && (
-            <p className="text-red-500 text-sm mt-2">Username is required.</p>
-          )}
+          <div className="mb-6">
+            <label
+              className="block text-gray-700 text-sm font-medium mb-2"
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {passwordRequired && (
+              <p className="text-red-500 text-sm mt-2">Password is required.</p>
+            )}
+          </div>
+
+          <div className="mb-6">
+            <label
+              className="block text-gray-700 text-sm font-medium mb-2"
+              htmlFor="confirm-password"
+            >
+              Confirm Password
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
+              id="confirm-password"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            {passwordMatchError && (
+              <p className="text-red-500 text-sm mt-2">Passwords do not match.</p>
+            )}
+          </div>
+
+          <div className="flex items-center justify-center">
+            <button
+              type="button"
+              className="text-white w-[40%] py-3 rounded-lg mb-6 transition duration-150"
+              style={{
+                background: 'linear-gradient(180deg, #6284FF 0%, #4B6DE9 100%)',
+                boxShadow: '0px 4px 80px 0px rgba(98, 132, 255, 0.20)'
+              }}
+              onClick={handleSignUp}
+            >
+              Sign Up
+            </button>
+          </div>
+          <div className="flex items-center justify-center">            
+            <div className="w-80 mx-auto absolute bottom-12 border rounded-lg p-3 bg-light-gray">
+              <p className="text-center">
+                Already have an account?{' '}
+                <a href="/" className="text-blue-500 ml-1 hover:underline">
+                  Sign in Here!
+                </a>
+              </p>
+            </div>
+          </div>  
         </div>
-
-        <div className="mb-6">
-          <label
-            className="block text-gray-700 text-sm font-medium mb-2"
-            htmlFor="password"
-          >
-            Password
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {passwordRequired && (
-            <p className="text-red-500 text-sm mt-2">Password is required.</p>
-          )}
-        </div>
-
-        <div className="mb-6">
-          <label
-            className="block text-gray-700 text-sm font-medium mb-2"
-            htmlFor="confirm-password"
-          >
-            Confirm Password
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
-            id="confirm-password"
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-          {passwordMatchError && (
-            <p className="text-red-500 text-sm mt-2">Passwords do not match.</p>
-          )}
-        </div>
-
-        <button
-          type="button"
-          className="bg-blue-600 text-white py-2 px-4 rounded w-full mb-6 hover-bg-blue-700 transition duration-150"
-          onClick={handleSignUp}
-        >
-          Sign Up
-        </button>
-
-        <div className="w-80 mx-auto mt-10 border rounded p-4">
-          <p className="text-center">
-            Already have an account?{' '}
-            <a href="/" className="text-blue-500 ml-1 hover:underline">
-              Sign in Here!
-            </a>
-          </p>
-        </div>
-      </div>
+      </div>  
     </div>
   )
 }
