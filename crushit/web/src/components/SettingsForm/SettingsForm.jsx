@@ -4,10 +4,23 @@ import ThemeToggle from '../ThemeToggle/ThemeToggle'
 import PasswordField from '../PasswordField/PasswordField'
 import NameField from '../NameField/NameField'
 import TimerField from '../TimerField/TimerField'
+import { useMutation } from '@redwoodjs/web'
+//import { UpdateUserInput } from 'src/graphql/users.sdl';
 
 export const SettingsForm = ({userId}) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmNewPassword, setConfirmNewPassword] = useState('');
+    const [podomoro, setPodomoro] = useState('');
+    const [shortBreak, setShortBreak] = useState('');
+    const [longBreak, setLongBreak] = useState('');
+
+
+
+
+
     const {theme} = useTheme();
     
     const handleFirstNameChange = (event) => {
@@ -18,11 +31,33 @@ export const SettingsForm = ({userId}) => {
         setLastName(event.target.value);
     };
 
+    const handleCurrentPasswordChange = (event) =>{
+        setCurrentPassword(event.target.value);
+    };
+
+    const handleNewPasswordChange = (event) =>{
+        setNewPassword(event.target.value);
+    };
+    const handleConfirmNewPasswordChange = (event) =>{
+        setConfirmNewPassword(event.target.value);
+    };
+    const handlePodomoroChange = (event) =>{
+        setPodomoro(event.target.value);
+    };
+    const handleShortBreakChange = (event) =>{
+        setShortBreak(event.target.value);
+    };
+    const handleLongBreakChange = (event) =>{
+        setLongBreak(event.target.value);
+    };
+
+
+    //this function is the save button that saves the entire settings page
     const handleSave = async () => {
         try {
-            // Here you call your updateUser mutation
+            // Here you call your updateUser mutation and password, and podomoro timer
             // Replace `updateUserAPI` with the actual function you would use to call your API
-            await updateUser({
+            await updateUserInput({
               id: userId,
               input: {
                 firstName,
@@ -37,9 +72,16 @@ export const SettingsForm = ({userId}) => {
           }
       };
 
+      //just clears all of the text boxes, not db stuff needed
     const handleCancel = () => {
         setFirstName('');
         setLastName('');
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmNewPassword('');
+        setPodomoro('');
+        setShortBreak('');
+        setLongBreak('');
         // Reset other states if necessary
     };
 
