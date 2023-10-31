@@ -7,11 +7,8 @@ const SettingsPage = () => {
   return (
     <>
       <MetaTags title="Settings" description="Settings page" />
-
-      <h1>SettingsPage</h1>
       <div>
         <SettingsForm/>
-        <ThemeToggle/>
       </div>
     </>
   )

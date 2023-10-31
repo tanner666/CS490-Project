@@ -1,14 +1,17 @@
 module.exports = {
   purge: ['./src/**/*.js', './src/**/*.jsx', './src/**/*.ts', './src/**/*.tsx'],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
       backgroundColor: {
         'custom-gray': '#252628',
         'light-gray': '#F5F7F9',
+        'dark-gray': '#3E3F42',
+        
       },
       fontFamily: {
         'fredoka': ['Fredoka One', 'sans-serif'],
+        'dm': ['DM Sans', 'sans-serif'],
       }
     },
   },
