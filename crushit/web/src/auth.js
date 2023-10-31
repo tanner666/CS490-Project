@@ -1,5 +1,5 @@
 import { initializeApp, getApp, getApps } from 'firebase/app'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, onAuthStateChanged} from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, onAuthStateChanged, reauthenticateWithCredential, EmailAuthProvider,updatePassword } from 'firebase/auth';
 import * as firebaseAuth from 'firebase/auth'
 
 import { createAuth } from '@redwoodjs/auth-firebase-web';
@@ -90,20 +90,14 @@ export const getUserUid = () => {
   });
 };
 
-export const changeUserPassword = async(email, oldPassword, newPassword) => {
-  const auth = getAuth(firebaseApp);
-  const credential = await firebaseAuth.EmailAuthProvider.credential(email, oldPassword)
-  firebaseAuth.reauthenticateWithCredential(auth.currentUser, credential)
-  .then(() => {
-    // Re-authentication succeeded; proceed to change the password
-    firebaseAuth.updatePassword(auth.currentUser, newPassword)
-      .then(() => {
-        console.log("Password updated successfully.");
-      })
-      .catch((error) => {
-        console.error("Password update error:", error);
-      });
-  })
-  .catch((error) => {
-    console.error("Re-authentication error:", error);
-  });}
+export const changeUserPassword = async (email, oldPassword, newPassword) => {
+  try {
+    const auth = getAuth(firebaseApp);
+    const credential = EmailAuthProvider.credential(email, oldPassword);
+    await reauthenticateWithCredential(auth.currentUser, credential);
+    await updatePassword(auth.currentUser, newPassword);
+    console.log("Password updated successfully.");
+  } catch (error) {
+    console.error("Password update error:", error);
+  }
+};
