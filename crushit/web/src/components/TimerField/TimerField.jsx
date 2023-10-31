@@ -1,11 +1,27 @@
 import SettingsField from "../SettingsField/SettingsField"
+import React, {useState} from 'react'
 
-const TimerField = ({theme}) => {
+const TimerField = ({podomoro, shortBreak, longBreak, handlePodomoroChange, handleShortBreakChange, handleLongBreakChange, theme}) => {
   return (
     <>
-      <SettingsField label="Podomoro" theme={theme}/>
-      <SettingsField label="Short Break" theme={theme}/>
-      <SettingsField label="Long Break" theme={theme}/>
+      <SettingsField 
+        label="Podomoro" 
+        value={podomoro}
+        onChange={handlePodomoroChange}
+        theme={theme}
+      />
+      <SettingsField 
+        label="Short Break" 
+        value={shortBreak}
+        onChange={handleShortBreakChange}
+        theme={theme}
+      />
+      <SettingsField 
+        label="Long Break" 
+        value={longBreak}
+        onChange={handleLongBreakChange}
+        theme={theme}
+      />
     </>
     
   )

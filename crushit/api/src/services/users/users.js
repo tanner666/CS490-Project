@@ -33,7 +33,7 @@ export const createUser = async ({ input }) => {
     console.log(email)
     const userDB = await db.user.create({
       data: {
-        email, firebaseUid, username: email, name: ""
+        email, firebaseUid, username: email, firstName: "", lastName: ""
       },
     })
     return userDB

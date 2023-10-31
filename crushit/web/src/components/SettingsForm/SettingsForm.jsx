@@ -4,10 +4,23 @@ import ThemeToggle from '../ThemeToggle/ThemeToggle'
 import PasswordField from '../PasswordField/PasswordField'
 import NameField from '../NameField/NameField'
 import TimerField from '../TimerField/TimerField'
+import { useMutation } from '@redwoodjs/web'
+//import { UpdateUserInput } from 'src/graphql/users.sdl';
 
-export const SettingsForm = () => {
+export const SettingsForm = ({userId}) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmNewPassword, setConfirmNewPassword] = useState('');
+    const [podomoro, setPodomoro] = useState('');
+    const [shortBreak, setShortBreak] = useState('');
+    const [longBreak, setLongBreak] = useState('');
+
+
+
+
+
     const {theme} = useTheme();
     
     const handleFirstNameChange = (event) => {
@@ -16,6 +29,60 @@ export const SettingsForm = () => {
     
     const handleLastNameChange = (event) => {
         setLastName(event.target.value);
+    };
+
+    const handleCurrentPasswordChange = (event) =>{
+        setCurrentPassword(event.target.value);
+    };
+
+    const handleNewPasswordChange = (event) =>{
+        setNewPassword(event.target.value);
+    };
+    const handleConfirmNewPasswordChange = (event) =>{
+        setConfirmNewPassword(event.target.value);
+    };
+    const handlePodomoroChange = (event) =>{
+        setPodomoro(event.target.value);
+    };
+    const handleShortBreakChange = (event) =>{
+        setShortBreak(event.target.value);
+    };
+    const handleLongBreakChange = (event) =>{
+        setLongBreak(event.target.value);
+    };
+
+
+    //this function is the save button that saves the entire settings page
+    const handleSave = async () => {
+        try {
+            // Here you call your updateUser mutation and password, and podomoro timer
+            // Replace `updateUserAPI` with the actual function you would use to call your API
+            await updateUserInput({
+              id: userId,
+              input: {
+                firstName,
+                lastName,
+                // include other fields if needed
+              },
+            });
+            alert('User updated successfully!');
+          } catch (error) {
+            console.error('Error updating user:', error);
+            alert('Failed to update user.');
+          }
+      };
+
+      //just clears all of the text boxes, not db stuff needed
+    const handleCancel = () => {
+        setFirstName('');
+        setLastName('');
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmNewPassword('');
+        setPodomoro('');
+        setShortBreak('');
+        setLongBreak('');
+        // Reset other states if necessary
     };
 
     return (
@@ -76,7 +143,13 @@ export const SettingsForm = () => {
                     </div>
                     <div className={`pb-5 px-8 w-full mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
                         <div className="grid grid-cols-2 gap-8">
-                            <NameField theme={theme}/>
+                            <NameField
+                            firstName={firstName}
+                            lastName={lastName}
+                            handleFirstNameChange={handleFirstNameChange}
+                            handleLastNameChange={handleLastNameChange}
+                            theme={theme}
+                            />
                         </div>
                     </div>
                     <h2 className={`text-xl font-dm font-semibold mt-6 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Change Password</h2>
@@ -103,7 +176,7 @@ export const SettingsForm = () => {
                         borderColor: '#6284FF',
                         boxShadow: '0px 4px 80px 0px rgba(98, 132, 255, 0.20)'
                     }}
-                    //onClick={handleSignUp}
+                    onClick={handleCancel}
                     >
                     Cancel
                     </button>
@@ -114,7 +187,7 @@ export const SettingsForm = () => {
                         background: 'linear-gradient(180deg, #6284FF 0%, #4B6DE9 100%)',
                         boxShadow: '0px 4px 80px 0px rgba(98, 132, 255, 0.20)'
                     }}
-                    //onClick={handleSignUp}
+                    onClick={handleSave}
                     >
                     Save
                     </button>
