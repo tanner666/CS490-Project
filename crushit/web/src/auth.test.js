@@ -1,11 +1,13 @@
-import { signUp, signIn, signOutUser } from './auth';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { signUp, signIn, signOutUser, forgotPassword } from './auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification, sendPasswordResetEmail } from 'firebase/auth';
 
 jest.mock('firebase/auth', () => ({
   getAuth: jest.fn(),
   createUserWithEmailAndPassword: jest.fn(),
   signInWithEmailAndPassword: jest.fn(),
   signOut: jest.fn(), 
+  sendEmailVerification: jest.fn(),
+  sendPasswordResetEmail: jest.fn(),
 }));
 
 describe('signUpWithEmailAndPassword', () => {
@@ -96,4 +98,26 @@ describe('signOutUser', () => {
   
   
   
-  
+  describe('forgotPassword', () => {
+  const email = 'test@example.com';
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should send a password reset email with valid email', async () => {
+    const auth = getAuth();
+    await forgotPassword(email);
+
+    expect(sendPasswordResetEmail).toHaveBeenCalledWith(auth, email);
+  });
+
+  it('should throw an error if sending password reset email fails', async () => {
+    const auth = getAuth();
+    const errorMessage = 'Failed to send password reset email';
+    sendPasswordResetEmail.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(forgotPassword(email)).rejects.toThrow(errorMessage);
+    expect(sendPasswordResetEmail).toHaveBeenCalledWith(auth, email);
+  });
+});

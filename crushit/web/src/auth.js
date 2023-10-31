@@ -1,5 +1,5 @@
 import { initializeApp, getApp, getApps } from 'firebase/app'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail} from 'firebase/auth';
 import * as firebaseAuth from 'firebase/auth'
 
 import { createAuth } from '@redwoodjs/auth-firebase-web';
@@ -63,3 +63,11 @@ export const signOutUser = async () => {
   }
 };
 
+export const forgotPassword = async (email) => {  
+  const auth = getAuth(firebaseApp);
+  try {
+    await sendPasswordResetEmail(auth, email);
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
