@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
-import RegistrationForm from './RegistrationForm'; // Adjust the path as needed
+import RegistrationForm from './RegistrationForm'; 
 //import { useMutation } from '@redwoodjs/web';
 import { ThemeProvider } from '../ThemeContext/ThemeContext';
 
