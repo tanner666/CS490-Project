@@ -5,7 +5,7 @@ import PasswordField from '../PasswordField/PasswordField'
 import NameField from '../NameField/NameField'
 import TimerField from '../TimerField/TimerField'
 
-export const SettingsForm = () => {
+export const SettingsForm = ({userId}) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const {theme} = useTheme();
@@ -19,8 +19,22 @@ export const SettingsForm = () => {
     };
 
     const handleSave = async () => {
-        // Logic to save firstName, lastName, etc. to the database
-        // This could involve calling an API or a mutation if using GraphQL
+        try {
+            // Here you call your updateUser mutation
+            // Replace `updateUserAPI` with the actual function you would use to call your API
+            await updateUser({
+              id: userId,
+              input: {
+                firstName,
+                lastName,
+                // include other fields if needed
+              },
+            });
+            alert('User updated successfully!');
+          } catch (error) {
+            console.error('Error updating user:', error);
+            alert('Failed to update user.');
+          }
       };
 
     const handleCancel = () => {

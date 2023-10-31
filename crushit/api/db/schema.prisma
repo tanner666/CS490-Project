@@ -20,7 +20,8 @@ generator client {
 model User {
   id        Int             @id @default(autoincrement())
   username  String
-  name      String
+  firstName String
+  LastName  String
   email     String          @unique
   firebaseUid  String       @unique
 
