@@ -3,9 +3,8 @@ export const schema = gql`
     id: Int!
     email: String!
     firebaseUid: String!
-    username: String
-    firstName: String
-    lastName: String
+    username: String!
+    name: String!
     pomodoros: [PomodoroTimer]!
   }
 
@@ -20,9 +19,8 @@ export const schema = gql`
   }
 
   input UpdateUserInput {
-    username: String
-    firstName: String
-    lastName: String
+    username: String!
+    name: String
     email: String
     firebaseUid: String
   }

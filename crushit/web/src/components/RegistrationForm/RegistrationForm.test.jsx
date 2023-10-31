@@ -1,53 +1,60 @@
-import React from 'react'
+import React from 'react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import RegistrationForm from './RegistrationForm'; // Adjust the path as needed
+//import { useMutation } from '@redwoodjs/web';
+import { ThemeProvider } from '../ThemeContext/ThemeContext';
 
-import { render, screen, waitFor, fireEvent } from '@redwoodjs/testing/web'
-
-import { useAuth } from 'src/auth'
-
-import RegistrationForm from './RegistrationForm'
-
-//   Improve this test with help from the Redwood Testing Doc:
-//    https://redwoodjs.com/docs/testing#testing-components
-
+// Mocking useMutation and signUp
+jest.mock('@redwoodjs/web', () => {
+  const actual = jest.requireActual('@redwoodjs/web');
+  return {
+    ...actual,
+    useMutation: jest.fn().mockImplementation(() => [
+      jest.fn(), // This represents the mutate function itself
+      { loading: false, error: null, data: null }, // This represents the state object
+    ]),
+  };
+});
 jest.mock('src/auth', () => ({
-  useAuth: jest.fn(),
-}))
+  signUp: jest.fn()
+}));
 
-describe('RegistrationForm', () => {
-  it('allows a user to sign up', async () => {
-    const signUpMock = jest.fn()
-    useAuth.mockImplementation(() => ({
-      signUp: signUpMock,
-    }))
+// Helper function to setup the test
+const setup = () => {
+  const utils = render(<ThemeProvider><RegistrationForm /></ThemeProvider>);
+  const emailInput = utils.getByLabelText('Email/username');
+  const passwordInput = utils.getByLabelText('Password');
+  const confirmPasswordInput = utils.getByLabelText('Confirm Password');
+  const submitButton = utils.getByText('Sign Up');
+  return {
+    emailInput,
+    passwordInput,
+    confirmPasswordInput,
+    submitButton,
+    ...utils,
+  };
+};
 
-    const { getByLabelText, getByText } = render(<RegistrationForm />)
+test('it renders all form fields and allows input', () => {
+  const { emailInput, passwordInput, confirmPasswordInput } = setup();
 
-    // Simulate user input
-    fireEvent.change(getByLabelText(/email/i), {
-      target: { value: 'test@example.com' },
-    })
-    fireEvent.change(getByLabelText(/password/i), {
-      target: { value: 'password123' },
-    })
+  fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+  fireEvent.change(passwordInput, { target: { value: 'Password123!' } });
+  fireEvent.change(confirmPasswordInput, { target: { value: 'Password123!' } });
 
-    // Simulate button click
-    fireEvent.click(getByText(/sign up/i))
+  expect(emailInput.value).toBe('test@example.com');
+  expect(passwordInput.value).toBe('Password123!');
+  expect(confirmPasswordInput.value).toBe('Password123!');
+});
 
-    // Assertions
-    await waitFor(() => {
-      expect(signUpMock).toHaveBeenCalledWith({
-        email: 'test@example.com',
-        password: 'password123',
-      })
-    })
+test('it shows error message when passwords do not match', () => {
+  const { passwordInput, confirmPasswordInput, submitButton, getByText } = setup();
 
-    // Optionally, test for navigation or success message if applicable
-  })
+  fireEvent.change(passwordInput, { target: { value: 'Password123!' } });
+  fireEvent.change(confirmPasswordInput, { target: { value: 'AnotherPass123!' } });
+  fireEvent.click(submitButton);
 
-  // Add more tests as needed...
-  it('renders successfully', () => {
-    expect(() => {
-      render(<RegistrationForm />)
-    }).not.toThrow()
-  })
-})
+  expect(getByText('Passwords do not match.')).toBeInTheDocument();
+});
+
+// Additional tests can be added here

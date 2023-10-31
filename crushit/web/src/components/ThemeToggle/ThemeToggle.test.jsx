@@ -1,5 +1,5 @@
 import { render } from '@redwoodjs/testing/web'
-
+import { ThemeProvider } from '../ThemeContext/ThemeContext'
 import ThemeToggle from './ThemeToggle'
 
 //   Improve this test with help from the Redwood Testing Doc:
@@ -8,7 +8,11 @@ import ThemeToggle from './ThemeToggle'
 describe('ThemeToggle', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<ThemeToggle />)
+      render(
+        <ThemeProvider>
+          <ThemeToggle />
+          </ThemeProvider>
+        )
     }).not.toThrow()
   })
 })
