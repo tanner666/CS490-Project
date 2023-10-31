@@ -14,8 +14,7 @@ const GET_USER_QUERY = gql`
     user(firebaseUid: $firebaseUid) {
       id
       firebaseUid
-      firstName
-      lastName
+      name
       username
       email
     }
@@ -26,8 +25,7 @@ const UPDATE_USER_MUTATION = gql`
   mutation updateUser($firebaseUid: String!, $input: UpdateUserInput!) {
     updateUser(firebaseUid: $firebaseUid, input: $input) {
       firebaseUid
-      firstName
-      lastName
+      name
       email
     }
   }
@@ -53,7 +51,9 @@ export const SettingsForm = ({ userId }) => {
         // console.log(data)
         if (data && data.user) {
           // Check if data is available and user object exists
-          const { firstName, lastName, email} = data.user;
+          const { name } = data.user;
+          let firstName = name.split('|')[0];
+          let lastName = name.split('|')[1];
         //   console.log(firstName, lastName, data.user);
           setFirstName(firstName);
           setLastName(lastName);
@@ -108,8 +108,7 @@ export const SettingsForm = ({ userId }) => {
                 variables:{
                     firebaseUid: userId,
                     input: {
-                        firstName,
-                        lastName,
+                        name: firstName +'|' + lastName,
                     },
                 }
             });
