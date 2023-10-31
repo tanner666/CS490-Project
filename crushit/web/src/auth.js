@@ -1,5 +1,5 @@
 import { initializeApp, getApp, getApps } from 'firebase/app'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail} from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, onAuthStateChanged} from 'firebase/auth';
 import * as firebaseAuth from 'firebase/auth'
 
 import { createAuth } from '@redwoodjs/auth-firebase-web';
@@ -71,3 +71,21 @@ export const forgotPassword = async (email) => {
     throw new Error(error.message);
   }
 }
+
+export const getUserUid = () => {
+  return new Promise((resolve, reject) => {
+    const auth = getAuth(firebaseApp);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in; you can now access their information.
+        const uid = user.uid;
+        resolve(uid);
+      } else {
+        // User is signed out or not authenticated.
+        reject(new Error('User is not authenticated'));
+      }
+      // Unsubscribe from the observer to prevent memory leaks.
+      unsubscribe();
+    });
+  });
+};
