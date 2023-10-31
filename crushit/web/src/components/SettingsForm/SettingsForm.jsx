@@ -109,6 +109,7 @@ export const SettingsForm = ({ userId }) => {
                     firebaseUid: userId,
                     input: {
                         name: firstName +'|' + lastName,
+                        username: data.user.username,
                     },
                 }
             });
