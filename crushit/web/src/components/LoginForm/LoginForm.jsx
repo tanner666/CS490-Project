@@ -1,5 +1,5 @@
 import { useAuth } from 'src/auth';
-import {signIn} from 'src/auth';
+import {signIn, forgotPassword} from 'src/auth';
 import React, { useState, useEffect } from 'react';
 import { navigate } from '@redwoodjs/router';
 
@@ -46,6 +46,10 @@ const LoginForm = () => {
       setLoginError('Login failed. Please check your credentials.');
     }
   };
+
+  const handleForgotPassword = async () => {
+    navigate('/forgot-password');
+  }
 
   // Function to check if the password contains characters from two different types
   const containsTwoCharacterTypes = (password) => {
@@ -140,7 +144,7 @@ const LoginForm = () => {
 
           <div className="w-80 mx-auto mt-10 border rounded-lg p-3">
             <p className="text-center">
-              <a href="#" className="text-blue-500 ml-1 hover:underline">
+              <a href="#" className="text-blue-500 ml-1 hover:underline" onClick={handleForgotPassword}>
                 Forgot Password
               </a>
             </p>
