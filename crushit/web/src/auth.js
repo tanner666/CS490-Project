@@ -1,4 +1,4 @@
-import { initializeApp, getApp, getApps } from 'firebase/app';
+import { initializeApp, getApp, getApps } from 'firebase/app'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import * as firebaseAuth from 'firebase/auth'
 
@@ -26,30 +26,32 @@ const firebaseApp = ((config) => {
 
 export const firebaseClient = {
   firebaseAuth,
-  firebaseApp,
-};
+  firebaseApp, // optional
+}
 
-export const { AuthProvider, useAuth } = createAuth(firebaseClient);
-// Additional functions for sign-up, sign-in, and sign-out
+export const { AuthProvider, useAuth } = createAuth(firebaseClient)
 
 export const signUp = async (email, password) => {
-  const auth = getAuth(firebaseApp);
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    return userCredential.user;
-  } catch (error) {
-    throw new Error(error.message);
-  }
+const auth = getAuth(firebaseApp);
+try {
+  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  console.log('User created successfully');
+  firebaseAuth.sendEmailVerification(userCredential.user);
+  // userCredential.user.sendEmailVerification().then(()=>{console.log('Email sent')}).catch((error)=>{console.log(error.message)});
+  return userCredential.user;
+} catch (error) {
+  throw new Error(error.message);
+}
 };
 
 export const signIn = async (email, password) => {
-  const auth = getAuth(firebaseApp);
-  try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    return userCredential.user;
-  } catch (error) {
-    throw new Error(error.message);
-  }
+const auth = getAuth(firebaseApp);
+try {
+  const userCredential = await signInWithEmailAndPassword(auth, email, password);
+  return userCredential.user
+} catch (error) {
+  throw new Error(error.message);
+}
 };
 
 export const signOutUser = async () => {
@@ -60,3 +62,4 @@ export const signOutUser = async () => {
     throw new Error(error.message);
   }
 };
+

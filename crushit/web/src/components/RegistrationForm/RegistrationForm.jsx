@@ -10,7 +10,7 @@ const CREATE_USER_MUTATION = gql`
     }
   }`
 
-import { useAuth } from 'src/auth'
+import { useAuth, signUp, signIn } from 'src/auth'
 
 const RegistrationForm = () => {
   const [createUser] = useMutation(CREATE_USER_MUTATION)
@@ -56,6 +56,7 @@ const RegistrationForm = () => {
     }
 
     try {
+
       const userFB = (await signUp(email, password ))
       const firebaseUid = (await createUser( {variables:{input: { email, firebaseUid: userFB.uid }}} )).data.createUser.firebaseUid
       console.log('Firebase registration successful')
