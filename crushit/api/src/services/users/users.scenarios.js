@@ -1,20 +1,14 @@
+
+// api/src/services/users/users.scenarios.js
+
 export const standard = defineScenario({
   user: {
     one: {
-      data: {
-        username: 5186506,
-        name: 'String',
-        email: 'String1201273',
-        passHash: 'String',
-      },
-    },
-    two: {
-      data: {
-        username: 2058344,
-        name: 'String',
-        email: 'String5118382',
-        passHash: 'String',
-      },
+      email: 'user1@example.com',
+      firebaseUid: 'firebaseUid1',
+      username: 'user1',
+      name: 'User One',
+      password: 'password1',
     },
   },
 })

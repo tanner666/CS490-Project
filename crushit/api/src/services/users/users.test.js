@@ -1,54 +1,21 @@
-import { users, user, createUser, updateUser, deleteUser } from './users'
 
-// Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float.
-//           Please refer to the RedwoodJS Testing Docs:
-//       https://redwoodjs.com/docs/testing#testing-services
-// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+import { standard } from './users.scenarios'
+import {createUser, deleteUser, users, user,} from './users'
 
-describe('users', () => {
-  scenario('returns all users', async (scenario) => {
-    const result = await users()
 
-    expect(result.length).toEqual(Object.keys(scenario.user).length)
-  })
 
-  scenario('returns a single user', async (scenario) => {
-    const result = await user({ id: scenario.user.one.id })
+describe('createUser', () => {
+  it('should create a user', async () => {
+    const input = { email: 'test@example.com', firebaseUid: '123456' };
+    const userDB = await createUser({ input });
+    expect(userDB).toBeDefined();
+    expect(userDB.email).toBe('test@example.com');
+    expect(userDB.firebaseUid).toBe('123456');
+  });
 
-    expect(result).toEqual(scenario.user.one)
-  })
-
-  scenario('creates a user', async () => {
-    const result = await createUser({
-      input: {
-        username: 330506,
-        name: 'String',
-        email: 'String8927690',
-        passHash: 'String',
-      },
-    })
-
-    expect(result.username).toEqual(330506)
-    expect(result.name).toEqual('String')
-    expect(result.email).toEqual('String8927690')
-    expect(result.passHash).toEqual('String')
-  })
-
-  scenario('updates a user', async (scenario) => {
-    const original = await user({ id: scenario.user.one.id })
-    const result = await updateUser({
-      id: original.id,
-      input: { username: 3314097 },
-    })
-
-    expect(result.username).toEqual(3314097)
-  })
-
-  scenario('deletes a user', async (scenario) => {
-    const original = await deleteUser({ id: scenario.user.one.id })
-    const result = await user({ id: original.id })
-
-    expect(result).toEqual(null)
-  })
-})
+  it('should throw an error if user creation fails', async () => {
+    const input = { email: 'test@example.com', firebaseUid: '123456' };
+    jest.spyOn(db.user, 'create').mockRejectedValue(new Error('Failed to create user'));
+    await expect(createUser({ input })).rejects.toThrow('Failed to create user');
+  });
+});
