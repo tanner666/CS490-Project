@@ -65,92 +65,98 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-start">
-    <div className="bg-custom-gray w-[59%] h-screen flex items-center justify-center relative">
-        <div className="flex flex-col justify-between items-center w-full">
-            <div className="text-center text-white">
-                <h2 className="font-normal leading-none font-fredoka" style={{ fontSize: '4vw' }}>Crush It</h2>
+    <div className="bg-light-gray min-h-screen flex justify-start">
+      <div className="bg-custom-gray w-[59%] h-screen flex items-center justify-center relative rounded-r-lg">
+          <div className="flex flex-col justify-between items-center w-full">
+              <div className="text-center text-white">
+                  <h2 className="font-normal leading-none font-fredoka" style={{ fontSize: '4vw' }}>Crush It</h2>
+              </div>
+              <img
+                  src="https://drive.google.com/uc?id=16-VMhr8wY_qwKfeaHduWZTeB3oFuTc4b"
+                  alt="Your Image"
+                  className="w-[63.76%] mt-[10%]"
+              />
+          </div>
+      </div>
+      <div className="flex items-center justify-center ml-[-50px]">
+        <div className="relative bg-white p-8 rounded-lg shadow-lg h-[90%]">
+          <h1 className="text-3xl font-semibold mb-8 text-center">Sign In</h1>
+
+          {loginSuccess && (
+            <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+              Login successful!
             </div>
-            <img
-                src="https://drive.google.com/uc?id=16-VMhr8wY_qwKfeaHduWZTeB3oFuTc4b"
-                alt="Your Image"
-                className="w-[63.76%] mt-[10%]"
+          )}
+
+          {loginError && (
+            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
+              {loginError}
+            </div>
+          )}
+
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="email">
+              Email/username
+            </label>
+            <input
+              className="shadow appearance-none border rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
+              id="email"
+              type="text"
+              placeholder="John Doe01"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-        </div>
-    </div>
-
-
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h1 className="text-3xl font-semibold mb-8 text-center">Sign In</h1>
-
-        {loginSuccess && (
-          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
-            Login successful!
+            {usernameRequired && (
+              <p className="text-red-500 text-sm mt-2">Username is required.</p>
+            )}
           </div>
-        )}
 
-        {loginError && (
-          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
-            {loginError}
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="password">
+              Password
+            </label>
+            <input
+              className="shadow appearance-none border rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {passwordRequired && (
+              <p className="text-red-500 text-sm mt-2">Password is required.</p>
+            )}
           </div>
-        )}
+          <div className="flex items-center justify-center">
+            <button
+              type="button"
+              className="text-white w-[50%] py-2 rounded-lg mb-6 transition duration-150"
+              style={{
+                background: 'linear-gradient(180deg, #6284FF 0%, #4B6DE9 100%)',
+                boxShadow: '0px 4px 80px 0px rgba(98, 132, 255, 0.20)'
+              }}
+              onClick={handleSignUp}
+            >
+              Sign In
+            </button>
+          </div>
 
-        <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="email">
-            Email/username
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
-            id="email"
-            type="text"
-            placeholder="John Doe01"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          {usernameRequired && (
-            <p className="text-red-500 text-sm mt-2">Username is required.</p>
-          )}
-        </div>
 
-        <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="password">
-            Password
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {passwordRequired && (
-            <p className="text-red-500 text-sm mt-2">Password is required.</p>
-          )}
-        </div>
+          <div className="w-80 mx-auto mt-10 border rounded-lg p-3">
+            <p className="text-center">
+              <a href="#" className="text-blue-500 ml-1 hover:underline">
+                Forgot Password
+              </a>
+            </p>
+          </div>
 
-        <button
-          type="button"
-          className="bg-blue-600 text-white py-2 px-4 rounded w-full mb-6 hover-bg-blue-700 transition duration-150"
-          onClick={handleSignUp}
-        >
-          Sign In
-        </button>
-
-        <div className="w-80 mx-auto mt-10 border rounded p-4">
-          <p className="text-center">
-            <a href="#" className="text-blue-500 ml-1 hover:underline">
-              Forgot Password
-            </a>
-          </p>
-        </div>
-
-        <div className="w-80 mx-auto mt-10 border rounded p-4">
-          <p className="text-center">
-            Need an account?{' '}
-            <a href="/registration" className="text-blue-500 ml-1 hover:underline">
-              Sign up Here!
-            </a>
-          </p>
+          <div className="w-80 mx-auto absolute bottom-12 border rounded-lg p-3 bg-light-gray">
+            <p className="text-center">
+              Need an account?{' '}
+              <a href="/registration" className="text-blue-500 ml-1 hover:underline">
+                Sign up Here!
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
