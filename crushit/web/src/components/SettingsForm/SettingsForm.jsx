@@ -5,7 +5,8 @@ import PasswordField from '../PasswordField/PasswordField'
 import NameField from '../NameField/NameField'
 import TimerField from '../TimerField/TimerField'
 import { useMutation, useQuery } from '@redwoodjs/web'
-import {changeUserPassword } from 'src/auth';
+import {changeUserPassword , signOutUser} from 'src/auth';
+import { navigate } from '@redwoodjs/router';
 //import { UpdateUserInput } from 'src/graphql/users.sdl';
 
 const GET_USER_QUERY = gql`
@@ -93,6 +94,10 @@ export const SettingsForm = ({ userId }) => {
         setLongBreak(event.target.value);
     };
 
+    const handleLogout = async (event) => {
+        await signOutUser()
+        navigate('/')
+    }
 
     //this function is the save button that saves the entire settings page
     const handleSave = async () => {
@@ -193,7 +198,7 @@ export const SettingsForm = ({ userId }) => {
 
                 {/* Logout  Button */}
                 <div className="mb-12 absolute bottom-8">
-                    <button className="bg-custom-gray text-xs text-white py-2 px-6 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 border border-white">
+                    <button onClick={handleLogout} className="bg-custom-gray text-xs text-white py-2 px-6 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 border border-white">
                         Log Out
                     </button>
                 </div>
