@@ -18,6 +18,17 @@ export const SettingsForm = () => {
         setLastName(event.target.value);
     };
 
+    const handleSave = async () => {
+        // Logic to save firstName, lastName, etc. to the database
+        // This could involve calling an API or a mutation if using GraphQL
+      };
+
+    const handleCancel = () => {
+        setFirstName('');
+        setLastName('');
+        // Reset other states if necessary
+    };
+
     return (
         <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
             {/*Sidebar*/}
@@ -76,7 +87,13 @@ export const SettingsForm = () => {
                     </div>
                     <div className={`pb-5 px-8 w-full mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
                         <div className="grid grid-cols-2 gap-8">
-                            <NameField theme={theme}/>
+                            <NameField
+                            firstName={firstName}
+                            lastName={lastName}
+                            handleFirstNameChange={handleFirstNameChange}
+                            handleLastNameChange={handleLastNameChange}
+                            theme={theme}
+                            />
                         </div>
                     </div>
                     <h2 className={`text-xl font-dm font-semibold mt-6 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Change Password</h2>
@@ -103,7 +120,7 @@ export const SettingsForm = () => {
                         borderColor: '#6284FF',
                         boxShadow: '0px 4px 80px 0px rgba(98, 132, 255, 0.20)'
                     }}
-                    //onClick={handleSignUp}
+                    onClick={handleCancel}
                     >
                     Cancel
                     </button>
@@ -114,7 +131,7 @@ export const SettingsForm = () => {
                         background: 'linear-gradient(180deg, #6284FF 0%, #4B6DE9 100%)',
                         boxShadow: '0px 4px 80px 0px rgba(98, 132, 255, 0.20)'
                     }}
-                    //onClick={handleSignUp}
+                    onClick={handleSave}
                     >
                     Save
                     </button>
