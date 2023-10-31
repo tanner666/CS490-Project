@@ -1,9 +1,13 @@
-const TimerField = () => {
+import SettingsField from "../SettingsField/SettingsField"
+
+const TimerField = ({theme}) => {
   return (
-    <div>
-      <h2>{'TimerField'}</h2>
-      <p>{'Find me in ./web/src/components/TimerField/TimerField.jsx'}</p>
-    </div>
+    <>
+      <SettingsField label="Podomoro" theme={theme}/>
+      <SettingsField label="Short Break" theme={theme}/>
+      <SettingsField label="Long Break" theme={theme}/>
+    </>
+    
   )
 }
 

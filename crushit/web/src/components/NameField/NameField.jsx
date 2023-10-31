@@ -1,9 +1,12 @@
-const NameField = () => {
+import SettingsField from "../SettingsField/SettingsField"
+
+const NameField = ({theme}) => {
   return (
-    <div>
-      <h2>{'NameField'}</h2>
-      <p>{'Find me in ./web/src/components/NameField/NameField.jsx'}</p>
-    </div>
+    <>
+      <SettingsField label="First Name" theme={theme}/>
+      <SettingsField label="Last Name" theme={theme}/>
+    </>
+    
   )
 }
 
