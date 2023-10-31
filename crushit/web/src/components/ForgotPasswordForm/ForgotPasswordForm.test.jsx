@@ -1,14 +1,8 @@
-import { render } from '@redwoodjs/testing/web'
+import { render, screen } from '@testing-library/react';
+import ForgotPasswordForm from './ForgotPasswordForm';
 
-import ForgotPasswordForm from './ForgotPasswordForm'
-
-//   Improve this test with help from the Redwood Testing Doc:
-//    https://redwoodjs.com/docs/testing#testing-components
-
-describe('ForgotPasswordForm', () => {
-  it('renders successfully', () => {
-    expect(() => {
-      render(<ForgotPasswordForm />)
-    }).not.toThrow()
-  })
-})
+test('renders ForgotPasswordForm', () => {
+  render(<ForgotPasswordForm />);
+  const formElement = screen.getByText(/Forgot Password?/i);
+  expect(formElement).toBeInTheDocument();
+});
