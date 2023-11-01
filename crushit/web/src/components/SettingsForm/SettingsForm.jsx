@@ -236,7 +236,7 @@ export const SettingsForm = ({ userId }) => {
                                 confirmNewPassword={confirmNewPassword}
                                 handleCurrentPasswordChange={handleCurrentPasswordChange}
                                 handleNewPasswordChange={handleNewPasswordChange}
-                                handleConfirmNewPasswordChange={handleNewPasswordChange}
+                                handleConfirmNewPasswordChange={handleConfirmNewPasswordChange}
                                 theme={theme}
                             />
                         </div>
