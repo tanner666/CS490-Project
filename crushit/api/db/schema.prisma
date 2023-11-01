@@ -1,0 +1,37 @@
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://admin:adminPass@localhost:5432/crushit"
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = "native"
+}
+
+// Define your own datamodels here and run `yarn redwood prisma migrate dev`
+// to create migrations for them and apply to your dev DB.
+// TODO: Please remove the following example:
+//model UserExample {
+//  id    Int     @id @default(autoincrement())
+//  email String  @unique
+//  name  String?
+//}
+
+model User {
+  id        Int             @id @default(autoincrement())
+  username  String
+  name      String
+  email     String          @unique
+  firebaseUid  String       @unique
+
+  pomodoros PomodoroTimer[]
+}
+
+model PomodoroTimer {
+  id       Int  @id @default(autoincrement())
+  pomodoro Int
+  short    Int
+  long     Int
+  userId   Int
+  user     User @relation(fields: [userId], references: [id])
+}

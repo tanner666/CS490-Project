@@ -1,0 +1,14 @@
+{
+  "name": "api",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@redwoodjs/api": "6.3.2",
+    "@redwoodjs/auth-firebase-api": "6.3.2",
+    "@redwoodjs/graphql-server": "6.3.2",
+    "firebase-admin": "11.10.1"
+  },
+  "prisma": {
+    "useEnv": true
+  }
+}
