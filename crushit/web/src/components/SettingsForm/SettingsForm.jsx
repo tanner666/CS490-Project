@@ -133,15 +133,22 @@ export const SettingsForm = ({ userId }) => {
             });
             await refetch();
             if (currentPassword && newPassword && confirmNewPassword) {
-                if (newPassword === confirmNewPassword && newPassword.length > 12 && containsTwoCharacterTypes(newPassword)) {
+                if (newPassword === confirmNewPassword && newPassword.length >= 12 && containsTwoCharacterTypes(newPassword)) {
                     console.log('Password will be changed');
                     try {
-                        await changeUserPassword(data.user.email, currentPassword, newPassword);
+                        await changeUserPassword(data.user.email, currentPassword, newPassword).then(() => {
+                            alert('Password changed successfully!');
+                            
+                        })
                     } catch (error) {
                         alert('Failed to change password');
                     }
+                    setCurrentPassword('');
+                            setNewPassword('');
+                            setConfirmNewPassword('')
                 } else {
                     console.log('Password requirements not met');
+                    alert('Password requirements not met');
 
                 }
             } else {
