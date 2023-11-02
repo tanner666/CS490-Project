@@ -20,6 +20,7 @@ const GET_USER_QUERY = gql`
       pomodoroLength
       pomodoroShort
       pomodoroLong
+      darkMode
     }
   }
 `;
@@ -33,6 +34,7 @@ const UPDATE_USER_MUTATION = gql`
       pomodoroLength
       pomodoroShort
       pomodoroLong
+      darkMode
     }
   }
 `
@@ -57,7 +59,7 @@ export const SettingsForm = ({ userId }) => {
         // console.log(data)
         if (data && data.user) {
             // Check if data is available and user object exists
-            const { name, pomodoroLength, pomodoroShort, pomodoroLong } = data.user;
+            const { name, pomodoroLength, pomodoroShort, pomodoroLong, darkMode } = data.user;
             let firstName = name.split('|')[0];
             let lastName = name.split('|')[1];
             //   console.log(firstName, lastName, data.user);
