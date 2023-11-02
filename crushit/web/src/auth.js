@@ -98,6 +98,7 @@ export const changeUserPassword = async (email, oldPassword, newPassword) => {
     await updatePassword(auth.currentUser, newPassword);
     console.log("Password updated successfully.");
   } catch (error) {
-    console.error("Password update error:", error);
+    // console.error("Password update error:", error);
+    throw new Error(error.message);
   }
 };

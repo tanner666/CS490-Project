@@ -11,6 +11,7 @@ const TimerField = ({podomoro, shortBreak, longBreak, handlePodomoroChange, hand
         value={podomoro}
         onChange={handlePodomoroChange}
         theme={theme}
+        type="number"
       />
       <SettingsField
         id="Short Break"
@@ -18,6 +19,8 @@ const TimerField = ({podomoro, shortBreak, longBreak, handlePodomoroChange, hand
         value={shortBreak}
         onChange={handleShortBreakChange}
         theme={theme}
+        type="number"
+
       />
       <SettingsField
         id="Long Break"
@@ -25,6 +28,8 @@ const TimerField = ({podomoro, shortBreak, longBreak, handlePodomoroChange, hand
         value={longBreak}
         onChange={handleLongBreakChange}
         theme={theme}
+        type="number"
+
       />
     </>
 
