@@ -20,12 +20,13 @@ generator client {
 model User {
   id        Int             @id @default(autoincrement())
   username  String
-  name      String
+  name      String          @default("|")
   email     String          @unique
   firebaseUid  String       @unique
-  pomodoroLength Int
-  pomodoroShort Int
-  pomodoroLong  Int
+  pomodoroLength Int        @default(25)
+  pomodoroShort Int         @default(5)
+  pomodoroLong  Int         @default(10)
+  darkMode  Boolean         @default(false)
   pomodoros PomodoroTimer[]
 }
 

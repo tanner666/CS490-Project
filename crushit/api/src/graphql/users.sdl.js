@@ -8,6 +8,7 @@ export const schema = gql`
     pomodoroLength: Int!
     pomodoroShort:  Int!
     pomodoroLong:  Int!
+    darkMode: Boolean!
     pomodoros: [PomodoroTimer]!
   }
 
@@ -28,6 +29,7 @@ export const schema = gql`
     pomodoroLength: Int
     pomodoroShort:  Int
     pomodoroLong:  Int
+    darkMode: Boolean
     firebaseUid: String
   }
 
