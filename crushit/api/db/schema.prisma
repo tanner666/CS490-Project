@@ -23,7 +23,9 @@ model User {
   name      String
   email     String          @unique
   firebaseUid  String       @unique
-
+  pomodoroLength Int
+  pomodoroShort Int
+  pomodoroLong  Int
   pomodoros PomodoroTimer[]
 }
 

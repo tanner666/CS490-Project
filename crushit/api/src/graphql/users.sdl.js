@@ -5,6 +5,9 @@ export const schema = gql`
     firebaseUid: String!
     username: String!
     name: String!
+    pomodoroLength: Int!
+    pomodoroShort:  Int!
+    pomodoroLong:  Int!
     pomodoros: [PomodoroTimer]!
   }
 
@@ -22,6 +25,9 @@ export const schema = gql`
     username: String!
     name: String
     email: String
+    pomodoroLength: Int
+    pomodoroShort:  Int
+    pomodoroLong:  Int
     firebaseUid: String
   }
 
