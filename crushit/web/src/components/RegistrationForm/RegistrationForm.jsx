@@ -153,12 +153,17 @@ const RegistrationForm = () => {
           </div>
 
           <div className="mb-6">
-            <label
-              className="block text-gray-700 text-sm font-medium mb-2"
-              htmlFor="password"
-            >
-              Password
-            </label>
+             <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="password">
+               <span className="flex items-center">
+                 <img
+                   src="https://drive.google.com/uc?id=1pA2Xu-YP86YyJFPSJb4Q6LfOYcmEM1Gc"
+                   alt="Password Icon"
+                   className="mr-2"
+                   style={{ width: '18px', height: '18px' }}
+                 />
+               Password
+               </span>
+             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
               id="password"
@@ -172,12 +177,17 @@ const RegistrationForm = () => {
           </div>
 
           <div className="mb-6">
-            <label
-              className="block text-gray-700 text-sm font-medium mb-2"
-              htmlFor="confirm-password"
-            >
-              Confirm Password
-            </label>
+             <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="password">
+               <span className="flex items-center">
+                 <img
+                   src="https://drive.google.com/uc?id=1pA2Xu-YP86YyJFPSJb4Q6LfOYcmEM1Gc"
+                   alt="Password Icon"
+                   className="mr-2"
+                   style={{ width: '18px', height: '18px' }}
+                 />
+               Confirm Password
+               </span>
+             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
               id="confirm-password"
