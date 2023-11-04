@@ -128,12 +128,17 @@ const RegistrationForm = () => {
           )}
 
           <div className="mb-6">
-            <label
-              className="block text-gray-700 text-sm font-medium mb-2"
-              htmlFor="email"
-            >
-              Email/username
-            </label>
+  	    <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="email">
+    	      <span className="flex items-center"> {/* Use a flex container to align items horizontally */}
+                <img
+                  src="https://drive.google.com/uc?id=1IU2B0OMrqnVAYx2tmcx4ffIJ__tvAgq1"
+                  alt="Email Icon"
+                  className="mr-2"
+                  style={{ width: '18px', height: '18px' }} // You can adjust the width and height as needed
+                  /> {/* Image */}
+                Email/username
+              </span>
+          </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
               id="email"
