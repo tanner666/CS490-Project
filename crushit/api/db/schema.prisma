@@ -18,23 +18,29 @@ generator client {
 //}
 
 model User {
-  id        Int             @id @default(autoincrement())
-  username  String
-  name      String          @default("|")
-  email     String          @unique
-  firebaseUid  String       @unique
-  pomodoroLength Int        @default(25)
-  pomodoroShort Int         @default(5)
-  pomodoroLong  Int         @default(10)
-  darkMode  Boolean         @default(false)
-  pomodoros PomodoroTimer[]
+  id             Int     @id @default(autoincrement())
+  username       String
+  name           String  @default("|")
+  email          String  @unique
+  firebaseUid    String  @unique
+  pomodoroLength Int     @default(25)
+  pomodoroShort  Int     @default(5)
+  pomodoroLong   Int     @default(10)
+  darkMode       Boolean @default(false)
+  tasks          Task[]  @relation("UserTasks")
 }
 
-model PomodoroTimer {
-  id       Int  @id @default(autoincrement())
-  pomodoro Int
-  short    Int
-  long     Int
-  userId   Int
-  user     User @relation(fields: [userId], references: [id])
+// schema.prisma
+
+model Task {
+  id                Int     @id @default(autoincrement())
+  taskName          String
+  priorityStatus    String
+  groupStatus       String?
+  completionStatus  Boolean
+  description       String?
+  pomodoroTimers    Int
+  pomodoroTimerType String?
+  createdBy         Int
+  created_by        User    @relation("UserTasks", fields: [createdBy], references: [id])
 }
