@@ -2,6 +2,7 @@ import { useAuth } from 'src/auth';
 import {signIn, forgotPassword} from 'src/auth';
 import React, { useState, useEffect } from 'react';
 import { navigate } from '@redwoodjs/router';
+import { set } from '@redwoodjs/forms';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -10,6 +11,7 @@ const LoginForm = () => {
   const [passwordRequired, setPasswordRequired] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [loginError, setLoginError] = useState(null);
+  // const { setUserUid } = useContext(UserContext);
   //const { signIn } = useAuth();
 
   const handleSignUp = async () => {
@@ -37,9 +39,10 @@ const LoginForm = () => {
     }
 
     try {
-      await signIn( email, password);
+      const uid = await (await signIn( email, password)).uid
       // Redirect the user to another page after a successful sign-up.
       setLoginSuccess(true);
+      // setUserUid(uid);
       navigate('/settings');
     } catch (error) {
       console.error('Sign-in error:', error);
@@ -66,7 +69,7 @@ const LoginForm = () => {
 
   return (
     <div className="bg-light-gray min-h-screen flex">
-      <div className="bg-custom-gray flex-grow h-screen flex items-center justify-center relative rounded-r-lg" 
+      <div className="bg-custom-gray flex-grow h-screen flex items-center justify-center relative rounded-r-lg"
       style={{ flex: '1', maxWidth: '59vw' }}>
           <div className="flex flex-col justify-between items-center w-full">
               <div className="text-center text-white mt-[10%]">
@@ -149,7 +152,7 @@ const LoginForm = () => {
               </a>
             </p>
           </div>
-        <div className="flex items-center justify-center">      
+        <div className="flex items-center justify-center">
           <div className="w-80 mx-auto absolute bottom-12 border rounded-lg p-3 bg-light-gray">
             <p className="text-center">
               Need an account?{' '}

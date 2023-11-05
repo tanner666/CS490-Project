@@ -1,4 +1,5 @@
 import { render } from '@redwoodjs/testing/web'
+import { ThemeProvider } from 'src/components/ThemeContext/ThemeContext'
 
 import SettingsPage from './SettingsPage'
 
@@ -8,7 +9,11 @@ import SettingsPage from './SettingsPage'
 describe('SettingsPage', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<SettingsPage />)
+      render(
+        <ThemeProvider>
+          <SettingsPage />
+          </ThemeProvider>
+        )
     }).not.toThrow()
   })
 })

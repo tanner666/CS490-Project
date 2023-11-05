@@ -2,6 +2,7 @@ import React from 'react'
 import { render, screen, waitFor, fireEvent } from '@redwoodjs/testing/web'
 import LoginForm from './LoginForm'
 import {useAuth} from 'src/auth'
+import { ThemeProvider } from '../ThemeContext/ThemeContext';
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
@@ -10,6 +11,7 @@ jest.mock('src/auth', () => ({
   useAuth: jest.fn(),
 }));
 
+
 describe('LoginForm', () => {
   it('allows a user to sign in', async () => {
     const signInMock = jest.fn();
@@ -17,9 +19,8 @@ describe('LoginForm', () => {
       signIn: signInMock,
     }));
 
-    const { getByLabelText, getByText } = render(<LoginForm />);
+    const { getByLabelText, getByText } = render(<ThemeProvider><LoginForm /></ThemeProvider>);
 
-    // Simulate user input
     fireEvent.change(getByLabelText(/email/i), {
       target: { value: 'test@example.com' },
     });
@@ -27,10 +28,10 @@ describe('LoginForm', () => {
       target: { value: 'password123' },
     });
 
-    // Simulate button click
-    fireEvent.click(getByText(/sign in/i));
+    const submitButton = getByText('Sign In', { selector: 'button' });
 
-    // Assertions
+    fireEvent.submit(submitButton);
+
     await waitFor(() => {
       expect(signInMock).toHaveBeenCalledWith({
         email: 'test@example.com',
@@ -38,10 +39,8 @@ describe('LoginForm', () => {
       });
     });
 
-    // Optionally, test for navigation or success message if applicable
   });
 
-  // Add more tests as needed...
   it('renders successfully', () => {
     expect(() => {
       render(<LoginForm />)

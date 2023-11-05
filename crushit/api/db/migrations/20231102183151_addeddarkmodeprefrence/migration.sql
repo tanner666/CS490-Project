@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "darkMode" BOOLEAN NOT NULL DEFAULT false,
+ALTER COLUMN "name" SET DEFAULT '|',
+ALTER COLUMN "pomodoroLength" SET DEFAULT 25,
+ALTER COLUMN "pomodoroLong" SET DEFAULT 10,
+ALTER COLUMN "pomodoroShort" SET DEFAULT 5;

@@ -1,4 +1,5 @@
 import { render } from '@redwoodjs/testing/web'
+import { ThemeProvider } from '../ThemeContext/ThemeContext'
 
 import SettingsField from './SettingsField'
 
@@ -8,7 +9,11 @@ import SettingsField from './SettingsField'
 describe('SettingsField', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<SettingsField />)
+      render(
+        <ThemeProvider>
+          <SettingsField />
+          </ThemeProvider>
+        )
     }).not.toThrow()
   })
 })

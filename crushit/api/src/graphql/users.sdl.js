@@ -3,15 +3,18 @@ export const schema = gql`
     id: Int!
     email: String!
     firebaseUid: String!
-    username: String
-    firstName: String
-    lastName: String
+    username: String!
+    name: String!
+    pomodoroLength: Int!
+    pomodoroShort:  Int!
+    pomodoroLong:  Int!
+    darkMode: Boolean!
     pomodoros: [PomodoroTimer]!
   }
 
   type Query {
     users: [User!]! @requireAuth
-    user(id: Int!): User @requireAuth
+    user(firebaseUid: String!): User @requireAuth
   }
 
   input CreateUserInput {
@@ -20,10 +23,13 @@ export const schema = gql`
   }
 
   input UpdateUserInput {
-    username: String
-    firstName: String
-    lastName: String
+    username: String!
+    name: String
     email: String
+    pomodoroLength: Int
+    pomodoroShort:  Int
+    pomodoroLong:  Int
+    darkMode: Boolean
     firebaseUid: String
   }
 
@@ -33,7 +39,7 @@ export const schema = gql`
   }
 
   type Mutation {
-    updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
+    updateUser(firebaseUid: String!, input: UpdateUserInput!): User! @requireAuth
     deleteUser(id: Int!): User! @requireAuth
 
     createUser(input: CreateUserInput!): User @skipAuth

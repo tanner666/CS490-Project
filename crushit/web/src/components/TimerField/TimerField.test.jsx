@@ -1,14 +1,64 @@
-import { render } from '@redwoodjs/testing/web'
+import React from 'react'
 
-import TimerField from './TimerField'
+import { render, screen, fireEvent } from '@testing-library/react'
 
-//   Improve this test with help from the Redwood Testing Doc:
-//    https://redwoodjs.com/docs/testing#testing-components
+import '@testing-library/jest-dom'
+import { ThemeProvider } from '../ThemeContext/ThemeContext'
 
-describe('TimerField', () => {
-  it('renders successfully', () => {
-    expect(() => {
-      render(<TimerField />)
-    }).not.toThrow()
+import TimerField from './TimerField' // Adjust the import path as needed
+
+import {handlePodomoroChange} from 'web/src/components/settingsform/settingsform'
+
+describe('TimerField Component', () => {
+  const mockHandlePodomoroChange = jest.fn((e) => {
+    e.target.value = '30'
+    return e
   })
+  const mockHandleShortBreakChange = jest.fn()
+  const mockHandleLongBreakChange = jest.fn()
+
+  it('renders without crashing', () => {
+    render(
+      <ThemeProvider>
+        <TimerField
+          podomoro={25}
+          shortBreak={5}
+          longBreak={15}
+          handlePodomoroChange={mockHandlePodomoroChange}
+          handleShortBreakChange={mockHandleShortBreakChange}
+          handleLongBreakChange={mockHandleLongBreakChange}
+          theme="light"
+        />
+      </ThemeProvider>
+    )
+
+    expect(screen.getByLabelText(/Podomoro/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Short Break/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Long Break/i)).toBeInTheDocument()
+  })
+
+  it('calls handlePodomoroChange when Podomoro value is changed', () => {
+    render(
+      <ThemeProvider>
+        <TimerField
+          podomoro={25}
+          shortBreak={5}
+          longBreak={15}
+          handlePodomoroChange={mockHandlePodomoroChange}
+          handleShortBreakChange={mockHandleShortBreakChange}
+          handleLongBreakChange={mockHandleLongBreakChange}
+          theme="light"
+        />
+      </ThemeProvider>
+    )
+
+    fireEvent.change(screen.getByPlaceholderText(/Podomoro/i), {
+      target: { value: '30' },
+    })
+
+    expect(mockHandlePodomoroChange).toHaveBeenCalledWith(
+      expect.objectContaining({ target: { value: '30' } })
+    )
+  })
+
 })

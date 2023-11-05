@@ -7,6 +7,7 @@ module.exports = {
         'custom-gray': '#252628',
         'light-gray': '#F5F7F9',
         'dark-gray': '#3E3F42',
+        'almost-black': '#1F1F1F',
         
       },
       fontFamily: {
