@@ -27,6 +27,7 @@ model User {
   pomodoroShort  Int     @default(5)
   pomodoroLong   Int     @default(10)
   darkMode       Boolean @default(false)
+  pomodoros PomodoroTimer[]
   tasks          Task[]  @relation("UserTasks")
 }
 
@@ -43,4 +44,13 @@ model Task {
   pomodoroTimerType String?
   createdBy         Int
   created_by        User    @relation("UserTasks", fields: [createdBy], references: [id])
+}
+
+model PomodoroTimer {
+  id       Int  @id @default(autoincrement())
+  pomodoro Int
+  short    Int
+  long     Int
+  userId   Int
+  user     User @relation(fields: [userId], references: [id])
 }
