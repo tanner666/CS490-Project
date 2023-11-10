@@ -154,6 +154,7 @@ export const SettingsForm = ({ userId }) => {
 
                 }
             } else {
+                alert("Passwords are empty")
                 console.log('passwords empty')
             }
 
