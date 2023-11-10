@@ -50,8 +50,12 @@ const RegistrationForm = () => {
 
     // Check password requirements
     if (password.length < 12 || !containsTwoCharacterTypes(password)) {
-      setRegistrationError('Password requirements not met.')
+      setRegistrationError('Password must be at least 12 characters long and contain characters from at least two different types (uppercase, lowercase, numeric, special).')
       return
+    }
+
+    if (setPasswordMatchError) {
+      setRegistrationError('Password does not match.')
     }
 
     try {

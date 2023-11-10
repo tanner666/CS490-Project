@@ -149,8 +149,8 @@ export const SettingsForm = ({ userId }) => {
                             setNewPassword('');
                             setConfirmNewPassword('')
                 } else {
-                    console.log('Password requirements not met');
-                    alert('Password requirements not met');
+                    console.log('Password must match and be at least 12 characters long and contain characters from at least two different types (uppercase, lowercase, numeric, special).');
+                    alert('Password must match and be at least 12 characters long and contain characters from at least two different types (uppercase, lowercase, numeric, special).');
 
                 }
             } else {
