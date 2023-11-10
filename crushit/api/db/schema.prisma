@@ -34,23 +34,25 @@ model User {
 // schema.prisma
 
 model Task {
-  id                Int     @id @default(autoincrement())
+  id                Int       @id @default(autoincrement())
   taskName          String
   priorityStatus    String
   groupStatus       String?
-  completionStatus  Boolean
+  completionStatus  Boolean   @default(false)
   description       String?
-  pomodoroTimers    Int
+  pomodoroTimers    Int // Times it runs a given day
   pomodoroTimerType String?
+  isRepeated        Boolean   @default(false)
+  endingDate        DateTime?
   createdBy         Int
-  created_by        User    @relation("UserTasks", fields: [createdBy], references: [id])
+  created_by        User      @relation("UserTasks", fields: [createdBy], references: [id])
 }
 
 model PomodoroTimer {
   id       Int  @id @default(autoincrement())
-  pomodoro Int     // Time in minutes for regular pomodoros
-  short    Int     // Time in minutes for short breaks
-  long     Int     // Time in minutes for long breaks
+  pomodoro Int // Time in minutes for regular pomodoros
+  short    Int // Time in minutes for short breaks
+  long     Int // Time in minutes for long breaks
   userId   Int
   user     User @relation("UserTimer", fields: [userId], references: [id])
 }
