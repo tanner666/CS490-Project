@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://admin:adminPass@localhost:5432/crushit"
+  url      = "postgresql://admin:adminPass@localhost:5433/crushit"
 }
 
 generator client {
@@ -26,7 +26,7 @@ model User {
   pomodoroLength     Int             @default(25)
   pomodoroShort      Int             @default(5)
   pomodoroLong       Int             @default(10)
-  pomodorosCompleted Int             @default(0) // Reset to 0 once day changes
+  pomodorosCompleted Int?            @default(0) // Reset to 0 once day changes
   darkMode           Boolean         @default(false)
   pomodoros          PomodoroTimer[] @relation("UserTimer")
   tasks              Task[]          @relation("UserTasks")
