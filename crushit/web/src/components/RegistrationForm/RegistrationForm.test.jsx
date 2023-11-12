@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
-import RegistrationForm from './RegistrationForm'; // Adjust the path as needed
-//import { useMutation } from '@redwoodjs/web';
+import RegistrationForm from './RegistrationForm';
 import { ThemeProvider } from '../ThemeContext/ThemeContext';
 
 jest.mock('@redwoodjs/web', () => {
