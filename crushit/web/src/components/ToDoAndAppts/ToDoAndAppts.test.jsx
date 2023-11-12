@@ -1,4 +1,6 @@
 import { render } from '@redwoodjs/testing/web'
+import { ThemeProvider } from '../ThemeContext/ThemeContext'
+
 
 import ToDoAndAppts from './ToDoAndAppts'
 
@@ -8,7 +10,7 @@ import ToDoAndAppts from './ToDoAndAppts'
 describe('ToDoAndAppts', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<ToDoAndAppts />)
+      render(<ThemeProvider><ToDoAndAppts /></ThemeProvider>)
     }).not.toThrow()
   })
 })

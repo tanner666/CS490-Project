@@ -1,4 +1,5 @@
 import { render } from '@redwoodjs/testing/web'
+import { ThemeProvider } from '../ThemeContext/ThemeContext'
 
 import PlanDay from './PlanDay'
 
@@ -8,7 +9,7 @@ import PlanDay from './PlanDay'
 describe('PlanDay', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<PlanDay />)
+      render(<ThemeProvider><PlanDay /></ThemeProvider>)
     }).not.toThrow()
   })
 })
