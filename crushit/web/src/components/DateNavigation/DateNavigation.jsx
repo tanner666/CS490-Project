@@ -71,13 +71,14 @@ const DateNavigation = () => {
     </div>
   );
 
-  const DropdownBox = (options, selectedValue, onChange) => (
+  const DropdownBox = (options, selectedValue, onChange, testId) => (
     <div style={roundedBoxStyle}>
       <select
         className="ml-2"
         style={{ background: 'transparent', border: 'none', outline: 'none' }}
         value={selectedValue}
         onChange={onChange}
+        data-testid={testId} // Assign the data-testid here
       >
         {options.map((option, index) => (
           <option key={index + 1} value={index + 1}>
@@ -136,14 +137,15 @@ const DateNavigation = () => {
                 'December',
               ],
               selectedMonth,
-              handleMonthChange
+              handleMonthChange,
+              'monthDropdown'
             )}
             {ImageBox("https://drive.google.com/uc?id=11WQmToUHDMwNKwAMmdrmgbsXWdPvkJmX")}
             {ImageBox("https://drive.google.com/uc?id=1yvUV6NAFgWMWYrNoDOUuHZ92uiHXwyyA")}
-            {DropdownBox(Array.from({ length: 31 }, (_, i) => i + 1), selectedDay, handleDayChange)}
+            {DropdownBox(Array.from({ length: 31 }, (_, i) => i + 1), selectedDay, handleDayChange, 'dayDropdown')}
             {ImageBox("https://drive.google.com/uc?id=11WQmToUHDMwNKwAMmdrmgbsXWdPvkJmX")}
             {ImageBox("https://drive.google.com/uc?id=1yvUV6NAFgWMWYrNoDOUuHZ92uiHXwyyA")}
-            {DropdownBox(Array.from({ length: 50 }, (_, i) => today.getFullYear() - i), selectedYear, handleYearChange)}
+            {DropdownBox(Array.from({ length: 50 }, (_, i) => today.getFullYear() - i), selectedYear, handleYearChange, 'yearDropdown')}
             {ImageBox("https://drive.google.com/uc?id=11WQmToUHDMwNKwAMmdrmgbsXWdPvkJmX")}
           </div>
         </div>

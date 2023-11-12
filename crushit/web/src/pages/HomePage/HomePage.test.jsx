@@ -1,9 +1,12 @@
-import { render } from '@redwoodjs/testing/web'
+// HomePage.test.jsx
 
+import { render } from '@redwoodjs/testing/web'
 import HomePage from './HomePage'
 
-//   Improve this test with help from the Redwood Testing Doc:
-//   https://redwoodjs.com/docs/testing#testing-pages-layouts
+// Mock the ThemeContext module
+jest.mock('../../components/ThemeContext/ThemeContext', () => ({
+  useTheme: jest.fn(() => ({ theme: 'yourMockedTheme' })), // Replace 'yourMockedTheme' with your actual mocked theme
+}))
 
 describe('HomePage', () => {
   it('renders successfully', () => {
