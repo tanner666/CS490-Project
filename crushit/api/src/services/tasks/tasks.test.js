@@ -1,4 +1,4 @@
-import { tasks, task, createTask, updateTask, deleteTask } from './tasks'
+import { tasks, task, createTask, updateTask, deleteTask, userTasksOnDate } from './tasks'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.
@@ -50,5 +50,38 @@ describe('tasks', () => {
     const result = await task({ id: original.id })
 
     expect(result).toEqual(null)
+  })
+})
+
+describe('userTasksOnDate', () => {
+  scenario('returns tasks for a user on a specific date', async (scenario) => {
+    // Assuming you have a user and tasks for that user on a specific date in your scenario
+    const userId = 'String945890'
+    const specifiedDay = 1 // Adjust these values based on your scenario data
+    const specifiedMonth = 1
+    const specifiedYear = 2023
+
+    const result = await userTasksOnDate({
+      userId: userId,
+      day: specifiedDay,
+      month: specifiedMonth,
+      year: specifiedYear,
+    })
+
+    // Check that the result contains tasks for the specified user and date
+    expect(result).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          createdBy: userId,
+          taskDates: expect.arrayContaining([
+            expect.objectContaining({
+              day: specifiedDay,
+              month: specifiedMonth,
+              year: specifiedYear,
+            }),
+          ]),
+        }),
+      ])
+    )
   })
 })

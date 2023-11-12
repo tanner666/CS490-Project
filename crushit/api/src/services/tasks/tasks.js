@@ -29,6 +29,24 @@ export const deleteTask = ({ id }) => {
   })
 }
 
+//returns an array of tasks for a user on a specific date
+export const userTasksOnDate = async ({ userId, day, month, year }) => {
+  return await db.task.findMany({  where: {
+    createdBy: userId, // the user's ID
+    taskDates: {
+      some: {
+        day: specifiedDay,
+        month: specifiedMonth,
+        year: specifiedYear,
+      },
+    },
+    },
+    include: {
+      taskDates: true, // to include the TaskDate data in the response
+    },
+  });
+};
+
 export const Task = {
   created_by: (_obj, { root }) => {
     return db.task.findUnique({ where: { id: root?.id } }).created_by()

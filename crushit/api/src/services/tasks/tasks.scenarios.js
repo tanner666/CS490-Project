@@ -26,6 +26,13 @@ export const standard = defineScenario({
             firebaseUid: 'String945890',
           },
         },
+        taskDates: {
+          create:{
+            day: 1,
+            month: 1,
+            year: 2023,
+          }
+        }
       },
     },
   },
