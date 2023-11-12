@@ -4,8 +4,10 @@ import React from 'react';
 import { useTheme } from '../ThemeContext/ThemeContext';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { navigate } from '@redwoodjs/router';
+import DateNavigation from '../DateNavigation/DateNavigation';
+import PlanDay from '../PlanDay/PlanDay';
 
-const DateNavigation = () => {
+const ToDoAndAppts = () => {
   const { theme } = useTheme();
 
   // Get today's date
@@ -13,6 +15,11 @@ const DateNavigation = () => {
   let [selectedDay, setSelectedDay] = React.useState(today.getDate());
   let [selectedMonth, setSelectedMonth] = React.useState(today.getMonth() + 1); // Using the month index
   let [selectedYear, setSelectedYear] = React.useState(today.getFullYear());
+
+  const handleLogout = async () => {
+    // Your logout logic here
+    navigate('/');
+  };
 
   const handleDayChange = (event) => {
     setSelectedDay(parseInt(event.target.value, 10));
@@ -85,41 +92,12 @@ const DateNavigation = () => {
   );
 
   return (
-      <div className="w-full p-4 relative">
-        <div style={blueBoxStyle}>
-          <div style={dateBoxContainerStyle}>
-            {ImageBox("https://drive.google.com/uc?id=1yvUV6NAFgWMWYrNoDOUuHZ92uiHXwyyA")}
-            {DropdownBox(
-              [
-                'January',
-                'February',
-                'March',
-                'April',
-                'May',
-                'June',
-                'July',
-                'August',
-                'September',
-                'October',
-                'November',
-                'December',
-              ],
-              selectedMonth,
-              handleMonthChange,
-              'monthDropdown'
-            )}
-            {ImageBox("https://drive.google.com/uc?id=11WQmToUHDMwNKwAMmdrmgbsXWdPvkJmX")}
-            {ImageBox("https://drive.google.com/uc?id=1yvUV6NAFgWMWYrNoDOUuHZ92uiHXwyyA")}
-            {DropdownBox(Array.from({ length: 31 }, (_, i) => i + 1), selectedDay, handleDayChange, 'dayDropdown')}
-            {ImageBox("https://drive.google.com/uc?id=11WQmToUHDMwNKwAMmdrmgbsXWdPvkJmX")}
-            {ImageBox("https://drive.google.com/uc?id=1yvUV6NAFgWMWYrNoDOUuHZ92uiHXwyyA")}
-            {DropdownBox(Array.from({ length: 50 }, (_, i) => today.getFullYear() - i), selectedYear, handleYearChange, 'yearDropdown')}
-            {ImageBox("https://drive.google.com/uc?id=11WQmToUHDMwNKwAMmdrmgbsXWdPvkJmX")}
-          </div>
-        </div>
-      </div>
+    <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
+      <PlanDay/>
+      <DateNavigation/>
+    </div>
   );
 };
 
-export default DateNavigation;
+export default ToDoAndAppts;
 
