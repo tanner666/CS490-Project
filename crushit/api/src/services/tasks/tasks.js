@@ -35,9 +35,9 @@ export const userTasksOnDate = async ({ userId, day, month, year }) => {
     createdBy: userId, // the user's ID
     taskDates: {
       some: {
-        day: specifiedDay,
-        month: specifiedMonth,
-        year: specifiedYear,
+        day: day,
+        month: month,
+        year: year,
       },
     },
     },

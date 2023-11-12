@@ -56,7 +56,7 @@ describe('tasks', () => {
 describe('userTasksOnDate', () => {
   scenario('returns tasks for a user on a specific date', async (scenario) => {
     // Assuming you have a user and tasks for that user on a specific date in your scenario
-    const userId = 'String945890'
+    const userId = 1789212324
     const specifiedDay = 1 // Adjust these values based on your scenario data
     const specifiedMonth = 1
     const specifiedYear = 2023

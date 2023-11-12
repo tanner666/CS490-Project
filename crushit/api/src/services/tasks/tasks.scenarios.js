@@ -23,7 +23,8 @@ export const standard = defineScenario({
           create: {
             username: 'String',
             email: 'String9171013',
-            firebaseUid: 'String945890',
+            firebaseUid: 'String9239233',
+            id: 1789212324,
           },
         },
         taskDates: {
