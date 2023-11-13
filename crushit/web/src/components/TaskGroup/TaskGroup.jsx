@@ -7,8 +7,8 @@ const TaskGroup = ({groupTitle, tasks, onStatusChange}) => {
   const { theme } = useTheme();
 
   return (
-    <div className={`rounded-lg ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
-      <h2 className="text-lg font-semibold text-gray-700">{groupTitle}</h2>
+    <div className={`mb-4 min-h-[44px] rounded-lg ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-black'}`}>
+      <h2 className="pl-2 pt-2 text-lg font-dm font-bold text-black">{groupTitle}</h2>
       {tasks.map((task) => (
         <TaskCard key={task.id} task={task} onStatusChange={onStatusChange} />
       ))}

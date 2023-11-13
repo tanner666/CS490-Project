@@ -13,6 +13,9 @@ module.exports = {
       fontFamily: {
         'fredoka': ['Fredoka One', 'sans-serif'],
         'dm': ['DM Sans', 'sans-serif'],
+      },
+      colors:{
+        'task-blue': '#6284FF',
       }
     },
   },

@@ -31,7 +31,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
         </div>
         <div className="pt-12 pl-6">
           <div className="flex items-center justify-start">
-            <h2 className={`text-[30px] font-dm font-bold mt-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Tasks</h2>
+            <h2 className={`text-[30px] font-dm font-bold mt-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Tasks</h2>
             <button className="pl-4" onClick={toggleFormVisibility}>
               {/*Insert + image here */}Add Task
             </button>
