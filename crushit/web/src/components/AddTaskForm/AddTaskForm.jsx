@@ -1,26 +1,61 @@
 import React, { useEffect, useState } from 'react';
+import {useMutation} from '@redwoodjs/web';
 
-const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) => {
+
+const CREATE_TASK_MUTATION = gql`
+   mutation createTask($input: CreateTaskInput!) {
+    createTask(input: $input) {
+      taskName
+      ImportanceGroup
+      completionStatus
+      description
+      pomodoroTimers
+      pomodoroTimerType
+      taskOrder
+      createdBy
+    }
+  }
+`
+
+export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) => {
   const [taskName, setTaskName] = useState('');
   const [description, setDescription] = useState('');
   const [ImportanceGroup, setImportanceGroup] = useState('other'); // default value
+  const [createTask] = useMutation(CREATE_TASK_MUTATION);
 
-
-  const handleSubmit = (e) => {
+//creates task in database
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit({ 
-      taskName, 
-      description, 
-      ImportanceGroup,
-      pomodoroTimeType: 'pomodoro',
-      createdBy: userId,
-      taskDates: {
-        day: day,
-        month: month,
-        year: year,
+  
+    console.log("userId:", userId);
+    try {
+      const response = await createTask({
+        variables: {
+          input: {
+            taskName, 
+            description, 
+            ImportanceGroup,
+            createdBy: userId,
+            completionStatus: false,
+            taskOrder: 0, //need to add functionality to handle this for rearanging tasks
+            pomodoroTimers: 0, // Set default value or get from state
+            pomodoroTimerType: 'pomodoro', // Example value
+            taskDates: [{ day, month, year}], // Assuming taskDates is an array of dates
+          },
+        },
+      });
+  
+      if (response && response.data && response.data.createTask) {
+        // Task creation successful
+        console.log('Task created:', response.data.createTask);
+        onSubmit(); // Invoke the onSubmit callback if needed
       }
-    });
+    } catch (error) {
+      console.error('Error creating task:', error);
+      alert('Failed to create task.');
+    }
   };
+  
 
 
   return (

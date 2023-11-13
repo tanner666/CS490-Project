@@ -32,6 +32,35 @@ const  GetUserTasksOnDate = gql`
   }
 `;
 
+const CREATE_TASK_MUTATION = gql`
+   mutation createTask($input: CreateTaskInput!) {
+    createTask(input: $input) {
+      taskName
+      ImportanceGroup
+      completionStatus
+      description
+      pomodoroTimers
+      pomodoroTimerType
+      taskOrder
+      createdBy
+    }
+  }
+`
+
+const UPDATE_TASK_MUTATION = gql`
+  mutation updateTask($id: Int!, $input: UpdateTaskInput!){
+    updateTask(id: $id, input: $input){
+      taskName
+      ImportanceGroup
+      completionStatus
+      description
+      pomodoroTimers
+      pomodoroTimerType
+      taskOrder
+    }
+  }
+`
+
 //ToDo is the parent task component, responsible for organizing and managing task groups and task cards
 const ToDo = ({userId, day, month, year}) => {
   const {data, loading, error} = useQuery(GetUserTasksOnDate, {variables: {userId, day, month, year}});
