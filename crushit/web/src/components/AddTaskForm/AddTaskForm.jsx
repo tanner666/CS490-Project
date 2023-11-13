@@ -48,7 +48,7 @@ export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) =>
           },
         },
       });
-  
+      console.log("response: ", response);
       if (response && response.data && response.data.createTask) {
         // Task creation successful
         console.log('Task created:', response.data.createTask);
