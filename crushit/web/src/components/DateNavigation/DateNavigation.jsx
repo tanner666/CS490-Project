@@ -53,7 +53,7 @@ const DateNavigation = () => {
     display: 'flex',
     alignItems: 'center',
     position: 'relative',
-    border: `1px solid rgba(98, 132, 255, 1)`, // Slightly darker blue border
+    border: `1px solid rgba(98, 132, 255, 1)`, 
   };
 
   const ImageBox = (imageUrl) => (
@@ -66,24 +66,34 @@ const DateNavigation = () => {
     </div>
   );
 
-  const DropdownBox = (options, selectedValue, onChange, testId) => (
-    <div style={roundedBoxStyle}>
-      <select
-        className="ml-2"
-        style={{ background: 'transparent', border: 'none', outline: 'none' }}
-        value={selectedValue}
-        onChange={onChange}
-        data-testid={testId} // Assign the data-testid here
-      >
-        {options.map((option, index) => (
-          <option key={index + 1} value={index + 1}>
-            {option}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-
+  const DropdownBox = (options, selectedValue, onChange, testId) => {
+    const handleWheel = (event) => {
+      event.preventDefault();
+      const delta = Math.sign(event.deltaY);
+      if (delta === 1 && selectedValue < options.length) {
+        onChange({ target: { value: selectedValue + 1 } });
+      } else if (delta === -1 && selectedValue > 1) {
+        onChange({ target: { value: selectedValue - 1 } });
+      }
+    };
+    return (
+      <div style={roundedBoxStyle}>
+        <select
+          className="ml-2"
+          style={{ background: 'transparent', border: 'none', outline: 'none' }}
+          value={selectedValue}
+          onChange={onChange}
+          data-testid={testId}
+        >
+          {options.map((option, index) => (
+            <option key={index + 1} value={index + 1}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </div>
+    );
+  };
   return (
       <div className="w-full p-4 relative">
         <div style={blueBoxStyle}>
