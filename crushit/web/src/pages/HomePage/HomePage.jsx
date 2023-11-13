@@ -9,9 +9,6 @@ const HomePage = () => {
       <div>
         <ToDoAndAppts/>
       </div>
-      <p>
-        "hello world"
-      </p>
     </>
   )
 }

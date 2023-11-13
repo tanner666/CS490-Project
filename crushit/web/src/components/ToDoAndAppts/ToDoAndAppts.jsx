@@ -6,6 +6,7 @@ import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { navigate } from '@redwoodjs/router';
 import DateNavigation from '../DateNavigation/DateNavigation';
 import PlanDay from '../PlanDay/PlanDay';
+import ToDo from '../ToDo/ToDo';
 
 const ToDoAndAppts = () => {
   const { theme } = useTheme();
@@ -95,9 +96,11 @@ const ToDoAndAppts = () => {
     <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
       <PlanDay/>
       <DateNavigation/>
+      <div className="flex-grow p-4" style={{ marginLeft: '0' }}>
+        <ToDo/>
+      </div>
     </div>
   );
 };
 
 export default ToDoAndAppts;
-
