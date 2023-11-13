@@ -248,7 +248,7 @@ export const SettingsForm = ({ userId }) => {
             {/*Rest of page */}
             <div className="w-full">
                 {/*Profile Header */}
-                <div className={`pt-1 pb-1 w-full mx-auto shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
+                <div className={`pt-1 pb-1 w-full mx-auto shadow-sm ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
                     <h2 className={`text-2xl font-dm font-bold mt-2 mb-2 ml-[3%] ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Profile</h2>
                 </div>
                 <div className="forms ml-[3%] mr-[3%]">

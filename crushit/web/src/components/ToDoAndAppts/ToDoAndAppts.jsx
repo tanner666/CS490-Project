@@ -11,41 +11,6 @@ import ToDo from '../ToDo/ToDo';
 const ToDoAndAppts = ({userId, day, month, year}) => {
   const { theme } = useTheme();
 
-  const handleLogout = async () => {
-    // Your logout logic here
-    navigate('/');
-  };
-
-  const handleDayChange = (event) => {
-    setSelectedDay(parseInt(event.target.value, 10));
-  };
-
-  const handleMonthChange = (event) => {
-    setSelectedMonth(parseInt(event.target.value, 10));
-  };
-
-  const handleYearChange = (event) => {
-    setSelectedYear(parseInt(event.target.value, 10));
-  };
-
-  const blueBoxStyle = {
-    backgroundColor: 'rgba(98, 132, 255, 0.15)',
-    width: '1020px',
-    height: '60px',
-    top: '94px',
-    left: '20px',
-    borderRadius: '10px',
-    position: 'absolute',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  };
-
-  const dateBoxContainerStyle = {
-    display: 'flex',
-    alignItems: 'center',
-  };
-
   const roundedBoxStyle = {
     backgroundColor: 'transparent',
     color: theme === 'dark' ? '#FFFFFF' : '#333333',
@@ -68,30 +33,23 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
     </div>
   );
 
-  const DropdownBox = (options, selectedValue, onChange, testId) => (
-    <div style={roundedBoxStyle}>
-      <select
-        className="ml-2"
-        style={{ background: 'transparent', border: 'none', outline: 'none' }}
-        value={selectedValue}
-        onChange={onChange}
-        data-testid={testId} // Assign the data-testid here
-      >
-        {options.map((option, index) => (
-          <option key={index + 1} value={index + 1}>
-            {option}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
 
   return (
     <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
       <PlanDay/>
-      <DateNavigation/>
-      <div className="flex-grow p-4" style={{ marginLeft: '0' }}>
-        <ToDo userId={userId} day={day} month={month} year={year}/>
+      <div className="w-full">
+        {/*Home Bar Top page */}
+        <div className={`pt-1 pb-1 w-full mx-auto shadow-sm ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
+          <h2 className={`text-2xl font-dm font-bold mt-2 mb-2 ml-[3%] ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Home</h2>
+        </div>
+        {/*Date Nav Bar */}
+        <div className="flex pt-2 justify-between items-center">
+          <DateNavigation/>
+        </div>
+        <div className="p-12">
+          <h2 className={`text-[30px] font-dm font-bold mt-2 mb-2 ml-[3%] ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Tasks</h2>
+          <ToDo userId={userId} day={day} month={month} year={year}/>
+        </div>
       </div>
     </div>
   );

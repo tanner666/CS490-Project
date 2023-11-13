@@ -147,7 +147,7 @@ const ToDo = ({userId, day, month, year}) => {
       {isFormVisible && (
         <AddTaskForm userId={userId} day={day} month={month} year={year} onSubmit={handleFormSubmit} onCancel={toggleFormVisibility} />
       )}
-      <div className="border-gray-300 border p-4 my-4 mx-auto w-full max-w-xs rounded-md shadow-sm bg-white">
+      <div className="border-gray-300 border p-4 my-4 w-full max-w-[52%] rounded-md shadow-sm bg-white">
         
         <TaskGroup
           groupTitle="Top Priority"

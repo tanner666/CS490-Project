@@ -28,9 +28,8 @@ const DateNavigation = () => {
 
   const blueBoxStyle = {
     backgroundColor: 'rgba(98, 132, 255, 0.15)',
-    width: '1020px',
+    width: '82.5vw',
     height: '60px',
-    top: '94px',
     left: '20px',
     borderRadius: '10px',
     position: 'absolute',
@@ -83,6 +82,7 @@ const DateNavigation = () => {
       </select>
     </div>
   );
+
 
   return (
       <div className="w-full p-4 relative">
