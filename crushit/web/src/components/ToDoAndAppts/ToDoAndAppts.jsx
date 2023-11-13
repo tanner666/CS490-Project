@@ -36,7 +36,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
               {/*Insert + image here */}Add Task
             </button>
           </div>
-          <div style={{ maxHeight: '75vh', overflowY: 'auto' }}>
+          <div style={{ maxHeight: '75vh', overflowY: 'auto' }} className="custom-scrollbar">
             <ToDo userId={userId} day={day} month={month} year={year} formVisibility={formVisibility}/>
           </div>
         </div>

@@ -141,9 +141,9 @@ const ToDo = ({userId, day, month, year, formVisibility}) => {
 
 
   return (
-    <div className="todo-container">
+    <div className="todo-container ">
       {formVisibility && (
-        <div className="w-1/3 h-1/3 top-20 mx-auto my-auto left-20 fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+        <div className="w-1/3 h-1/3 top-20 mx-auto my-auto left-20 fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center ">
           <AddTaskForm userId={userId} day={day} month={month} year={year} onSubmit={handleFormSubmit} onCancel={toggleFormVisibility} />
         </div>
       )}
