@@ -36,7 +36,9 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
               {/*Insert + image here */}Add Task
             </button>
           </div>
-          <ToDo userId={userId} day={day} month={month} year={year} formVisibility={formVisibility}/>
+          <div className="max-h-screen overflow-y-auto">
+            <ToDo userId={userId} day={day} month={month} year={year} formVisibility={formVisibility}/>
+          </div>
         </div>
       </div>
     </div>
