@@ -1,14 +1,27 @@
 import React, { useEffect, useState } from 'react';
 
-const AddTaskForm = ({ onSubmit, onCancel }) => {
+const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) => {
   const [taskName, setTaskName] = useState('');
   const [description, setDescription] = useState('');
-  const [priorityGroup, setPriorityGroup] = useState('other'); // default value
+  const [ImportanceGroup, setImportanceGroup] = useState('other'); // default value
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ taskName, description, priorityGroup });
+    onSubmit({ 
+      taskName, 
+      description, 
+      ImportanceGroup,
+      pomodoroTimeType: 'pomodoro',
+      createdBy: userId,
+      taskDates: {
+        day: day,
+        month: month,
+        year: year,
+      }
+    });
   };
+
 
   return (
     <form onSubmit={handleSubmit}>
@@ -25,7 +38,7 @@ const AddTaskForm = ({ onSubmit, onCancel }) => {
         placeholder="Description" 
         required 
       />
-      <select value={priorityGroup} onChange={(e) => setPriorityGroup(e.target.value)}>
+      <select value={ImportanceGroup} onChange={(e) => setImportanceGroup(e.target.value)}>
         <option value="topPriority">Top Priority</option>
         <option value="important">Important</option>
         <option value="other">Other</option>

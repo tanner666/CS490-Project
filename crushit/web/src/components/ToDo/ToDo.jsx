@@ -92,9 +92,8 @@ const ToDo = ({userId, day, month, year}) => {
 
   const handleFormSubmit = (newTask) => {
     // Implement logic to add the new task
-    addTask(newTask.priorityGroup, { 
+    addTask(newTask.ImportanceGroup, { 
       ...newTask, 
-      id: Date.now(), // You might want a better ID generation strategy
       completed: false 
     });
     setIsFormVisible(false); // Hide form after submission
@@ -115,7 +114,7 @@ const ToDo = ({userId, day, month, year}) => {
         Add Task
       </button>
       {isFormVisible && (
-        <AddTaskForm onSubmit={handleFormSubmit} onCancel={toggleFormVisibility} />
+        <AddTaskForm userId={userId} day={day} month={month} year={year} onSubmit={handleFormSubmit} onCancel={toggleFormVisibility} />
       )}
       <div className="border-gray-300 border p-4 my-4 mx-auto w-full max-w-xs rounded-md shadow-sm bg-white">
         
