@@ -7,7 +7,12 @@ import { getUserUid, useAuth } from 'src/auth';
 
 
 const HomePage = () => {
-  const [uid, setUID] = useState('')
+  const [uid, setUID] = useState('');
+  const currentDate = new Date();
+  const day = currentDate.getDate();
+  const month = currentDate.getMonth() + 1; //MOnth is 0-indexed 
+  const year = currentDate.getFullYear();
+
   useEffect(() => {
     getUserUid()
       .then((uid) => {
@@ -19,13 +24,14 @@ const HomePage = () => {
       });
 
   }, []);
-  console.log('UserId from Page: ', uid);
+  
+  //passes the current date when initially loading page
   return (
     <>
       <MetaTags title="Home" description="Home page" />
       <div>
       {uid ? (
-          <ToDoAndAppts userId={uid} />
+          <ToDoAndAppts userId={uid} day={day} month={month} year={year}/>
         ) : (
           <p>Loading or no UID available...</p>
         )} 

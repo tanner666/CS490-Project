@@ -11,12 +11,6 @@ import ToDo from '../ToDo/ToDo';
 const ToDoAndAppts = ({userId, day, month, year}) => {
   const { theme } = useTheme();
 
-  // Get today's date
-  const today = new Date();
-  let [selectedDay, setSelectedDay] = React.useState(today.getDate());
-  let [selectedMonth, setSelectedMonth] = React.useState(today.getMonth() + 1); // Using the month index
-  let [selectedYear, setSelectedYear] = React.useState(today.getFullYear());
-
   const handleLogout = async () => {
     // Your logout logic here
     navigate('/');
