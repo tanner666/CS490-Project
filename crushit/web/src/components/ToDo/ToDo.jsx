@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import TaskGroup from '../TaskGroup/TaskGroup';
 import {useQuery} from '@redwoodjs/web';
+import AddTaskForm from '../AddTaskForm/AddTaskForm';
 //import GetUserTasksOnDate from 'src/graphql/tasks.gql'
 //import {QUERY} from 'src/graphql/tasks';
 
 //query ... defiens a graphql query names userTasksON... with parameters (! means parameter is required)
 //second line with userTasksOnDate corresponds to graphql schema resolver on server side
 //inside this field, spcify data in GraphQL schema
-  //inside this, specify 
+  //inside this, specify what you want to retrieve (here is is an array of Tasks (per the gql schema def), all with the listed fields below)
 
-const Get_Tasks_For_Date = gql` 
+const  GetUserTasksOnDate = gql` 
   query userTasksOnDate($userId: Int!, $day: Int!, $month: Int!, $year: Int!) {
     userTasksOnDate(userId: $userId, day: $day, month: $month, year: $year) {
       id
@@ -30,9 +31,9 @@ const Get_Tasks_For_Date = gql`
     }
   }
 `;
-//replace title/podomorTimer, etc with stuff retrieved from databse
+
 //ToDo is the parent task component, responsible for organizing and managing task groups and task cards
-const ToDo = () => {
+const ToDo = ({userId, day, month, year}) => {
   const {data, loading, error} = useQuery(GetUserTasksOnDate, {variables: {userId, day, month, year}});
 
   //define three array groups
@@ -42,7 +43,7 @@ const ToDo = () => {
     other: [],
   });
 
-  //function to sort tasks
+  //function to sort tasks into priority groups
   const sortTasks = (tasks) => {
     const sortedTasks = {
       topPriority: [],
@@ -87,38 +88,35 @@ const ToDo = () => {
     }));
   };
 
+  const [isFormVisible, setIsFormVisible] = useState(false);
+
+  const handleFormSubmit = (newTask) => {
+    // Implement logic to add the new task
+    addTask(newTask.priorityGroup, { 
+      ...newTask, 
+      id: Date.now(), // You might want a better ID generation strategy
+      completed: false 
+    });
+    setIsFormVisible(false); // Hide form after submission
+  };
+
+  const toggleFormVisibility = () => {
+    setIsFormVisible(!isFormVisible);
+  };
+
   const handleStatusChange = (taskId, completed) => {
     // Find which group the task belongs to and update the task's completed status
   };
 
-  useEffect(() => {
-    // console.log(data)
-    if (data && data.user) {
-        // Check if data is available and user object exists
-        const { name, pomodoroLength, pomodoroShort, pomodoroLong, darkMode } = data.user;
-        let firstName = name.split('|')[0];
-        let lastName = name.split('|')[1];
-        //   console.log(firstName, lastName, data.user);
-        if (firstName && lastName) {
-            setFirstName(firstName);
-            setLastName(lastName);
-        }
-        if (pomodoroLength && pomodoroShort && pomodoroLong) {
-            setPodomoro(pomodoroLength);
-            setShortBreak(pomodoroShort);
-            setLongBreak(pomodoroLong);
-        }
-        //   console.log(data.user, podomoroLength)
-        //   console.log("names",firstName, lastName, podomoro, shortBreak, longBreak);
-        // Update other state variables if needed
-    }
-}, [data]);
 
   return (
     <div className="todo-container">
-      <button onClick={() => addTask('topPriority', { id: Date.now(), title: 'New Task', completed: false })}>
-          Tasks
-        </button>
+      <button onClick={toggleFormVisibility}>
+        Add Task
+      </button>
+      {isFormVisible && (
+        <AddTaskForm onSubmit={handleFormSubmit} onCancel={toggleFormVisibility} />
+      )}
       <div className="border-gray-300 border p-4 my-4 mx-auto w-full max-w-xs rounded-md shadow-sm bg-white">
         
         <TaskGroup
