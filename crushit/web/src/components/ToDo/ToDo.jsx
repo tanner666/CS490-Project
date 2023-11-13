@@ -67,9 +67,11 @@ const UPDATE_TASK_MUTATION = gql`
 `
 
 //ToDo is the parent task component, responsible for organizing and managing task groups and task cards
-const ToDo = ({userId, day, month, year}) => {
+const ToDo = ({userId, day, month, year, formVisibility}) => {
   console.log("UserId in ToDo: ", userId);
   const {data, loading, error} = useQuery(GetUserTasksOnDate, {variables: {userId, day, month, year}});
+
+  const [isFormVisibile, setIsFormVisible] = useState(false);
 
   //define three array groups
   const [tasks, setTasks] = useState({
@@ -123,31 +125,27 @@ const ToDo = ({userId, day, month, year}) => {
     }));
   };
 
-  const [isFormVisible, setIsFormVisible] = useState(false);
-
   const handleFormSubmit = (newTask) => {
     // Implement logic to add the new task
     setIsFormVisible(false); // Hide form after submission
   };
 
-  const toggleFormVisibility = () => {
-    setIsFormVisible(!isFormVisible);
-  };
 
   const handleStatusChange = (taskId, completed) => {
     // Find which group the task belongs to and update the task's completed status
   };
 
+  const toggleFormVisibility = () => {
+    setIsFormVisible(prevState => !prevState);
+  };
+
 
   return (
     <div className="todo-container">
-      <button onClick={toggleFormVisibility}>
-        Add Task
-      </button>
-      {isFormVisible && (
+      {formVisibility && (
         <AddTaskForm userId={userId} day={day} month={month} year={year} onSubmit={handleFormSubmit} onCancel={toggleFormVisibility} />
       )}
-      <div className="border-gray-300 border p-4 my-4 w-full max-w-[52%] rounded-md shadow-sm bg-white">
+      <div className="p-6 my-4 w-full max-w-[52%] rounded-lg shadow-sm bg-white">
         
         <TaskGroup
           groupTitle="Top Priority"
