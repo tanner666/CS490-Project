@@ -31,6 +31,7 @@ export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) =>
 //creates task in database
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("useId: ", userId);
     console.log("IMportance group value:", ImportanceGroup);
     try {
       const response = await createTask({
