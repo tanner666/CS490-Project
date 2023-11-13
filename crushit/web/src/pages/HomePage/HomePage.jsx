@@ -8,6 +8,7 @@ import { getUserUid, useAuth } from 'src/auth';
 
 const HomePage = () => {
   const [uid, setUID] = useState('');
+  //change these to retreive the current values in the navigation bar
   const currentDate = new Date();
   const day = currentDate.getDate();
   const month = currentDate.getMonth() + 1; //MOnth is 0-indexed 

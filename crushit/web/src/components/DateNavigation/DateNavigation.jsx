@@ -5,26 +5,12 @@ import { useTheme } from '../ThemeContext/ThemeContext';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { navigate } from '@redwoodjs/router';
 
-const DateNavigation = () => {
+const DateNavigation = ({selectedDay, selectedMonth, selectedYear, handleDayChange, handleMonthChange, handleYearChange}) => {
   const { theme } = useTheme();
 
   // Get today's date
   const today = new Date();
-  let [selectedDay, setSelectedDay] = React.useState(today.getDate());
-  let [selectedMonth, setSelectedMonth] = React.useState(today.getMonth() + 1); // Using the month index
-  let [selectedYear, setSelectedYear] = React.useState(today.getFullYear());
 
-  const handleDayChange = (event) => {
-    setSelectedDay(parseInt(event.target.value, 10));
-  };
-
-  const handleMonthChange = (event) => {
-    setSelectedMonth(parseInt(event.target.value, 10));
-  };
-
-  const handleYearChange = (event) => {
-    setSelectedYear(parseInt(event.target.value, 10));
-  };
 
   const blueBoxStyle = {
     backgroundColor: 'rgba(98, 132, 255, 0.15)',

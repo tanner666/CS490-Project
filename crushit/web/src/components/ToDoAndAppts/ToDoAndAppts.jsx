@@ -12,6 +12,23 @@ import ToDo from '../ToDo/ToDo';
 const ToDoAndAppts = ({userId, day, month, year}) => {
   const { theme } = useTheme();
 
+  const today = new Date();
+  let [selectedDay, setSelectedDay] = React.useState(today.getDate());
+  let [selectedMonth, setSelectedMonth] = React.useState(today.getMonth() + 1); // Using the month index
+  let [selectedYear, setSelectedYear] = React.useState(today.getFullYear());
+
+  const handleDayChange = (event) => {
+    setSelectedDay(parseInt(event.target.value, 10));
+  };
+
+  const handleMonthChange = (event) => {
+    setSelectedMonth(parseInt(event.target.value, 10));
+  };
+
+  const handleYearChange = (event) => {
+    setSelectedYear(parseInt(event.target.value, 10));
+  };
+
   const [formVisibility, setFormVisibility] = useState(false);
   const toggleFormVisibility = () => {
     setFormVisibility(prevState => !prevState);
@@ -27,7 +44,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
         </div>
         {/*Date Nav Bar */}
         <div className="flex pt-2 justify-between items-center">
-          <DateNavigation/>
+          <DateNavigation selectedDay={selectedDay} selectedMonth={selectedMonth} selectedYear={selectedYear} handleDayChange={handleDayChange} handleMonthChange={handleMonthChange} handleYearChange={handleYearChange}/>
         </div>
         <div className="pt-12 pl-6">
           <div className="flex items-center justify-start">
@@ -37,7 +54,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
             </button>
           </div>
           <div style={{ maxHeight: '75vh', overflowY: 'auto' }} className="custom-scrollbar">
-            <ToDo userId={userId} day={day} month={month} year={year} formVisibility={formVisibility}/>
+            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility}/>
           </div>
         </div>
       </div>
