@@ -34,7 +34,7 @@ const LoginForm = () => {
 
     // Check password requirements
     if (password.length < 12 || !containsTwoCharacterTypes(password)) {
-      setLoginError('Password requirements not met.');
+      setLoginError('Password must be at least 12 characters long and contain characters from at least two different types (uppercase, lowercase, numeric, special).');
       return;
     }
 
