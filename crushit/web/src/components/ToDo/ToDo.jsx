@@ -43,6 +43,11 @@ const CREATE_TASK_MUTATION = gql`
       pomodoroTimerType
       taskOrder
       createdBy
+      taskDates {
+        day
+        month
+        year
+      }
     }
   }
 `
@@ -68,29 +73,29 @@ const ToDo = ({userId, day, month, year}) => {
 
   //define three array groups
   const [tasks, setTasks] = useState({
-    topPriority: [],
-    important: [],
-    other: [],
+    TopPriority: [],
+    Important: [],
+    Other: [],
   });
 
   //function to sort tasks into priority groups
   const sortTasks = (tasks) => {
     const sortedTasks = {
-      topPriority: [],
-      important: [],
-      other: [],
+      TopPriority: [],
+      Important: [],
+      Other: [],
     };
 
     tasks.forEach(task => {
       switch(task.ImportanceGroup) {
-        case 'topPriority':
-          sortedTasks.topPriority.push(task);
+        case 'TopPriority':
+          sortedTasks.TopPriority.push(task);
           break;
-        case 'important':
-          sortedTasks.important.push(task);
+        case 'Important':
+          sortedTasks.Important.push(task);
           break;
-        case 'other':
-          sortedTasks.other.push(task);
+        case 'Other':
+          sortedTasks.Other.push(task);
           break;
         default:
           // Handle tasks with no or unrecognized importance group
@@ -122,10 +127,6 @@ const ToDo = ({userId, day, month, year}) => {
 
   const handleFormSubmit = (newTask) => {
     // Implement logic to add the new task
-    addTask(newTask.ImportanceGroup, { 
-      ...newTask, 
-      completed: false 
-    });
     setIsFormVisible(false); // Hide form after submission
   };
 
@@ -150,17 +151,17 @@ const ToDo = ({userId, day, month, year}) => {
         
         <TaskGroup
           groupTitle="Top Priority"
-          tasks={tasks.topPriority}
+          tasks={tasks.TopPriority}
           onStatusChange={handleStatusChange}
         />
          <TaskGroup
           groupTitle="Important"
-          tasks={tasks.important}
+          tasks={tasks.Important}
           onStatusChange={handleStatusChange}
         />
          <TaskGroup
           groupTitle="Other"
-          tasks={tasks.other}
+          tasks={tasks.Other}
           onStatusChange={handleStatusChange}
         />
       </div>

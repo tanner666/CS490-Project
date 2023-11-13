@@ -10,11 +10,34 @@ export const task = ({ id }) => {
   })
 }
 
-export const createTask = ({ input }) => {
+export const createTask = async ({ input }) => {
+  const user = await db.user.findUnique({
+    where: { firebaseUid: input.createdBy },
+  });
+
+  if (!user) {
+    throw new Error(input.createdBy);
+  }
   return db.task.create({
-    data: input,
-  })
-}
+    data: {
+      taskName: input.taskName,
+      ImportanceGroup: input.ImportanceGroup,
+      completionStatus: input.completionStatus,
+      description: input.description,
+      pomodoroTimers: input.pomodoroTimers,
+      pomodoroTimersType: input.pomodoroTimersType,
+      taskOrder: input.taskOrder,
+      createdBy: input.createdBy,
+      taskDates:{
+        create: input.taskDates.map(date => ({
+          day: date.day,
+          month: date.month,
+          year: date.year
+        }))
+      },
+    },
+  });
+};
 
 export const updateTask = ({ id, input }) => {
   return db.task.update({

@@ -2,7 +2,7 @@ export const schema = gql`
   type Task {
     id: Int!
     taskName: String!
-    ImportanceGroup: ImportanceGroup
+    ImportanceGroup: ImportanceGroupEnum
     completionStatus: Boolean!
     description: String
     pomodoroTimers: Int!
@@ -13,7 +13,7 @@ export const schema = gql`
     taskDates: [TaskDate]!
   }
 
-  enum ImportanceGroup {
+  enum ImportanceGroupEnum {
     TopPriority
     Important
     Other
@@ -27,24 +27,31 @@ export const schema = gql`
 
   input CreateTaskInput {
     taskName: String!
-    ImportanceGroup: ImportanceGroup
+    ImportanceGroup: ImportanceGroupEnum
     completionStatus: Boolean!
     description: String
     pomodoroTimers: Int!
     pomodoroTimerType: String
     taskOrder: Int!
     createdBy: String!
+    taskDates: [TaskDateInput!]
   }
 
   input UpdateTaskInput {
     taskName: String
-    ImportanceGroup: ImportanceGroup
+    ImportanceGroup: ImportanceGroupEnum
     completionStatus: Boolean
     description: String
     pomodoroTimers: Int
     pomodoroTimerType: String
     taskOrder: Int
     createdBy: String
+  }
+
+  input TaskDateInput {
+    day: Int!
+    month: Int!
+    year: Int!
   }
 
   type Mutation {

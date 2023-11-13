@@ -13,6 +13,11 @@ const CREATE_TASK_MUTATION = gql`
       pomodoroTimerType
       taskOrder
       createdBy
+      taskDates {
+        day
+        month
+        year
+      }
     }
   }
 `
@@ -20,14 +25,13 @@ const CREATE_TASK_MUTATION = gql`
 export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) => {
   const [taskName, setTaskName] = useState('');
   const [description, setDescription] = useState('');
-  const [ImportanceGroup, setImportanceGroup] = useState('other'); // default value
+  const [ImportanceGroup, setImportanceGroup] = useState('Other'); // default value
   const [createTask] = useMutation(CREATE_TASK_MUTATION);
 
 //creates task in database
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    console.log("userId:", userId);
+    console.log("IMportance group value:", ImportanceGroup);
     try {
       const response = await createTask({
         variables: {
@@ -74,9 +78,9 @@ export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) =>
         required 
       />
       <select value={ImportanceGroup} onChange={(e) => setImportanceGroup(e.target.value)}>
-        <option value="topPriority">Top Priority</option>
-        <option value="important">Important</option>
-        <option value="other">Other</option>
+        <option value="TopPriority">Top Priority</option>
+        <option value="Important">Important</option>
+        <option value="Other">Other</option>
       </select>
       <button type="submit">Add Task</button>
       <button type="button" onClick={onCancel}>Cancel</button>
