@@ -19,6 +19,7 @@ const HomePage = () => {
       });
 
   }, []);
+  console.log('UserId from Page: ', uid);
   return (
     <>
       <MetaTags title="Home" description="Home page" />

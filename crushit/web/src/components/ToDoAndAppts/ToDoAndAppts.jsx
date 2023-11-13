@@ -8,7 +8,7 @@ import DateNavigation from '../DateNavigation/DateNavigation';
 import PlanDay from '../PlanDay/PlanDay';
 import ToDo from '../ToDo/ToDo';
 
-const ToDoAndAppts = () => {
+const ToDoAndAppts = ({userId, day, month, year}) => {
   const { theme } = useTheme();
 
   // Get today's date
@@ -97,7 +97,7 @@ const ToDoAndAppts = () => {
       <PlanDay/>
       <DateNavigation/>
       <div className="flex-grow p-4" style={{ marginLeft: '0' }}>
-        <ToDo/>
+        <ToDo userId={userId} day={day} month={month} year={year}/>
       </div>
     </div>
   );

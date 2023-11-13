@@ -48,8 +48,8 @@ model Task {
   pomodoroTimers    Int // Number of times it runs a given day. May be unneeded.
   pomodoroTimerType String?
   taskOrder         Int // Must be filled in at the backend. Represents the order of tasks within their respective groupStatus. The value must be calculated based on the tasks within the same groupStatus.
-  createdBy         Int
-  created_by        User             @relation("UserTasks", fields: [createdBy], references: [id])
+  createdBy         String
+  created_by        User             @relation("UserTasks", fields: [createdBy], references: [firebaseUid])
   taskDates         TaskDate[]       @relation("TaskDate")
 }
 

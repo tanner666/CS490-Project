@@ -11,7 +11,7 @@ import AddTaskForm from '../AddTaskForm/AddTaskForm';
   //inside this, specify what you want to retrieve (here is is an array of Tasks (per the gql schema def), all with the listed fields below)
 
 const  GetUserTasksOnDate = gql` 
-  query userTasksOnDate($userId: Int!, $day: Int!, $month: Int!, $year: Int!) {
+  query userTasksOnDate($userId: String!, $day: Int!, $month: Int!, $year: Int!) {
     userTasksOnDate(userId: $userId, day: $day, month: $month, year: $year) {
       id
       taskName
@@ -63,6 +63,7 @@ const UPDATE_TASK_MUTATION = gql`
 
 //ToDo is the parent task component, responsible for organizing and managing task groups and task cards
 const ToDo = ({userId, day, month, year}) => {
+  console.log("UserId in ToDo: ", userId);
   const {data, loading, error} = useQuery(GetUserTasksOnDate, {variables: {userId, day, month, year}});
 
   //define three array groups

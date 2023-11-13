@@ -8,7 +8,7 @@ export const schema = gql`
     pomodoroTimers: Int!
     pomodoroTimerType: String
     taskOrder: Int!
-    createdBy: Int!
+    createdBy: String!
     created_by: User!
     taskDates: [TaskDate]!
   }
@@ -33,7 +33,7 @@ export const schema = gql`
     pomodoroTimers: Int!
     pomodoroTimerType: String
     taskOrder: Int!
-    createdBy: Int!
+    createdBy: String!
   }
 
   input UpdateTaskInput {
@@ -44,7 +44,7 @@ export const schema = gql`
     pomodoroTimers: Int
     pomodoroTimerType: String
     taskOrder: Int
-    createdBy: Int
+    createdBy: String
   }
 
   type Mutation {
