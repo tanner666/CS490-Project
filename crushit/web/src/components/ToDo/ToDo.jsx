@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import TaskGroup from '../TaskGroup/TaskGroup';
-import {useQuery} from '@redwoodjs/web';
+import {useQuery, gql, useMutation} from '@redwoodjs/web';
 import AddTaskForm from '../AddTaskForm/AddTaskForm';
 //import GetUserTasksOnDate from 'src/graphql/tasks.gql'
 //import {QUERY} from 'src/graphql/tasks';
+
 
 //query ... defiens a graphql query names userTasksON... with parameters (! means parameter is required)
 //second line with userTasksOnDate corresponds to graphql schema resolver on server side
 //inside this field, spcify data in GraphQL schema
   //inside this, specify what you want to retrieve (here is is an array of Tasks (per the gql schema def), all with the listed fields below)
 
-const  GetUserTasksOnDate = gql`
+
+  const GetUserTasksOnDate = gql`
   query userTasksOnDate($userId: String!, $day: Int!, $month: Int!, $year: Int!) {
     userTasksOnDate(userId: $userId, day: $day, month: $month, year: $year) {
       id
@@ -30,10 +32,10 @@ const  GetUserTasksOnDate = gql`
       }
     }
   }
-`;
+`
 
 const CREATE_TASK_MUTATION = gql`
-   mutation createTask($input: CreateTaskInput!) {
+  mutation createTask($input: CreateTaskInput!) {
     createTask(input: $input) {
       taskName
       ImportanceGroup
@@ -53,8 +55,8 @@ const CREATE_TASK_MUTATION = gql`
 `
 
 const UPDATE_TASK_MUTATION = gql`
-  mutation updateTask($id: Int!, $input: UpdateTaskInput!){
-    updateTask(id: $id, input: $input){
+  mutation updateTask($id: Int!, $input: UpdateTaskInput!) {
+    updateTask(id: $id, input: $input) {
       taskName
       ImportanceGroup
       completionStatus
@@ -68,9 +70,11 @@ const UPDATE_TASK_MUTATION = gql`
 
 //ToDo is the parent task component, responsible for organizing and managing task groups and task cards
 const ToDo = ({userId, day, month, year, formVisibility}) => {
-  console.log("UserId in ToDo: ", userId);
-  const {data, loading, error} = useQuery(GetUserTasksOnDate, {variables: {userId, day, month, year}});
-
+  //onsole.log("UserId in ToDo: ", userId); // Log the entire input object
+  //console.log('Type of createdBy:', typeof userId);
+  const { data, loading, error } = useQuery(GetUserTasksOnDate, {
+    variables: { userId, day, month, year },
+  });
   const [isFormVisibile, setIsFormVisible] = useState(false);
 
   //define three array groups
@@ -80,6 +84,15 @@ const ToDo = ({userId, day, month, year, formVisibility}) => {
     Other: [],
   });
 
+  const [createTaskMutation] = useMutation(CREATE_TASK_MUTATION);
+  const [updateTaskMutation] = useMutation(UPDATE_TASK_MUTATION);
+
+  useEffect(() => {
+    if (data && data.userTasksOnDate) {
+      const sortedTasks = sortTasks(data.userTasksOnDate);
+      setTasks(sortedTasks);
+    }
+  }, [data]);
   //function to sort tasks into priority groups
   const sortTasks = (tasks) => {
     const sortedTasks = {
@@ -116,32 +129,6 @@ const ToDo = ({userId, day, month, year, formVisibility}) => {
     }
   }, [data]);
 
-const roundedBoxStyle = {
-  backgroundColor: 'transparent',
-  color: '#FFFFFF', // Assuming white text color, you can adjust this based on your design
-  padding: '8px',
-  margin: '0 5px',
-  borderRadius: '10px',
-  display: 'flex',
-  alignItems: 'center',
-  position: 'relative',
-  border: 'none', // Slightly darker blue border
-};
-
-const ImageBox = ({ imageUrl, onClick, style }) => (
-  <div
-    style={{
-      ...roundedBoxStyle,
-      backgroundImage: `url(${imageUrl})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      cursor: 'pointer',
-      ...style,
-    }}
-    onClick={onClick}
-  ></div>
-);
-
 
   //need to retrieve info from useState and/or database for this
   const addTask = (group, newTask) =>{
@@ -151,20 +138,54 @@ const ImageBox = ({ imageUrl, onClick, style }) => (
     }));
   };
 
-  const handleFormSubmit = (newTask) => {
-    // Implement logic to add the new task
-    setIsFormVisible(false); // Hide form after submission
+  const handleFormSubmit = async (newTask) => {
+    console.log('newTask:', newTask); // Log newTask here
+
+    const mutationString = CREATE_TASK_MUTATION.loc.source.body;
+    console.log('mutationString:', mutationString); // Log the mutation string
+
+    try {
+      const { data, errors } = await createTaskMutation({
+        variables: { input: newTask },
+      });
+
+
+      if (errors) {
+        console.error('GraphQL errors:', errors);
+      }
+
+      if (data && data.createTask) {
+        const taskGroup = data.createTask.ImportanceGroup;
+        addTask(taskGroup, data.createTask);
+      }
+
+      setIsFormVisible(false);
+    } catch (error) {
+      console.error('Error creating task:', error);
+    }
   };
 
 
-  const handleStatusChange = (taskId, completed) => {
-    // Find which group the task belongs to and update the task's completed status
+  const handleStatusChange = async (taskId, completed) => {
+    try {
+      const { data, errors } = await updateTaskMutation({
+        variables: { id: taskId, input: { completionStatus: completed } },
+      });
+
+      if (errors) {
+        console.error('GraphQL errors:', errors);
+      }
+
+      if (data && data.updateTask) {
+      }
+    } catch (error) {
+      console.error('Error updating task status:', error);
+    }
   };
 
   const toggleFormVisibility = () => {
-    setIsFormVisible(prevState => !prevState);
+    setIsFormVisible((prev) => !prev);
   };
-
 
   return (
     <div className="todo-container ">
@@ -196,5 +217,3 @@ const ImageBox = ({ imageUrl, onClick, style }) => (
 };
 
 export default ToDo;
-
-

@@ -29,53 +29,53 @@ export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) =>
   const [createTask] = useMutation(CREATE_TASK_MUTATION);
 
 //creates task in database
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("IMportance group value:", ImportanceGroup);
-    try {
-      const response = await createTask({
-        variables: {
-          input: {
-            taskName, 
-            description, 
-            ImportanceGroup,
-            createdBy: userId,
-            completionStatus: false,
-            taskOrder: 0, //need to add functionality to handle this for rearanging tasks
-            pomodoroTimers: 0, // Set default value or get from state
-            pomodoroTimerType: 'pomodoro', // Example value
-            taskDates: [{ day, month, year}], // Assuming taskDates is an array of dates
-          },
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  console.log("Importance group value:", ImportanceGroup);
+  try {
+    const formattedTaskDates = [{ day, month, year }];
+    const response = await createTask({
+      variables: {
+        input: {
+          taskName,
+          description,
+          ImportanceGroup,
+          createdBy: userId,
+          completionStatus: false,
+          taskOrder: 0,
+          pomodoroTimers: 0,
+          pomodoroTimerType: 'pomodoro',
+          taskDates: formattedTaskDates, // Use the formatted taskDates array
         },
-      });
-      console.log("response: ", response);
-      if (response && response.data && response.data.createTask) {
-        // Task creation successful
-        console.log('Task created:', response.data.createTask);
-        onSubmit(); // Invoke the onSubmit callback if needed
-      }
-    } catch (error) {
-      console.error('Error creating task:', error);
-      alert('Failed to create task.');
+      },
+    });
+    console.log("response: ", response);
+    if (response && response.data && response.data.createTask) {
+      console.log('Task created:', response.data.createTask);
+      onSubmit(response.data.createTask);
     }
-  };
-  
+  } catch (error) {
+    console.error('Error creating task:', error);
+    alert('Failed to create task.');
+  }
+};
+
 
 
   return (
     <form onSubmit={handleSubmit}>
-      <input 
-        type="text" 
-        value={taskName} 
-        onChange={(e) => setTaskName(e.target.value)} 
-        placeholder="Task Name" 
-        required 
+      <input
+        type="text"
+        value={taskName}
+        onChange={(e) => setTaskName(e.target.value)}
+        placeholder="Task Name"
+        required
       />
-      <textarea 
+      <textarea
         className = "w-full h-32"
-        value={description} 
-        onChange={(e) => setDescription(e.target.value)} 
-        placeholder="Description"  
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        placeholder="Description"
       />
       <select value={ImportanceGroup} onChange={(e) => setImportanceGroup(e.target.value)}>
         <option value="TopPriority">Top Priority</option>

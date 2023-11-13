@@ -16,8 +16,9 @@ export const createTask = async ({ input }) => {
   });
 
   if (!user) {
-    throw new Error(input.createdBy);
+    throw new Error(`User with firebaseUid ${input.createdBy} not found`);
   }
+
   return db.task.create({
     data: {
       taskName: input.taskName,
@@ -25,7 +26,7 @@ export const createTask = async ({ input }) => {
       completionStatus: input.completionStatus,
       description: input.description,
       pomodoroTimers: input.pomodoroTimers,
-      pomodoroTimersType: input.pomodoroTimersType,
+      pomodoroTimerType: input.pomodoroTimerType,
       taskOrder: input.taskOrder,
       createdBy: input.createdBy,
       taskDates:{
