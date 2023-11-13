@@ -1,51 +1,58 @@
 import React, { useState } from 'react';
+import TaskGroup from '../TaskGroup/TaskGroup';
+import {useQuery} from '@redwoodjs/web';
+import {QUERY} from 'src/graphql/path-to-your-query';
 
+//replace title/podomorTimer, etc with stuff retrieved from databse
+//ToDo is the parent task component, responsible for organizing and managing task groups and task cards
+const ToDo = () => {
+  const {data, loading,error} = useQuery(QUERY, {variables: {userId, day, month, year}})
 
-const TaskCard = ({ title, pomodoroTimers, notes, leaders }) => {
-const [checked, setChecked] = useState(false);
+  const [tasks, setTasks] = useState({
+    topPriority: [],
+    important: [],
+    other: [],
+  });
 
+  //need to retrieve info from useState and/or database for this
+  const addTask = (group, newTask) =>{
+    setTasks((prevTasks) => ({
+      ...prevTasks,
+      [group]: [...prevTasks[group], newTask],
+    }));
+  };
 
-return (
-  <div style={{ border: '1px solid black', padding: '10px', margin: '10px', width: '300px', minWidth: '300px' }}>
-    <h2>{title}</h2>
-    <div style={{ alignItems: 'center' }}>
-      <input type="checkbox" checked={checked} onChange={() => setChecked(!checked)} />
-      <p style={{ marginLeft: '10px' }}>Complete Math Homework</p>
+  const handleStatusChange = (taskId, completed) => {
+    // Find which group the task belongs to and update the task's completed status
+  };
+
+  return (
+    <div className="todo-container">
+      <button onClick={() => addTask('topPriority', { id: Date.now(), title: 'New Task', completed: false })}>
+          Tasks
+        </button>
+      <div className="border-gray-300 border p-4 my-4 mx-auto w-full max-w-xs rounded-md shadow-sm bg-white">
+        
+        <TaskGroup
+          groupTitle="Top Priority"
+          tasks={tasks.topPriority}
+          onStatusChange={handleStatusChange}
+        />
+         <TaskGroup
+          groupTitle="Important"
+          tasks={tasks.important}
+          onStatusChange={handleStatusChange}
+        />
+         <TaskGroup
+          groupTitle="Other"
+          tasks={tasks.other}
+          onStatusChange={handleStatusChange}
+        />
+      </div>
     </div>
-    <p>Number of Pomodoro Timers (30 mins each): {pomodoroTimers}</p>
-    <p>Notes</p>
-    <textarea style={{ width: '100%', height: '10px' }} defaultValue={notes} />
-    <p>Assign Leader for Task 1</p>
-    <select>
-      {leaders.map((leader, index) => (
-        <option key={index} value={leader}>
-          {leader}
-        </option>
-      ))}
-    </select>
-  </div>
-);
+  );
 };
 
-
-const TaskManagement = () => {
-const tasks = [
-  { title: 'Top Priority', pomodoroTimers: 2, notes: 'Lorem ipsum...', leaders: ['Leader 1', 'Leader 2'] },
-  { title: 'Important', pomodoroTimers: 1, notes: 'Lorem ipsum...', leaders: ['Leader 1', 'Leader 2'] },
-  { title: 'Other', pomodoroTimers: 3, notes: 'Lorem ipsum...', leaders: ['Leader 1', 'Leader 2'] },
-];
-
-
-return (
-  <div style={{ marginTop: '160px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start' }}>
-    {tasks.map((task, index) => (
-      <TaskCard key={index} {...task} />
-    ))}
-  </div>
-);
-};
-
-
-export default TaskManagement;
+export default ToDo;
 
 
