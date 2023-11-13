@@ -1,3 +1,5 @@
+import { userTasksOnDate } from './tasks'
+
 export const standard = defineScenario({
   task: {
     one: {
@@ -38,3 +40,11 @@ export const standard = defineScenario({
     },
   },
 })
+
+export const resolvers = {
+  Query: {
+    userTasksOnDate: (_obj, { userId, day, month, year }) => {
+      return userTasksOnDate({ userId, day, month, year })
+    },
+  },
+}
