@@ -1,3 +1,5 @@
+import { userTasksOnDate } from './tasks'
+
 export const standard = defineScenario({
   task: {
     one: {
@@ -24,7 +26,6 @@ export const standard = defineScenario({
             username: 'String',
             email: 'String9171013',
             firebaseUid: 'String9239233',
-            id: 1789212324,
           },
         },
         taskDates: {
@@ -38,3 +39,11 @@ export const standard = defineScenario({
     },
   },
 })
+
+export const resolvers = {
+  Query: {
+    userTasksOnDate: (_obj, { userId, day, month, year }) => {
+      return userTasksOnDate({ userId, day, month, year })
+    },
+  },
+}
