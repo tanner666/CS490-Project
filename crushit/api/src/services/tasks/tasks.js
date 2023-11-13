@@ -16,7 +16,7 @@ export const createTask = async ({ input }) => {
   });
 
   if (!user) {
-    throw new Error(input.createdBy);
+    throw new Error(user);
   }
   return db.task.create({
     data: {
