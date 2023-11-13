@@ -1,6 +1,7 @@
 // DateNavigation.jsx
 
 import React from 'react';
+import { useState } from 'react';
 import { useTheme } from '../ThemeContext/ThemeContext';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { navigate } from '@redwoodjs/router';
@@ -8,19 +9,13 @@ import DateNavigation from '../DateNavigation/DateNavigation';
 import PlanDay from '../PlanDay/PlanDay';
 import ToDo from '../ToDo/ToDo';
 
-const ToDoAndAppts = () => {
+const ToDoAndAppts = ({userId, day, month, year}) => {
   const { theme } = useTheme();
 
-  // Get today's date
   const today = new Date();
   let [selectedDay, setSelectedDay] = React.useState(today.getDate());
   let [selectedMonth, setSelectedMonth] = React.useState(today.getMonth() + 1); // Using the month index
   let [selectedYear, setSelectedYear] = React.useState(today.getFullYear());
-
-  const handleLogout = async () => {
-    // Your logout logic here
-    navigate('/');
-  };
 
   const handleDayChange = (event) => {
     setSelectedDay(parseInt(event.target.value, 10));
@@ -34,70 +29,34 @@ const ToDoAndAppts = () => {
     setSelectedYear(parseInt(event.target.value, 10));
   };
 
-  const blueBoxStyle = {
-    backgroundColor: 'rgba(98, 132, 255, 0.15)',
-    width: '1020px',
-    height: '60px',
-    top: '94px',
-    left: '20px',
-    borderRadius: '10px',
-    position: 'absolute',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+  const [formVisibility, setFormVisibility] = useState(false);
+  const toggleFormVisibility = () => {
+    setFormVisibility(prevState => !prevState);
   };
-
-  const dateBoxContainerStyle = {
-    display: 'flex',
-    alignItems: 'center',
-  };
-
-  const roundedBoxStyle = {
-    backgroundColor: 'transparent',
-    color: theme === 'dark' ? '#FFFFFF' : '#333333',
-    padding: '8px',
-    margin: '0 5px',
-    borderRadius: '10px',
-    display: 'flex',
-    alignItems: 'center',
-    position: 'relative',
-    border: `1px solid rgba(98, 132, 255, 1)`, // Slightly darker blue border
-  };
-
-  const ImageBox = (imageUrl) => (
-    <div style={roundedBoxStyle}>
-      <img
-        src={imageUrl}
-        alt="Arrow"
-        style={{ width: '100%', height: '100%', borderRadius: '50%' }}
-      />
-    </div>
-  );
-
-  const DropdownBox = (options, selectedValue, onChange, testId) => (
-    <div style={roundedBoxStyle}>
-      <select
-        className="ml-2"
-        style={{ background: 'transparent', border: 'none', outline: 'none' }}
-        value={selectedValue}
-        onChange={onChange}
-        data-testid={testId} // Assign the data-testid here
-      >
-        {options.map((option, index) => (
-          <option key={index + 1} value={index + 1}>
-            {option}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
 
   return (
     <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
       <PlanDay/>
-      <DateNavigation/>
-      <div className="flex-grow p-4" style={{ marginLeft: '0' }}>
-        <ToDo/>
+      <div className="w-full">
+        {/*Home Bar Top page */}
+        <div className={`pt-1 pb-1 w-full mx-auto shadow-sm ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
+          <h2 className={`text-2xl font-dm font-bold mt-2 mb-2 ml-[3%] ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Home</h2>
+        </div>
+        {/*Date Nav Bar */}
+        <div className="flex pt-2 justify-between items-center">
+          <DateNavigation selectedDay={selectedDay} selectedMonth={selectedMonth} selectedYear={selectedYear} handleDayChange={handleDayChange} handleMonthChange={handleMonthChange} handleYearChange={handleYearChange}/>
+        </div>
+        <div className="pt-12 pl-6">
+          <div className="flex items-center justify-start">
+            <h2 className={`text-[30px] font-dm font-bold mt-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Tasks</h2>
+            <button className="pl-4" onClick={toggleFormVisibility}>
+              {/*Insert + image here */}Add Task
+            </button>
+          </div>
+          <div style={{ maxHeight: '75vh', overflowY: 'auto' }} className="custom-scrollbar">
+            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility}/>
+          </div>
+        </div>
       </div>
     </div>
   );
