@@ -72,18 +72,18 @@ export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) =>
         required 
       />
       <textarea 
+        className = "w-full h-32"
         value={description} 
         onChange={(e) => setDescription(e.target.value)} 
-        placeholder="Description" 
-        required 
+        placeholder="Description"  
       />
       <select value={ImportanceGroup} onChange={(e) => setImportanceGroup(e.target.value)}>
         <option value="TopPriority">Top Priority</option>
         <option value="Important">Important</option>
         <option value="Other">Other</option>
       </select>
-      <button type="submit">Add Task</button>
-      <button type="button" onClick={onCancel}>Cancel</button>
+      <button className="bg-white" type="submit">Add Task</button>
+      <button className="bg-white" type="button" onClick={onCancel}>Cancel</button>
     </form>
   );
 };

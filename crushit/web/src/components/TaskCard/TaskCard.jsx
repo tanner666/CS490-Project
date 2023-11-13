@@ -22,7 +22,7 @@ const TaskCard = ({ task, onStatusChange }) => {
           <p className="text-xs text-timer-orange mr-8">{task.pomodoroTimers}</p>
         </div>
         <p className="text-xs font-medium text-notes-grey mt-4 mx-1">Notes</p>
-        <p className="text-sm text-task-black w-full mx-1 rounded-md mt-1 pt-1 pb-1">
+        <p className="whitespace-normal break-words text-sm text-task-black w-full mx-1 rounded-md mt-1 pt-1 pb-1">
           {task.description}
         </p>
         
