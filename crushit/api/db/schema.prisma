@@ -18,39 +18,55 @@ generator client {
 //}
 
 model User {
-  id             Int             @id @default(autoincrement())
-  username       String
-  name           String          @default("|")
-  email          String          @unique
-  firebaseUid    String          @unique
-  pomodoroLength Int             @default(25)
-  pomodoroShort  Int             @default(5)
-  pomodoroLong   Int             @default(10)
-  darkMode       Boolean         @default(false)
-  pomodoros      PomodoroTimer[] @relation("UserTimer")
-  tasks          Task[]          @relation("UserTasks")
+  id                 Int             @id @default(autoincrement())
+  username           String
+  name               String          @default("|")
+  email              String          @unique
+  firebaseUid        String          @unique
+  pomodoroLength     Int             @default(25)
+  pomodoroShort      Int             @default(5)
+  pomodoroLong       Int             @default(10)
+  pomodorosCompleted Int?            @default(0) // Reset to 0 once day changes
+  darkMode           Boolean         @default(false)
+  pomodoros          PomodoroTimer[] @relation("UserTimer")
+  tasks              Task[]          @relation("UserTasks")
 }
 
-// schema.prisma
+// To be done next sprint: uncompleted items need to rolled over to the next day and have their group level dropped by one
+enum ImportanceGroup {
+  TopPriority // When adding do - "ImportanceGroup: ImportanceGroup.TopPriority". Ensure that there are only 3 tasks marked as TopPriority for a given day, force as Important or lower otherwise
+  Important // When adding do - "ImportanceGroup: ImportanceGroup.Important"
+  Other // When adding do - "ImportanceGroup: ImportanceGroup.Other"
+}
 
 model Task {
-  id                Int     @id @default(autoincrement())
+  id                Int              @id @default(autoincrement())
   taskName          String
-  priorityStatus    String
-  groupStatus       String?
-  completionStatus  Boolean
+  ImportanceGroup   ImportanceGroup? // TopPriority, Important, or Other
+  completionStatus  Boolean          @default(false)
   description       String?
-  pomodoroTimers    Int
+  pomodoroTimers    Int // Number of times it runs a given day. May be unneeded.
   pomodoroTimerType String?
+  taskOrder         Int // Must be filled in at the backend. Represents the order of tasks within their respective groupStatus. The value must be calculated based on the tasks within the same groupStatus.
   createdBy         Int
-  created_by        User    @relation("UserTasks", fields: [createdBy], references: [id])
+  created_by        User             @relation("UserTasks", fields: [createdBy], references: [id])
+  taskDates         TaskDate[]       @relation("TaskDate")
+}
+
+model TaskDate {
+  id     Int  @id @default(autoincrement())
+  day    Int
+  month  Int
+  year   Int
+  taskId Int
+  task   Task @relation("TaskDate", fields: [taskId], references: [id])
 }
 
 model PomodoroTimer {
   id       Int  @id @default(autoincrement())
-  pomodoro Int     // Time in minutes for regular pomodoros
-  short    Int     // Time in minutes for short breaks
-  long     Int     // Time in minutes for long breaks
+  pomodoro Int // Time in minutes for regular pomodoros
+  short    Int // Time in minutes for short breaks
+  long     Int // Time in minutes for long breaks
   userId   Int
   user     User @relation("UserTimer", fields: [userId], references: [id])
 }

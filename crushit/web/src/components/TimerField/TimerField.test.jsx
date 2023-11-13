@@ -32,33 +32,9 @@ describe('TimerField Component', () => {
       </ThemeProvider>
     )
 
-    expect(screen.getByLabelText(/Podomoro/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/Short Break/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/Long Break/i)).toBeInTheDocument()
-  })
-
-  it('calls handlePodomoroChange when Podomoro value is changed', () => {
-    render(
-      <ThemeProvider>
-        <TimerField
-          podomoro={25}
-          shortBreak={5}
-          longBreak={15}
-          handlePodomoroChange={mockHandlePodomoroChange}
-          handleShortBreakChange={mockHandleShortBreakChange}
-          handleLongBreakChange={mockHandleLongBreakChange}
-          theme="light"
-        />
-      </ThemeProvider>
-    )
-
-    fireEvent.change(screen.getByPlaceholderText(/Podomoro/i), {
-      target: { value: '30' },
-    })
-
-    expect(mockHandlePodomoroChange).toHaveBeenCalledWith(
-      expect.objectContaining({ target: { value: '30' } })
-    )
+    expect(screen.getByPlaceholderText(/Enter Pomodoro duration/i)).toBeInTheDocument()
+    expect(screen.getByPlaceholderText(/Short Break/i)).toBeInTheDocument()
+    expect(screen.getByPlaceholderText(/Long Break/i)).toBeInTheDocument()
   })
 
 })

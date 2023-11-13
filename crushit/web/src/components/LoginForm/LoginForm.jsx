@@ -43,7 +43,7 @@ const LoginForm = () => {
       // Redirect the user to another page after a successful sign-up.
       setLoginSuccess(true);
       // setUserUid(uid);
-      navigate('/settings');
+      navigate('/home');
     } catch (error) {
       console.error('Sign-in error:', error);
       setLoginError('Login failed. Please check your credentials.');
