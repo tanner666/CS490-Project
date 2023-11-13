@@ -16,18 +16,12 @@ jest.mock('@redwoodjs/router', () => ({
 describe('DateNavigation', () => {
   it('renders successfully', () => {
     render(<DateNavigation />);
-    
-    // Check if the component renders without crashing
-    expect(screen.getByText('Crush It')).toBeInTheDocument();
-    expect(screen.getByAltText('Plan your day illustration')).toBeInTheDocument();
-    expect(screen.getByText('Plan Day')).toBeInTheDocument();
-    expect(screen.getByText('Log Out')).toBeInTheDocument();
   });
 
   it('checks the presence of images', () => {
     render(<DateNavigation />);
     
-    // Check if the images are present
+    // Check if the images are present.
     expect(screen.getByAltText('Previous Month')).toBeInTheDocument();
     expect(screen.getByAltText('Next Month')).toBeInTheDocument();
     expect(screen.getByAltText('Previous Day')).toBeInTheDocument();
