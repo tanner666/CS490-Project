@@ -16,6 +16,10 @@ module.exports = {
       },
       colors:{
         'task-blue': '#6284FF',
+        'bar-grey': '#E2EAF1',
+        'task-black': '#1F1F1F',
+        'timer-orange': '#FE754D',
+        'notes-grey': '#545454',
       }
     },
   },

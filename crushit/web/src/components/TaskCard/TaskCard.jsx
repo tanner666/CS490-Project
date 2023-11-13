@@ -4,24 +4,27 @@ import { useTheme } from '../ThemeContext/ThemeContext'
 
 const TaskCard = ({ task, onStatusChange }) => {
   return (
-      <div className="p-2 my-4 mx-3 w-full max-w-[91%] rounded-lg shadow-sm bg-white">
-        <div className="task-card flex items-center mt-2">
+      <div className="p-2 my-3 mx-3 w-full max-w-[91%] rounded-lg shadow-sm bg-white font-dm font-bold">
+        <div className="task-card flex items-center mt-1">
         <h3>{task.title}</h3>
         {/* REplace this checkbox with status images */}
           <input
             type="checkbox"
             checked={task.completed}
             onChange={(e) => onStatusChange(task.id, e.target.checked)}
-            className="form-checkbox h-4 w-5 text-blue-600"
+            className="form-checkbox h-4 w-5"
           />
-          <p className="ml-2 text-md font-dm text-task-blue">{task.taskName}</p>
+          <p className="ml-2 text-md text-task-blue">{task.taskName}</p>
         </div>
-        <p className="text-sm text-gray-500 mt-3">Number of Pomodoro Timers (30 mins each): {task.pomodoroTimers}</p>
-        <p className="text-sm font-medium text-gray-700 mt-4">Notes</p>
-        <textarea
-          className="w-full p-2 text-sm text-gray-700 border border-gray-300 rounded-md mt-1"
-          defaultValue={task.description}
-        />
+        <div className="border mt-2 mx-auto h-0.4 w-[98%] bg-bar-grey"></div>
+        <div className="flex items-center justify-between mx-1 mt-3">
+          <p className="text-xs text-task-black">Number of Pomodoro Timers (30 mins each) </p>
+          <p className="text-xs text-timer-orange mr-8">{task.pomodoroTimers}</p>
+        </div>
+        <p className="text-xs font-medium text-notes-grey mt-4 mx-1">Notes</p>
+        <p className="text-sm text-task-black w-full mx-1 rounded-md mt-1 pt-1 pb-1">
+          {task.description}
+        </p>
         
       </div>
   )
