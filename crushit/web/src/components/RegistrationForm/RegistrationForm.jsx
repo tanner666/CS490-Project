@@ -73,7 +73,7 @@ const RegistrationForm = () => {
       // } else {
       //   console.error('User registration in Prisma failed')
       // }
-      navigate('/settings')
+      navigate('/')
     } catch (error) {
       console.error('Sign-up error:', error)
       setRegistrationError(
