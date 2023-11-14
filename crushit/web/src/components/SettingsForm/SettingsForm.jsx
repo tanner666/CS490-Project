@@ -5,8 +5,9 @@ import PasswordField from '../PasswordField/PasswordField'
 import NameField from '../NameField/NameField'
 import TimerField from '../TimerField/TimerField'
 import { useMutation, useQuery } from '@redwoodjs/web'
-import {changeUserPassword , signOutUser} from 'src/auth';
+import { changeUserPassword, signOutUser } from 'src/auth';
 import { navigate } from '@redwoodjs/router';
+import PlanDay from '../PlanDay/PlanDay';
 //import { UpdateUserInput } from 'src/graphql/users.sdl';
 
 const GET_USER_QUERY = gql`
@@ -17,6 +18,10 @@ const GET_USER_QUERY = gql`
       name
       username
       email
+      pomodoroLength
+      pomodoroShort
+      pomodoroLong
+      darkMode
     }
   }
 `;
@@ -27,15 +32,19 @@ const UPDATE_USER_MUTATION = gql`
       firebaseUid
       name
       email
+      pomodoroLength
+      pomodoroShort
+      pomodoroLong
+      darkMode
     }
   }
 `
 
 export const SettingsForm = ({ userId }) => {
     // const [uid, setUID] = useState('')
-    const { loading, error, data } = useQuery(GET_USER_QUERY, {
+    const { loading, error, data, refetch } = useQuery(GET_USER_QUERY, {
         variables: { firebaseUid: userId },
-      });
+    });
     const [updateUser] = useMutation(UPDATE_USER_MUTATION)
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('');
@@ -50,16 +59,25 @@ export const SettingsForm = ({ userId }) => {
     useEffect(() => {
         // console.log(data)
         if (data && data.user) {
-          // Check if data is available and user object exists
-          const { name } = data.user;
-          let firstName = name.split('|')[0];
-          let lastName = name.split('|')[1];
-        //   console.log(firstName, lastName, data.user);
-          setFirstName(firstName);
-          setLastName(lastName);
-          // Update other state variables if needed
+            // Check if data is available and user object exists
+            const { name, pomodoroLength, pomodoroShort, pomodoroLong, darkMode } = data.user;
+            let firstName = name.split('|')[0];
+            let lastName = name.split('|')[1];
+            //   console.log(firstName, lastName, data.user);
+            if (firstName && lastName) {
+                setFirstName(firstName);
+                setLastName(lastName);
+            }
+            if (pomodoroLength && pomodoroShort && pomodoroLong) {
+                setPodomoro(pomodoroLength);
+                setShortBreak(pomodoroShort);
+                setLongBreak(pomodoroLong);
+            }
+            //   console.log(data.user, podomoroLength)
+            //   console.log("names",firstName, lastName, podomoro, shortBreak, longBreak);
+            // Update other state variables if needed
         }
-      }, [data]);
+    }, [data]);
 
     // const [userData, setUserData] = useState(null);
 
@@ -94,41 +112,48 @@ export const SettingsForm = ({ userId }) => {
         setLongBreak(event.target.value);
     };
 
-    const handleLogout = async (event) => {
-        await signOutUser()
-        navigate('/')
-    }
-
     //this function is the save button that saves the entire settings page
     const handleSave = async () => {
         try {
             // Here you call your updateUser mutation and password, and podomoro timer
             // Replace `updateUserAPI` with the actual function you would use to call your API
             await updateUser({
-                variables:{
+                variables: {
                     firebaseUid: userId,
                     input: {
-                        name: firstName +'|' + lastName,
+                        name: firstName + '|' + lastName,
                         username: data.user.username,
+                        pomodoroLength: parseInt(podomoro),
+                        pomodoroShort: parseInt(shortBreak),
+                        pomodoroLong: parseInt(longBreak),
                     },
                 }
             });
+            await refetch();
             if (currentPassword && newPassword && confirmNewPassword) {
-                if (newPassword === confirmNewPassword && newPassword.length > 12 && containsTwoCharacterTypes(newPassword)) {
+                if (newPassword === confirmNewPassword && newPassword.length >= 12 && containsTwoCharacterTypes(newPassword)) {
                     console.log('Password will be changed');
                     try {
-                        await changeUserPassword(data.user.email, currentPassword, newPassword);
+                        await changeUserPassword(data.user.email, currentPassword, newPassword).then(() => {
+                            alert('Password changed successfully!');
+                            
+                        })
                     } catch (error) {
                         alert('Failed to change password');
                     }
+                    setCurrentPassword('');
+                            setNewPassword('');
+                            setConfirmNewPassword('')
                 } else {
-                    console.log('Password requirements not met');
+                    console.log('Password must match and be at least 12 characters long and contain characters from at least two different types (uppercase, lowercase, numeric, special).');
+                    alert('Password must match and be at least 12 characters long and contain characters from at least two different types (uppercase, lowercase, numeric, special).');
 
                 }
-            }else{
+            } else {
+                alert("Passwords are empty")
                 console.log('passwords empty')
             }
-            
+
             alert('User updated successfully!');
         } catch (error) {
             console.error('Error updating user:', error);
@@ -138,14 +163,27 @@ export const SettingsForm = ({ userId }) => {
 
     //just clears all of the text boxes, not db stuff needed
     const handleCancel = () => {
-        setFirstName(data.user.firstName);
-        setLastName(data.user.lastName);
+        if (data.user.name) {
+            let firstName = data.user.name.split('|')[0];
+            let lastName = data.user.name.split('|')[1];
+            setFirstName(firstName);
+            setLastName(lastName);
+        } else {
+            setFirstName('');
+            setLastName('');
+        }
         setCurrentPassword('');
         setNewPassword('');
         setConfirmNewPassword('');
-        setPodomoro('');
-        setShortBreak('');
-        setLongBreak('');
+        if (data.user.pomodoroLength && data.user.pomodoroShort && data.user.pomodoroLong) {
+            setPodomoro(data.user.pomodoroLength);
+            setShortBreak(data.user.pomodoroShort);
+            setLongBreak(data.user.pomodoroLong);
+        } else {
+            setPodomoro('');
+            setShortBreak('');
+            setLongBreak('');
+        }
         // Reset other states if necessary
     };
     const containsTwoCharacterTypes = (password) => {
@@ -153,67 +191,25 @@ export const SettingsForm = ({ userId }) => {
         const hasLower = /[a-z]/.test(password)
         const hasNumeric = /[0-9]/.test(password)
         const hasSpecial = /[!@#$%^&*()_+[\]{};:'",.<>?/\\| -]/.test(password)
-    
+
         const characterTypes = [hasUpper, hasLower, hasNumeric, hasSpecial]
         const typesCount = characterTypes.filter((type) => type).length
-    
+
         return typesCount >= 2
-      }
+    }
     return (
         <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
-            {/*Sidebar*/}
-            <div className="bg-custom-gray flex-grow h-screen flex flex-col items-center relative"
-                style={{ flex: '1', maxWidth: '14vw', minWidth: '14vw' }}>
-
-                {/* Title */}
-                <div className="text-white mt-10">
-                    <h2 className="font-normal leading-none font-fredoka" style={{ fontSize: '2vw' }}>Crush It</h2>
-                </div>
-
-                {/* Bar */}
-                <div className=" mt-10 h-0.5 w-[80%] bg-dark-gray">
-
-                </div>
-
-                {/* Image */}
-                <div className="mt-10 flex items-center justify-center">
-                    <img
-                        src="https://drive.google.com/uc?id=16-VMhr8wY_qwKfeaHduWZTeB3oFuTc4b"
-                        alt="Plan your day illustration"
-                        className="w-[63.76%] mb-8"
-                    />
-                </div>
-
-                {/* Bottom Text */}
-                <div className="text-white mb-8">
-                    <p className="font-normal leading-none font-fredoka text-center" style={{ fontSize: '1vw' }}>It's time to<br />plan your day!</p>
-                </div>
-
-                {/* Bottom Button */}
-                <div className="mb-12">
-                    <button className="bg-custom-gray text-white py-3 px-10 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 border border-white">
-                        Plan Day
-                    </button>
-                </div>
-
-                {/* Logout  Button */}
-                <div className="mb-12 absolute bottom-8">
-                    <button onClick={handleLogout} className="bg-custom-gray text-xs text-white py-2 px-6 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 border border-white">
-                        Log Out
-                    </button>
-                </div>
-
-            </div>
+            <PlanDay/>
             {/*Rest of page */}
             <div className="w-full">
                 {/*Profile Header */}
-                <div className={`pt-1 pb-1 w-full mx-auto shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
+                <div className={`pt-1 pb-1 w-full mx-auto shadow-sm ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
                     <h2 className={`text-2xl font-dm font-bold mt-2 mb-2 ml-[3%] ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Profile</h2>
                 </div>
                 <div className="forms ml-[3%] mr-[3%]">
                     <div className="flex justify-between items-center">
                         <h2 className={`text-xl font-dm font-semibold mt-6 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>User Info</h2>
-                        <ThemeToggle />
+                        <ThemeToggle userId={userId}/>
                     </div>
                     <div className={`pb-5 px-8 w-full mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
                         <div className="grid grid-cols-2 gap-8">
@@ -229,7 +225,7 @@ export const SettingsForm = ({ userId }) => {
                     <h2 className={`text-xl font-dm font-semibold mt-6 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Change Password</h2>
                     <div className={`pb-5 px-8 w-full mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
                         <div className="grid grid-cols-3 gap-8">
-                            <PasswordField 
+                            <PasswordField
 
                                 currentPassword={currentPassword}
                                 newPassword={newPassword}
@@ -244,7 +240,7 @@ export const SettingsForm = ({ userId }) => {
                     <h2 className={`text-xl font-dm font-semibold mt-6 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Podomoro Timer (Minutes)</h2>
                     <div className={`pb-5 px-8 w-full mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
                         <div className="grid grid-cols-3 gap-8">
-                            <TimerField 
+                            <TimerField
                                 podomoro={podomoro}
                                 shortBreak={shortBreak}
                                 longBreak={longBreak}

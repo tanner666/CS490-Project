@@ -10,17 +10,19 @@ import {ThemeProvider} from './components/ThemeContext/ThemeContext'
 import './index.css'
 
 const App = () => (
-  <ThemeProvider>
-    <FatalErrorBoundary page={FatalErrorPage}>
-      <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
-        <AuthProvider>
-          <RedwoodApolloProvider useAuth={useAuth}>
-            <Routes />
-          </RedwoodApolloProvider>
-        </AuthProvider>
-      </RedwoodProvider>
-    </FatalErrorBoundary>
-  </ThemeProvider>
+  <RedwoodApolloProvider>
+    <ThemeProvider>
+      <FatalErrorBoundary page={FatalErrorPage}>
+        <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+          <AuthProvider>
+            <RedwoodApolloProvider useAuth={useAuth}>
+              <Routes />
+            </RedwoodApolloProvider>
+          </AuthProvider>
+        </RedwoodProvider>
+      </FatalErrorBoundary>
+    </ThemeProvider>
+  </RedwoodApolloProvider>
 )
 
 export default App

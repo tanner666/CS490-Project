@@ -2,6 +2,25 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+/* Custom Scrollbar styles */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px; /* Width of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #d1d5db; /* Light grey track color */
+  border-radius: 10px; /* Rounded edges on the track */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #3B82F6; /* Blue thumb color */
+  border-radius: 10px; /* Rounded edges on the thumb */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #2563EB; /* Slightly darker blue color on hover */
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   }

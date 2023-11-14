@@ -34,7 +34,7 @@ const LoginForm = () => {
 
     // Check password requirements
     if (password.length < 12 || !containsTwoCharacterTypes(password)) {
-      setLoginError('Password requirements not met.');
+      setLoginError('Password must be at least 12 characters long and contain characters from at least two different types (uppercase, lowercase, numeric, special).');
       return;
     }
 
@@ -43,7 +43,7 @@ const LoginForm = () => {
       // Redirect the user to another page after a successful sign-up.
       setLoginSuccess(true);
       // setUserUid(uid);
-      navigate('/settings');
+      navigate('/home');
     } catch (error) {
       console.error('Sign-in error:', error);
       setLoginError('Login failed. Please check your credentials.');
@@ -65,6 +65,12 @@ const LoginForm = () => {
     const typesCount = characterTypes.filter((type) => type).length;
 
     return typesCount >= 2;
+  };
+
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const togglePasswordVisibility = () => {
+    // Toggle the password visibility state
+    setPasswordVisible(!passwordVisible);
   };
 
   return (
@@ -99,9 +105,18 @@ const LoginForm = () => {
           )}
 
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="email">
-              Email/username
-            </label>
+  	    <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="email">
+    	      <span className="flex items-center"> {/* Use a flex container to align items horizontally */}
+                <img
+                  src="https://drive.google.com/uc?id=1IU2B0OMrqnVAYx2tmcx4ffIJ__tvAgq1"
+                  alt="Email Icon"
+                  className="mr-2"
+                  style={{ width: '18px', height: '18px' }} // You can adjust the width and height as needed
+                  /> {/* Image */}
+                Email/username
+              </span>
+          </label>
+
             <input
               className="shadow appearance-none border rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
               id="email"
@@ -115,17 +130,36 @@ const LoginForm = () => {
             )}
           </div>
 
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="password">
-              Password
-            </label>
-            <input
-              className="shadow appearance-none border rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+           <div className="mb-6">
+             <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="password">
+               <span className="flex items-center">
+                 <img
+                   src="https://drive.google.com/uc?id=1pA2Xu-YP86YyJFPSJb4Q6LfOYcmEM1Gc"
+                   alt="Password Icon"
+                   className="mr-2"
+                   style={{ width: '18px', height: '18px' }}
+                 />
+               Password
+               </span>
+             </label>
+	     
+	     <div className="relative">
+               <input
+          	className="shadow appearance-none border rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
+          	id="password"
+          	type={passwordVisible ? 'text' : 'password'} // Use the passwordVisible state to toggle input type
+          	value={password}
+          	onChange={(e) => setPassword(e.target.value)}
+		autoComplete="new-password" // Add this line to prevent the default password toggle button
+              />
+              <img
+          	src="https://drive.google.com/uc?id=1Js4L7DAzkvl-TCPZ2GQi7R7z8TAI26_L"
+          	alt={passwordVisible ? "Hide Password" : "Show Password"}
+          	className="absolute top-2 right-2 cursor-pointer"
+          	style={{ width: '18px', height: '18px' }}
+          	onClick={togglePasswordVisibility}
+              />
+      	    </div>
             {passwordRequired && (
               <p className="text-red-500 text-sm mt-2">Password is required.</p>
             )}

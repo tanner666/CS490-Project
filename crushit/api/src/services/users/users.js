@@ -40,7 +40,8 @@ export const createUser = async ({ input }) => {
     console.log(email)
     const userDB = await db.user.create({
       data: {
-        email, firebaseUid, username: email, name: "" 
+        email, firebaseUid, username: email, name: "", 
+        // pomodoroLength: 25, pomodoroShort: 5, pomodoroLong: 10,
       },
     })
     return userDB
@@ -55,6 +56,24 @@ export const updateUser = ({ firebaseUid, input }) => {
     data: input,
     where: { firebaseUid },
   })
+}
+
+export const updateTheme = async ({ firebaseUid, darkMode }) => {
+  return db.user.update({
+    where: { firebaseUid },
+    data: { darkMode },
+  })
+}
+
+export const userTheme = async ({ firebaseUid }) => {
+  console.log("user stuff1: ", user);
+  // Assuming you have a db object that allows you to interact with your database
+  const user = await db.user.findUnique({
+    where: { firebaseUid },
+    select: { darkMode: true }, // Only select the 'theme' field
+  });
+  console.log("user stuff: ", user);
+  return user.darkMode; // Return only the 'theme' value
 }
 
 // Not completely functional yet, removes from firebase but not database;

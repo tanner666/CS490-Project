@@ -1,19 +1,42 @@
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
+import ToDoAndAppts from 'src/components/ToDoAndAppts/ToDoAndAppts';
+import ThemeToggle from 'src/components/ThemeToggle/ThemeToggle';
+import { useEffect, useState } from 'react';
+import { getUserUid, useAuth } from 'src/auth';
+
 
 const HomePage = () => {
+  const [uid, setUID] = useState('');
+  //change these to retreive the current values in the navigation bar
+  const currentDate = new Date();
+  const day = currentDate.getDate();
+  const month = currentDate.getMonth() + 1; //MOnth is 0-indexed 
+  const year = currentDate.getFullYear();
+
+  useEffect(() => {
+    getUserUid()
+      .then((uid) => {
+        // console.log(uid)
+          setUID(uid)
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+
+  }, []);
+  
+  //passes the current date when initially loading page
   return (
     <>
       <MetaTags title="Home" description="Home page" />
-
-      <h1>HomePage</h1>
-      <p>
-        Find me in <code>./web/src/pages/HomePage/HomePage.jsx</code>
-      </p>
-      <p>
-        My default route is named <code>home</code>, link to me with `
-        <Link to={routes.home()}>Home</Link>`
-      </p>
+      <div>
+      {uid ? (
+          <ToDoAndAppts userId={uid} day={day} month={month} year={year}/>
+        ) : (
+          <p>Loading or no UID available...</p>
+        )} 
+      </div>
     </>
   )
 }
