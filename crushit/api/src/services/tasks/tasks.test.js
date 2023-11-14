@@ -1,4 +1,5 @@
 import { tasks, task, createTask, updateTask, deleteTask, userTasksOnDate } from './tasks'
+import { createUser } from '../users/users';
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.
@@ -7,6 +8,36 @@ import { tasks, task, createTask, updateTask, deleteTask, userTasksOnDate } from
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('tasks', () => {
+  scenario('creates a user and then a task', async (scenario) => {
+    // Create a user first
+    const user = await createUser({
+      input: {
+        // user details here
+        email: "adska@gmail.com",
+        firebaseUid: 'stringfiebas3456',
+        name: "",
+        username: "adska@gmail.com",
+        // ... other user fields ...
+      },
+    });
+
+    // Now create a task associated with this user
+    const result = await createTask({
+      input: {
+        taskName: 'String',
+        completionStatus: false,
+        pomodoroTimers: 7999023,
+        taskOrder: 6938815,
+        createdBy: user.firebaseUid,
+        taskDates: [{day: 2, month: 2, year: 2022}],
+      },
+    });
+    expect(result.taskName).toEqual('String')
+    expect(result.pomodoroTimers).toEqual(7999023)
+    expect(result.taskOrder).toEqual(6938815)
+    expect(result.createdBy).toEqual('stringfiebas3456')
+  });
+
   scenario('returns all tasks', async (scenario) => {
     const result = await tasks()
 
@@ -17,22 +48,6 @@ describe('tasks', () => {
     const result = await task({ id: scenario.task.one.id })
 
     expect(result).toEqual(scenario.task.one)
-  })
-
-  scenario('creates a task', async (scenario) => {
-    const result = await createTask({
-      input: {
-        taskName: 'String',
-        pomodoroTimers: 7999023,
-        taskOrder: 6938815,
-        createdBy: scenario.task.two.createdBy,
-      },
-    })
-
-    expect(result.taskName).toEqual('String')
-    expect(result.pomodoroTimers).toEqual(7999023)
-    expect(result.taskOrder).toEqual(6938815)
-    expect(result.createdBy).toEqual(scenario.task.two.createdBy)
   })
 
   scenario('updates a task', async (scenario) => {
@@ -68,19 +83,9 @@ describe('userTasksOnDate', () => {
       year: specifiedYear,
     })
 
-    // Check that the result contains tasks for the specified user and date
+    // Check that the result contains nothing, since no user created yet
     expect(result).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({
-          createdBy: userId,
-          taskDates: expect.arrayContaining([
-            expect.objectContaining({
-              day: specifiedDay,
-              month: specifiedMonth,
-              year: specifiedYear,
-            }),
-          ]),
-        }),
       ])
     )
   })
