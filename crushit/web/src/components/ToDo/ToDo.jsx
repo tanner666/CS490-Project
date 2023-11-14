@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import TaskGroup from '../TaskGroup/TaskGroup';
 import {useQuery} from '@redwoodjs/web';
 import AddTaskForm from '../AddTaskForm/AddTaskForm';
+import { DragDropContext } from 'react-beautiful-dnd';
 //import GetUserTasksOnDate from 'src/graphql/tasks.gql'
 //import {QUERY} from 'src/graphql/tasks';
 
@@ -91,13 +92,17 @@ const ToDo = ({userId, day, month, year, formVisibility}) => {
     tasks.forEach(task => {
       switch(task.ImportanceGroup) {
         case 'TopPriority':
-          sortedTasks.TopPriority.push(task);
+          // task.taskOrder = sortedTasks.TopPriority.length;
+          sortedTasks.TopPriority.push({...task, order: sortedTasks.TopPriority.length});
+          // console.log("TopPriority", sortedTasks.TopPriority);
           break;
         case 'Important':
-          sortedTasks.Important.push(task);
+          // task.taskOrder = sortedTasks.Important.length;
+          sortedTasks.Important.push({...task, order: sortedTasks.Important.length});
           break;
         case 'Other':
-          sortedTasks.Other.push(task);
+          // task.taskOrder = sortedTasks.Other.length;
+          sortedTasks.Other.push({...task, order: sortedTasks.Other.length});
           break;
         default:
           // Handle tasks with no or unrecognized importance group
@@ -149,7 +154,7 @@ const ToDo = ({userId, day, month, year, formVisibility}) => {
         </div>
       )}
       <div className="p-6 my-2 w-full max-w-[52%] rounded-lg shadow-sm bg-white">
-        
+        <DragDropContext>
         <TaskGroup
           groupTitle="Top Priority"
           tasks={tasks.TopPriority}
@@ -165,6 +170,7 @@ const ToDo = ({userId, day, month, year, formVisibility}) => {
           tasks={tasks.Other}
           onStatusChange={handleStatusChange}
         />
+        </DragDropContext>
       </div>
     </div>
   );
