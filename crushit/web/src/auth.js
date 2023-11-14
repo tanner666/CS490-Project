@@ -102,3 +102,14 @@ export const changeUserPassword = async (email, oldPassword, newPassword) => {
     throw new Error(error.message);
   }
 };
+
+export const resetUserPassword = async(newPassword, oobCode) => {
+  try{
+    console.log('resetting password', oobCode, newPassword)
+    await firebaseAuth.verifyPasswordResetCode(getAuth(), oobCode);
+    console.log('verified')
+  await firebaseAuth.confirmPasswordReset(getAuth(), oobCode, newPassword)
+  }catch(error){
+    throw new Error("Error", error.message)
+  }
+};
