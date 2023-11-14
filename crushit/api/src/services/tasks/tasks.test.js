@@ -22,20 +22,20 @@ describe('tasks', () => {
     });
 
     // Now create a task associated with this user
-    const taskResult = await createTask({
+    const result = await createTask({
       input: {
         taskName: 'String',
         completionStatus: false,
         pomodoroTimers: 7999023,
         taskOrder: 6938815,
         createdBy: user.firebaseUid,
-        taskDates: {day: 2, month: 2, year: 2022},
+        taskDates: [{day: 2, month: 2, year: 2022}],
       },
     });
     expect(result.taskName).toEqual('String')
     expect(result.pomodoroTimers).toEqual(7999023)
     expect(result.taskOrder).toEqual(6938815)
-    expect(result.createdBy).toEqual('String34435jdsm')
+    expect(result.createdBy).toEqual('stringfiebas3456')
   });
 
   scenario('returns all tasks', async (scenario) => {
