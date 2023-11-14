@@ -13,7 +13,7 @@ const TaskGroup = ({groupTitle, tasks, onStatusChange}) => {
     {...provided.droppableProps} ref={provided.innerRef}>
       <h2 className="pl-2 pt-2 text-lg font-dm font-bold text-black">{groupTitle}</h2>
       {tasks.map((task) => (
-        <Draggable key={task.id.toString()} draggableId={task.id.toString()} index={task.order}>
+        <Draggable key={task.id.toString()} draggableId={task.id.toString()} index={task.taskOrder}>
         {(dragProvided) => (
           <div {...dragProvided.draggableProps} {...dragProvided.dragHandleProps} ref={dragProvided.innerRef} >
           <TaskCard task={task} onStatusChange={onStatusChange} />

@@ -3,6 +3,7 @@ import TaskGroup from '../TaskGroup/TaskGroup';
 import {useQuery, useMutation} from '@redwoodjs/web';
 import AddTaskForm from '../AddTaskForm/AddTaskForm';
 import { DragDropContext } from 'react-beautiful-dnd';
+import { object } from 'prop-types';
 
 //import GetUserTasksOnDate from 'src/graphql/tasks.gql'
 //import {QUERY} from 'src/graphql/tasks';
@@ -96,16 +97,17 @@ const ToDo = ({userId, day, month, year, formVisibility}) => {
         case 'TopPriority':
           // task.taskOrder = sortedTasks.TopPriority.length;
           // task.taskOrder = sortedTasks.TopPriority.length;
-          sortedTasks["TopPriority"].push({...task, order: sortedTasks["TopPriority"].length});
+          sortedTasks["TopPriority"].push({...task, taskOrder: sortedTasks["TopPriority"].length});
+
           // console.log("TopPriority", sortedTasks.TopPriority);
           break;
         case 'Important':
           // task.taskOrder = sortedTasks.Important.length;
-          sortedTasks.Important.push({...task, order: sortedTasks.Important.length});
+          sortedTasks.Important.push({...task, taskOrder: sortedTasks.Important.length});
           break;
         case 'Other':
           // task.taskOrder = sortedTasks.Other.length;
-          sortedTasks.Other.push({...task, order: sortedTasks.Other.length});
+          sortedTasks.Other.push({...task, taskOrder: sortedTasks.Other.length});
           break;
         default:
           // Handle tasks with no or unrecognized importance group
@@ -127,41 +129,21 @@ const ToDo = ({userId, day, month, year, formVisibility}) => {
   }, [data]);
 
   useEffect(() => {
-    // Any code that depends on the updated tasks state should go here
-    // Object.keys(tasks).forEach((group) => {
-    //   tasks[group].forEach((task) => {
-    //     if (task.ImportanceGroup !== group) {
-    //       // The task's ImportanceGroup has changed, update it in the database
-    //       const taskId = task.id; // Replace this with the actual ID retrieval for the task
-    //       const newImportanceGroup = task.ImportanceGroup;
-    //       console.log("taskId: ", task, taskId, newImportanceGroup);
-    //       // Call the mutation to update the task's ImportanceGroup in the database
-    //       // You'll need to pass taskId and newImportanceGroup as variables to the mutation
-    //       // You may need to handle errors and loading states appropriately
-    //       // Example:
-    //       // updateTaskMutation({ variables: { id: taskId, input: { ImportanceGroup: newImportanceGroup } } });
-    //     }
-    //   });
-    // });
     console.log(tasks)
     Object.keys(tasks).forEach((group) => {
-      // console.log(group)
       tasks[group].forEach((task) => {
-        // console.log(task)
-        // console.log('data',data)
+      // updateTasks({variables: {id: task.id, input: {ImportanceGroup: task.ImportanceGroup, taskOrder: task.taskOrder}}})
         data.userTasksOnDate.filter((task2) =>{ 
           if(task.id == task2.id){
-            if(task.ImportanceGroup !== task2.ImportanceGroup){
-              updateTasks({variables: {id: task.id, input: {ImportanceGroup: task.ImportanceGroup}}})
+            if(task.ImportanceGroup !== task2.ImportanceGroup || task.taskOrder != task2.taskOrder){
+              console.log("Updating Task: ", task, task2)
+              updateTasks({variables: {id: task.id, input: {ImportanceGroup: task.ImportanceGroup, taskOrder: task.taskOrder}}})
             }
           }
         })
 
       })
-    })
-
-    // console.log(data)
-    
+    })    
   }, [tasks]);
 
 
@@ -218,16 +200,22 @@ const ToDo = ({userId, day, month, year, formVisibility}) => {
     if (destinationGroupId in updatedTasks) {
       updatedTasks[destinationGroupId].splice(newOrder, 0, {
         ...draggedTask,
-        order: newOrder,
+        taskOrder: newOrder,
       });
     } else {
       updatedTasks[destinationGroupId] = [
         {
           ...draggedTask,
-          order: newOrder,
+          taskOrder: newOrder,
         },
       ];
     }
+
+    Object.keys(updatedTasks).forEach((group) => {
+      for(let i = 0; i < updatedTasks[group].length; i++){
+        updatedTasks[group][i].taskOrder = i;
+      }
+    })
   
     // Update the order of all tasks within the source and destination groups
     // updatedTasks[sourceGroupId] = updatedTasks[sourceGroupId].map((task, index) => ({
