@@ -36,7 +36,7 @@ const DateNavigation = ({selectedDay, selectedMonth, selectedYear, handleDayChan
     cursor: 'pointer',
   };
 
-  
+
 
   const daysInMonth = (year, month) => new Date(year, month, 0).getDate();
 

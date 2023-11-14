@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import TaskGroup from '../TaskGroup/TaskGroup';
-import {useQuery, useMutation} from '@redwoodjs/web';
+import {useQuery, gql, useMutation} from '@redwoodjs/web';
 import AddTaskForm from '../AddTaskForm/AddTaskForm';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { useTheme } from '../ThemeContext/ThemeContext';
@@ -9,18 +9,21 @@ import { object } from 'prop-types';
 //import GetUserTasksOnDate from 'src/graphql/tasks.gql'
 //import {QUERY} from 'src/graphql/tasks';
 
+
 //query ... defiens a graphql query names userTasksON... with parameters (! means parameter is required)
 //second line with userTasksOnDate corresponds to graphql schema resolver on server side
 //inside this field, spcify data in GraphQL schema
   //inside this, specify what you want to retrieve (here is is an array of Tasks (per the gql schema def), all with the listed fields below)
 
-const  GetUserTasksOnDate = gql` 
+
+  const GetUserTasksOnDate = gql`
   query userTasksOnDate($userId: String!, $day: Int!, $month: Int!, $year: Int!) {
     userTasksOnDate(userId: $userId, day: $day, month: $month, year: $year) {
       id
       taskName
       ImportanceGroup
       completionStatus
+      taskStatus
       description
       pomodoroTimers
       pomodoroTimerType
@@ -34,14 +37,15 @@ const  GetUserTasksOnDate = gql`
       }
     }
   }
-`;
+`
 
 const CREATE_TASK_MUTATION = gql`
-   mutation createTask($input: CreateTaskInput!) {
+  mutation createTask($input: CreateTaskInput!) {
     createTask(input: $input) {
       taskName
       ImportanceGroup
       completionStatus
+      taskStatus
       description
       pomodoroTimers
       pomodoroTimerType
@@ -57,8 +61,8 @@ const CREATE_TASK_MUTATION = gql`
 `
 
 const UPDATE_TASK_MUTATION = gql`
-  mutation updateTask($id: Int!, $input: UpdateTaskInput!){
-    updateTask(id: $id, input: $input){
+  mutation updateTask($id: Int!, $input: UpdateTaskInput!) {
+    updateTask(id: $id, input: $input) {
       taskName
       ImportanceGroup
       completionStatus
@@ -76,7 +80,7 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
   const {data, loading, error, refetch} = useQuery(GetUserTasksOnDate, {variables: {userId, day, month, year}});
   const [updateTasks] = useMutation(UPDATE_TASK_MUTATION);
   const { theme } = useTheme();
-  
+
   const [isFormVisibile, setIsFormVisible] = useState(false);
 
   //define three array groups
@@ -86,6 +90,15 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
     Other: [],
   });
 
+  const [createTaskMutation] = useMutation(CREATE_TASK_MUTATION);
+  const [updateTaskMutation] = useMutation(UPDATE_TASK_MUTATION);
+
+  useEffect(() => {
+    if (data && data.userTasksOnDate) {
+      const sortedTasks = sortTasks(data.userTasksOnDate);
+      setTasks(sortedTasks);
+    }
+  }, [data]);
   //function to sort tasks into priority groups
   const sortTasks = (tasks) => {
     const sortedTasks = {
@@ -135,7 +148,7 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
     Object.keys(tasks).forEach((group) => {
       tasks[group].forEach((task) => {
       // updateTasks({variables: {id: task.id, input: {ImportanceGroup: task.ImportanceGroup, taskOrder: task.taskOrder}}})
-        data.userTasksOnDate.filter((task2) =>{ 
+        data.userTasksOnDate.filter((task2) =>{
           if(task.id == task2.id){
             if(task.ImportanceGroup !== task2.ImportanceGroup || task.taskOrder != task2.taskOrder){
               console.log("Updating Task: ", task, task2)
@@ -145,7 +158,7 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
         })
 
       })
-    })    
+    })
   }, [tasks]);
 
 
@@ -178,12 +191,12 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
     if (!result.destination) {
       return; // Task dropped outside of a droppable area
     }
-  
+
     const sourceGroupId = result.source.droppableId;
     const destinationGroupId = result.destination.droppableId;
-  
+
     const updatedTasks = { ...tasks };
-  
+
     const [draggedTask] = updatedTasks[sourceGroupId].filter((task) => {
       if(task.id.toString() === result.draggableId)
         return task
@@ -191,9 +204,9 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
       );
     draggedTask.ImportanceGroup = destinationGroupId;
     updatedTasks[sourceGroupId] = updatedTasks[sourceGroupId].filter((task) => task.id.toString() !== result.draggableId);
-  
+
     const newOrder = result.destination.index;
-  
+
     if (destinationGroupId in updatedTasks) {
       updatedTasks[destinationGroupId].splice(newOrder, 0, {
         ...draggedTask,
@@ -236,5 +249,3 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
 };
 
 export default ToDo;
-
-

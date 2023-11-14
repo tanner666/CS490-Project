@@ -4,6 +4,7 @@ export const schema = gql`
     taskName: String!
     ImportanceGroup: ImportanceGroupEnum
     completionStatus: Boolean!
+    taskStatus: String!
     description: String
     pomodoroTimers: Int!
     pomodoroTimerType: String
@@ -29,6 +30,7 @@ export const schema = gql`
     taskName: String!
     ImportanceGroup: ImportanceGroupEnum
     completionStatus: Boolean!
+    taskStatus: String!
     description: String
     pomodoroTimers: Int!
     pomodoroTimerType: String
@@ -41,6 +43,7 @@ export const schema = gql`
     taskName: String
     ImportanceGroup: ImportanceGroupEnum
     completionStatus: Boolean
+    taskStatus: String
     description: String
     pomodoroTimers: Int
     pomodoroTimerType: String

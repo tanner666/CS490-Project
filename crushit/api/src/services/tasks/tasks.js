@@ -18,14 +18,16 @@ export const createTask = async ({ input }) => {
   if (!user) {
     throw new Error(user);
   }
+
   return db.task.create({
     data: {
       taskName: input.taskName,
       ImportanceGroup: input.ImportanceGroup,
       completionStatus: input.completionStatus,
+      taskStatus: input.taskStatus,
       description: input.description,
       pomodoroTimers: input.pomodoroTimers,
-      pomodoroTimersType: input.pomodoroTimersType,
+      pomodoroTimerType: input.pomodoroTimerType,
       taskOrder: input.taskOrder,
       createdBy: input.createdBy,
       taskDates:{
