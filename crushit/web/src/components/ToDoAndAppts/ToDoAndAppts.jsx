@@ -138,7 +138,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
           <div className="flex items-center justify-start">
             <h2 className={`text-[30px] font-dm font-bold mt-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Tasks</h2>
             <button className="pl-4" onClick={toggleFormVisibility}>
-              {/*Insert + image here */}Add Task
+              <img src="https://drive.google.com/uc?export=view&id=1psd6NBXctlxs7lN-5CJpXSCylzaWHVg1"/>
             </button>
           </div>
           <div style={{ maxHeight: '75vh', overflowY: 'auto' }} className="custom-scrollbar">

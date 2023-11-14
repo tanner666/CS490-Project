@@ -1,5 +1,5 @@
 import { signUp, signIn, signOutUser, forgotPassword } from './auth';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, onAuthStateChanged, reauthenticateWithCredential, EmailAuthProvider,updatePassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, onAuthStateChanged, reauthenticateWithCredential, EmailAuthProvider,updatePassword, verifyPasswordResetCode, confirmPasswordReset } from 'firebase/auth';
 
 jest.mock('firebase/auth', () => ({
   getAuth: jest.fn(),
@@ -9,6 +9,8 @@ jest.mock('firebase/auth', () => ({
   sendEmailVerification: jest.fn(),
   sendPasswordResetEmail: jest.fn(),
   EmailAuthProvider: jest.fn(),
+  verifyPasswordResetCode: jest.fn(),
+  confirmPasswordReset: jest.fn(),
 }));
 
 describe('signUpWithEmailAndPassword', () => {
@@ -94,10 +96,7 @@ describe('signOutUser', () => {
   
       await expect(signOutUser()).rejects.toThrow(errorMessage);
     });
-  });  
-  
-  
-  
+  });   
   
   describe('forgotPassword', () => {
   const email = 'test@example.com';
@@ -120,5 +119,27 @@ describe('signOutUser', () => {
 
     await expect(forgotPassword(email)).rejects.toThrow(errorMessage);
     expect(sendPasswordResetEmail).toHaveBeenCalledWith(auth, email);
+  });
+});
+
+import { resetUserPassword } from './auth';
+
+describe('resetUserPassword', () => {
+  const newPassword = 'newPassword';
+  const oobCode = 'oobCode';
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should reset user password with valid oobCode and newPassword', async () => {
+    const auth = getAuth();
+    verifyPasswordResetCode.mockResolvedValueOnce(undefined);
+    confirmPasswordReset.mockResolvedValueOnce(undefined);
+
+    await resetUserPassword(newPassword, oobCode);
+
+    expect(verifyPasswordResetCode).toHaveBeenCalledWith(auth, oobCode);
+    expect(confirmPasswordReset).toHaveBeenCalledWith(auth, oobCode, newPassword);
   });
 });
