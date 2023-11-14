@@ -70,7 +70,7 @@ const UPDATE_TASK_MUTATION = gql`
 `
 
 //ToDo is the parent task component, responsible for organizing and managing task groups and task cards
-const ToDo = ({userId, day, month, year, formVisibility}) => {
+const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) => {
   console.log("UserId in ToDo: ", userId);
   const {data, loading, error, refetch} = useQuery(GetUserTasksOnDate, {variables: {userId, day, month, year}});
   const [updateTasks] = useMutation(UPDATE_TASK_MUTATION);
@@ -157,7 +157,7 @@ const ToDo = ({userId, day, month, year, formVisibility}) => {
 
   const handleFormSubmit = (newTask) => {
     // Implement logic to add the new task
-    setIsFormVisible(false); // Hide form after submission
+    toggleFormVisibility()
     refetch();
   };
 
@@ -166,9 +166,10 @@ const ToDo = ({userId, day, month, year, formVisibility}) => {
     // Find which group the task belongs to and update the task's completed status
   };
 
-  const toggleFormVisibility = () => {
-    setIsFormVisible(prevState => !prevState);
-  };
+  // const toggleFormVisibility = () => {
+  //   console.log("toggleFormVisibility", formVisibility);
+  //   setIsFormVisible(prevState => !prevState);
+  // };
 
 
   const handleOnDragEnd = (result) => {
@@ -176,27 +177,21 @@ const ToDo = ({userId, day, month, year, formVisibility}) => {
       return; // Task dropped outside of a droppable area
     }
   
-    // Get the source and destination group IDs
     const sourceGroupId = result.source.droppableId;
     const destinationGroupId = result.destination.droppableId;
   
-    // Copy the tasks object to avoid mutating the state directly
     const updatedTasks = { ...tasks };
   
-    // Get the task that was dragged
     const [draggedTask] = updatedTasks[sourceGroupId].filter((task) => {
       if(task.id.toString() === result.draggableId)
         return task
     }
       );
     draggedTask.ImportanceGroup = destinationGroupId;
-    // Remove the task from the source group
     updatedTasks[sourceGroupId] = updatedTasks[sourceGroupId].filter((task) => task.id.toString() !== result.draggableId);
   
-    // Determine the new order based on the destination index
     const newOrder = result.destination.index;
   
-    // Insert the task into the destination group at the correct order
     if (destinationGroupId in updatedTasks) {
       updatedTasks[destinationGroupId].splice(newOrder, 0, {
         ...draggedTask,
@@ -216,20 +211,7 @@ const ToDo = ({userId, day, month, year, formVisibility}) => {
         updatedTasks[group][i].taskOrder = i;
       }
     })
-  
-    // Update the order of all tasks within the source and destination groups
-    // updatedTasks[sourceGroupId] = updatedTasks[sourceGroupId].map((task, index) => ({
-    //   ...task,
-    //   order: index,
-    // }));
-    // if (destinationGroupId in updatedTasks) {
-    //   updatedTasks[destinationGroupId] = updatedTasks[destinationGroupId].map((task, index) => ({
-    //     ...task,
-    //     order: index,
-    //   }));
-    // }
-  
-    // Update the state with the new tasks object
+
     setTasks(updatedTasks);
   }
 

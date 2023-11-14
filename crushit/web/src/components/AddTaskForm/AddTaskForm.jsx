@@ -60,8 +60,6 @@ export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) =>
       alert('Failed to create task.');
     }
   };
-  
-
 
   return (
     <form onSubmit={handleSubmit}>

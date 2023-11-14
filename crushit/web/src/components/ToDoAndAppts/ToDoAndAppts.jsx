@@ -118,6 +118,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
 
   const [formVisibility, setFormVisibility] = useState(false);
   const toggleFormVisibility = () => {
+    console.log('toggleFormVisibility', formVisibility);
     setFormVisibility(prevState => !prevState);
   };
 
@@ -141,7 +142,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
             </button>
           </div>
           <div style={{ maxHeight: '75vh', overflowY: 'auto' }} className="custom-scrollbar">
-            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility}/>
+            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility}/>
           </div>
         </div>
       </div>
