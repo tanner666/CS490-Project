@@ -67,6 +67,12 @@ const LoginForm = () => {
     return typesCount >= 2;
   };
 
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const togglePasswordVisibility = () => {
+    // Toggle the password visibility state
+    setPasswordVisible(!passwordVisible);
+  };
+
   return (
     <div className="bg-light-gray min-h-screen flex">
       <div className="bg-custom-gray flex-grow h-screen flex items-center justify-center relative rounded-r-lg"
@@ -136,14 +142,24 @@ const LoginForm = () => {
                Password
                </span>
              </label>
-
-            <input
-              className="shadow appearance-none border rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+	     
+	     <div className="relative">
+               <input
+          	className="shadow appearance-none border rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
+          	id="password"
+          	type={passwordVisible ? 'text' : 'password'} // Use the passwordVisible state to toggle input type
+          	value={password}
+          	onChange={(e) => setPassword(e.target.value)}
+		autoComplete="new-password" // Add this line to prevent the default password toggle button
+              />
+              <img
+          	src="https://drive.google.com/uc?id=1Js4L7DAzkvl-TCPZ2GQi7R7z8TAI26_L"
+          	alt={passwordVisible ? "Hide Password" : "Show Password"}
+          	className="absolute top-2 right-2 cursor-pointer"
+          	style={{ width: '18px', height: '18px' }}
+          	onClick={togglePasswordVisibility}
+              />
+      	    </div>
             {passwordRequired && (
               <p className="text-red-500 text-sm mt-2">Password is required.</p>
             )}
