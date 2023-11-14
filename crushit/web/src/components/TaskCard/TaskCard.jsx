@@ -8,6 +8,7 @@ const TaskCard = ({ task, onStatusChange }) => {
   const [statusIndex, setStatusIndex] = useState(0);
   const [openedDropdownIndex, setOpenedDropdownIndex] = useState(null);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [isTaskInfoVisible, setTaskInfoVisible] = useState(true);
   const statuses = ['Not Started', 'In Progress', 'Complete', 'Rolled Over'];
 
   const UPDATE_TASK_STATUS_MUTATION = gql`
@@ -82,18 +83,32 @@ const TaskCard = ({ task, onStatusChange }) => {
           </div>
         )}
         <p className="ml-2 text-md text-task-blue">{task.taskName}</p>
-        <div className="relative ml-auto">
-          {/* Dropdown */}
+        <div className="ml-auto flex items-center">
+          {/* Move button */}
+          <img
+            src="https://drive.google.com/uc?id=1Xiz9LatICGYP1TZo-kICAtJ2GCIf70Al"
+            className="w-5 h-5 mr-4"
+          />
+          {/* Hide/Show */}
           <img
             src="https://drive.google.com/uc?id=14p4ndBlSZ1Bv681-Ze2XyxrxYxTosUP8"
+            onClick={() => setTaskInfoVisible(!isTaskInfoVisible)}
+            className="w-5 h-5 mr-4"
           />
         </div>
-      </div><div className="border mt-2 mx-auto h-0.4 w-[98%] bg-bar-grey"></div><div className="flex items-center justify-between mx-1 mt-3">
-          <p className="text-xs text-task-black">Number of Pomodoro Timers (30 mins each) </p>
-          <p className="text-xs text-timer-orange mr-8">{task.pomodoroTimers}</p>
-        </div><p className="text-xs font-medium text-notes-grey mt-4 mx-1">Notes</p><p className="whitespace-normal break-words text-sm text-task-black w-full mx-1 rounded-md mt-1 pt-1 pb-1">
-          {task.description}
-        </p>
+      </div>{isTaskInfoVisible && (
+        <>
+          <div className="border mt-2 mx-auto h-0.4 w-[98%] bg-bar-grey"></div>
+          <div className="flex items-center justify-between mx-1 mt-3">
+            <p className="text-xs text-task-black">Number of Pomodoro Timers (30 mins each) </p>
+            <p className="text-xs text-timer-orange mr-8">{task.pomodoroTimers}</p>
+          </div>
+          <p className="text-xs font-medium text-notes-grey mt-4 mx-1">Notes</p>
+          <p className="whitespace-normal break-words text-sm text-task-black w-full mx-1 rounded-md mt-1 pt-1 pb-1">
+            {task.description}
+          </p>
+        </>
+      )}
       </div>
   );
 };
