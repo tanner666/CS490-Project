@@ -61,7 +61,7 @@ export const schema = gql`
     pomodoro: Int!
     short: Int!
     long: Int!
-    userId: Int!
+    userId: String!
     taskId: Int!
   }
 

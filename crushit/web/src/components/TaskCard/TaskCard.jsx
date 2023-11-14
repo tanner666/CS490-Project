@@ -30,7 +30,7 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount }) => {
     
     setShowButtons(prevShowButtons => !prevShowButtons);
     if(showButtons){
-        saveTimerCount(task.id, pomodoroCount);
+        saveTimerCount(task, pomodoroCount);
     }
   };
   return (

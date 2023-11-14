@@ -4,7 +4,7 @@ export const schema = gql`
     pomodoro: Int!
     short: Int!
     long: Int!
-    userId: Int!
+    userId: String!
     taskId: Int!
     user: User!
     task: Task!
@@ -19,7 +19,7 @@ export const schema = gql`
     pomodoro: Int!
     short: Int!
     long: Int!
-    userId: Int!
+    userId: String!
     taskId: Int!
   }
 
@@ -27,7 +27,7 @@ export const schema = gql`
     pomodoro: Int
     short: Int
     long: Int
-    userId: Int
+    userId: String
     taskId: Int
   }
 

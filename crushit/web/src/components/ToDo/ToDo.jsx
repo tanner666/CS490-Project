@@ -157,9 +157,16 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
     })    
   }, [tasks]);
 
-  const saveTimerCount = async (taskID, pomodoroCount) =>{
-    console.log("saveTimerCount", taskID, pomodoroCount)
-    await updateTasks({variables:{id: taskID, input:{pomodoroTimers: pomodoroCount}}})
+  const saveTimerCount = async (task, pomodoroCount) =>{
+    console.log("saveTimerCount", task.id, pomodoroCount)
+    const pomodoros = task.pomodoro ? [...task.pomodoro] : []
+    for(let i = 0; i < pomodoroCount; i++){
+      pomodoros.push({pomodoro:30, short:5, long:15, userId: task.createdBy, taskId: task.id})
+    }
+    console.log(pomodoros)
+
+    await updateTasks({variables:{id: task.id, input:{pomodoroTimers: pomodoroCount, pomodoro: pomodoros}}})
+
   }
 
 
