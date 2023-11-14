@@ -1,7 +1,7 @@
-// web/src/components/DateNavigation/DateNavigation.test.jsx
+//web/src/components/DateNavigation/DateNavigation.test.jsx
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import DateNavigation from './DateNavigation';
 
 jest.mock('../ThemeContext/ThemeContext', () => ({
@@ -26,7 +26,7 @@ describe('DateNavigation', () => {
 
   it('checks the presence of dropdown boxes', () => {
     render(<DateNavigation />);
-    
+
     // Find the select elements directly
     const monthDropdown = screen.getByTestId('monthDropdown');
     const dayDropdown = screen.getByTestId('dayDropdown');
@@ -37,14 +37,34 @@ describe('DateNavigation', () => {
     expect(yearDropdown).toBeInTheDocument();
   });
 
-  it('checks the functionality of dropdown boxes', () => {
+  it('checks the functionality of month dropdown', () => {
     render(<DateNavigation />);
-    // Get the select elements directly
     const monthDropdown = screen.getByTestId('monthDropdown');
+
+    // Simulate a change in the month dropdown
+    fireEvent.change(monthDropdown, { target: { value: '6' } });
+
+    // Your assertions for the functionality go here
+  });
+
+  it('checks the functionality of day dropdown', () => {
+    render(<DateNavigation />);
     const dayDropdown = screen.getByTestId('dayDropdown');
+
+    // Simulate a change in the day dropdown
+    fireEvent.change(dayDropdown, { target: { value: '15' } });
+
+    // Your assertions for the functionality go here
+  });
+
+  it('checks the functionality of year dropdown', () => {
+    render(<DateNavigation />);
     const yearDropdown = screen.getByTestId('yearDropdown');
 
-    // Your dropdown functionality test assertions go here
+    // Simulate a change in the year dropdown
+    fireEvent.change(yearDropdown, { target: { value: '2025' } });
+
+    // Your assertions for the functionality go here
   });
 });
 
