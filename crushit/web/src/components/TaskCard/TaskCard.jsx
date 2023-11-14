@@ -3,7 +3,6 @@ import { useTheme } from '../ThemeContext/ThemeContext'
 import { Draggable } from "react-beautiful-dnd"
 import { useState } from 'react';
 
-
 const TaskCard = ({ task, onStatusChange, saveTimerCount }) => {
   const [pomodoroCount, setPomodoroCount] = useState(task.pomodoroTimers);
   const [showButtons, setShowButtons] = useState(false);
@@ -37,8 +36,7 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount }) => {
 
     <div className="p-2 my-3 mx-auto w-full w-[94%] rounded-lg shadow-sm bg-white font-dm font-bold">
 
-      <div className="task-card flex items-center mt-1">
-        <h3>{task.title}</h3>
+        <div className="task-card flex items-center mt-1">
         {/* REplaced this checkbox with status images */}
         <button className='w-7 h-7' onClick={() => onStatusChange(task.id, !task.completed)}>
           <img src="https://drive.google.com/uc?export=view&id=1JbmEUFBK5MHBXKQNh0MvHDI8eSG8z1sP" />

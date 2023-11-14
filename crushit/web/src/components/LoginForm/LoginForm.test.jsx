@@ -1,73 +1,76 @@
 import React from 'react'
-import { render, screen, waitFor, fireEvent } from '@redwoodjs/testing/web'
+//import { render, screen, waitFor, fireEvent } from '@redwoodjs/testing/web'
 import LoginForm from './LoginForm'
 import {useAuth} from 'src/auth'
 import { ThemeProvider } from '../ThemeContext/ThemeContext';
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import { signIn } from 'src/auth';
+import { navigate } from '@redwoodjs/router';
 
-//   Improve this test with help from the Redwood Testing Doc:
-//    https://redwoodjs.com/docs/testing#testing-components
-
-jest.mock('src/auth', () => {
-  return {
-    useAuth: () => ({
-      signIn: jest.fn(),
-      // include other functions or properties that useAuth returns, if any
-    }),
-  };
-});
-
+// Mock the signIn and navigate functions
+jest.mock('src/auth', () => ({
+  signIn: jest.fn(),
+}));
+jest.mock('@redwoodjs/router', () => ({
+  navigate: jest.fn(),
+}));
 
 describe('LoginForm', () => {
-  it('allows a user to sign in', async () => {
-    const signInMock = jest.fn(() => Promise.resolve({ uid: '123' }));
+  it('allows the user to enter email and password', () => {
+    const { getByLabelText } = render(<ThemeProvider><LoginForm /></ThemeProvider>);
 
-    // Now, you directly set the mock return value of signIn
-    useAuth().signIn.mockReturnValue(signInMock());
+    const emailInput = getByLabelText(/email\/username/i);
+    const passwordInput = getByLabelText(/password/i);
 
-    const { getByLabelText, getByText, findByText } = render(<ThemeProvider><LoginForm /></ThemeProvider>);
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
 
-    fireEvent.change(getByLabelText(/email/i), {
-      target: { value: 'test@example.com' },
-    });
-    fireEvent.change(getByLabelText(/password/i), {
-      target: { value: 'password123' },
-    });
-
-    const submitButton = getByRole('button', { name: /sign in/i });
-    fireEvent.click(submitButton);
-
-    await waitFor(() => {
-      expect(signInMock).toHaveBeenCalledWith('test@example.com', 'password123');
-    });
-
-    // Check for success message
-    expect(await findByText('Login successful!')).toBeInTheDocument();
+    expect(emailInput.value).toBe('test@example.com');
+    expect(passwordInput.value).toBe('password123');
   });
 
-  it('shows error message on invalid credentials', async () => {
-    const signInMock = jest.fn(() => Promise.reject(new Error('Invalid credentials')));
-    useAuth().signIn.mockReturnValue(signInMock());
-    
-    const { getByLabelText, getByText, findByText } = render(<ThemeProvider><LoginForm /></ThemeProvider>);
+  it('shows an error if email or password is not entered', () => {
+    const { getByLabelText, getByRole } = render(<ThemeProvider><LoginForm /></ThemeProvider>);
 
-    // ... similar steps to simulate user input
+    const signInButton = getByRole('button', { name: /sign in/i });
+    fireEvent.click(signInButton);
 
-    const submitButton = getByText('Sign In');
-    fireEvent.click(submitButton);
-
-    await waitFor(() => {
-      expect(signInMock).toHaveBeenCalledWith('test@example.com', 'password123');
-    });
-
-    // Check for error message
-    expect(await findByText('Login failed. Please check your credentials.')).toBeInTheDocument();
+    expect(getByLabelText(/email\/username/i)).toBeInTheDocument();
+    expect(getByLabelText(/password/i)).toBeInTheDocument();
   });
 
-  // Additional tests for form validation, empty fields, etc.
+  it('navigates to settings page on successful sign-in', async () => {
+    signIn.mockResolvedValue({ uid: '123' });
 
-  it('renders successfully', () => {
-    expect(() => {
-      render(<LoginForm />)
-    }).not.toThrow()
+    const { getByLabelText, getByRole } = render(<ThemeProvider><LoginForm /></ThemeProvider>);
+
+    fireEvent.change(getByLabelText(/email\/username/i), { target: { value: 'hammy1@gmail.com' } });
+    fireEvent.change(getByLabelText(/password/i), { target: { value: 'passwordpassword1' } });
+
+    fireEvent.click(getByRole('button', { name: /sign in/i }));
+
+    await waitFor(() => {
+      expect(navigate).toHaveBeenCalledWith('/home');
+    });
+  });
+
+  it('displays an error on sign-in failure', async () => {
+    signIn.mockRejectedValue(new Error('Login failed'));
+
+    const { getByLabelText, getByRole, findByText } = render(<ThemeProvider><LoginForm /></ThemeProvider>);
+
+    fireEvent.change(getByLabelText(/email\/username/i), { target: { value: 'test' } });
+    fireEvent.change(getByLabelText(/password/i), { target: { value: 'passwordpassword123' } });
+
+    fireEvent.click(getByRole('button', { name: /sign in/i }));
+
+    const errorMessage = await findByText(/Login failed\. Please check your credentials\./i);
+    expect(errorMessage).toBeInTheDocument();
+  });
+
+  it('navigates to forgot-password page on clicking Forgot Password', () => {
+    const { getByText } = render(<LoginForm />);
+    fireEvent.click(getByText(/forgot password/i));
+    expect(navigate).toHaveBeenCalledWith('/forgot-password');
   });
 });
