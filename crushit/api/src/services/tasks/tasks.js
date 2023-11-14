@@ -44,7 +44,7 @@ export const updateTask = async ({ id, input }) => {
   const {pomodoro} = input
   let createdPomodoros = []
   console.log("Updating Tasks", input)
-  if(pomodoro && pomodoro.length > 0){
+  if(pomodoro && input.pomodoroTimers > 0){
       createdPomodoros = await Promise.all(
           pomodoro.map(async pomo => {
             const createdTimer = await db.pomodoroTimer.create({
