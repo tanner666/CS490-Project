@@ -8,6 +8,7 @@ const CREATE_TASK_MUTATION = gql`
       taskName
       ImportanceGroup
       completionStatus
+      taskStatus
       description
       pomodoroTimers
       pomodoroTimerType
@@ -40,9 +41,10 @@ export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) =>
       const response = await createTask({
         variables: {
           input: {
-            taskName, 
-            description, 
+            taskName,
+            description,
             ImportanceGroup,
+            taskStatus: 'Not Started',
             createdBy: userId,
             completionStatus: false,
             taskOrder: 0, //need to add functionality to handle this for rearanging tasks
@@ -69,22 +71,22 @@ export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) =>
 <div>
   <h2 className="text-2xl font-semibold mb-4 ">Add Task</h2>
   <form onSubmit={handleSubmit}>
-    <input 
-      type="text" 
-      value={taskName} 
-      onChange={(e) => setTaskName(e.target.value)} 
-      placeholder="Task Name" 
-      required 
+    <input
+      type="text"
+      value={taskName}
+      onChange={(e) => setTaskName(e.target.value)}
+      placeholder="Task Name"
+      required
       className="w-full p-2 mb-4 border rounded"
     />
-    <textarea 
+    <textarea
       className="w-full h-32 p-2 mb-4 border rounded"
-      value={description} 
-      onChange={(e) => setDescription(e.target.value)} 
-      placeholder="Description"  
+      value={description}
+      onChange={(e) => setDescription(e.target.value)}
+      placeholder="Description"
     />
-    <select 
-      value={ImportanceGroup} 
+    <select
+      value={ImportanceGroup}
       onChange={(e) => setImportanceGroup(e.target.value)}
       className="w-full p-2 mb-4 border rounded"
     >
