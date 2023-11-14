@@ -5,7 +5,7 @@ import { Draggable } from "react-beautiful-dnd"
 
 import { useMutation } from '@redwoodjs/web';
 
-const TaskCard = ({ task, onStatusChange }) => {
+const TaskCard = ({ task, onStatusChange, saveTimerCount }) => {
   const [statusIndex, setStatusIndex] = useState(0);
   const [openedDropdownIndex, setOpenedDropdownIndex] = useState(null);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
