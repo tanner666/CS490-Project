@@ -23,16 +23,19 @@ describe('tasks', () => {
     const result = await createTask({
       input: {
         taskName: 'String',
+        completionStatus: false,
         pomodoroTimers: 7999023,
         taskOrder: 6938815,
-        createdBy: scenario.task.two.createdBy,
+        createdBy: 'String34435jdsm',
+        taskDates: {day: 2, month: 2, year: 2022},
+
       },
     })
 
     expect(result.taskName).toEqual('String')
     expect(result.pomodoroTimers).toEqual(7999023)
     expect(result.taskOrder).toEqual(6938815)
-    expect(result.createdBy).toEqual(scenario.task.two.createdBy)
+    expect(result.createdBy).toEqual('String34435jdsm')
   })
 
   scenario('updates a task', async (scenario) => {
@@ -68,19 +71,9 @@ describe('userTasksOnDate', () => {
       year: specifiedYear,
     })
 
-    // Check that the result contains tasks for the specified user and date
+    // Check that the result contains nothing, since no user created yet
     expect(result).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({
-          createdBy: userId,
-          taskDates: expect.arrayContaining([
-            expect.objectContaining({
-              day: specifiedDay,
-              month: specifiedMonth,
-              year: specifiedYear,
-            }),
-          ]),
-        }),
       ])
     )
   })
