@@ -7,6 +7,7 @@ import TimerField from '../TimerField/TimerField'
 import { useMutation, useQuery } from '@redwoodjs/web'
 import { changeUserPassword, signOutUser } from 'src/auth';
 import { navigate } from '@redwoodjs/router';
+import PlanDay from '../PlanDay/PlanDay';
 //import { UpdateUserInput } from 'src/graphql/users.sdl';
 
 const GET_USER_QUERY = gql`
@@ -111,11 +112,6 @@ export const SettingsForm = ({ userId }) => {
         setLongBreak(event.target.value);
     };
 
-    const handleLogout = async (event) => {
-        await signOutUser()
-        navigate('/')
-    }
-
     //this function is the save button that saves the entire settings page
     const handleSave = async () => {
         try {
@@ -203,49 +199,7 @@ export const SettingsForm = ({ userId }) => {
     }
     return (
         <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
-            {/*Sidebar*/}
-            <div className="bg-custom-gray flex-grow h-screen flex flex-col items-center relative"
-                style={{ flex: '1', maxWidth: '14vw', minWidth: '14vw' }}>
-
-                {/* Title */}
-                <div className="text-white mt-10">
-                    <h2 className="font-normal leading-none font-fredoka" style={{ fontSize: '2vw' }}>Crush It</h2>
-                </div>
-
-                {/* Bar */}
-                <div className=" mt-10 h-0.5 w-[80%] bg-dark-gray">
-
-                </div>
-
-                {/* Image */}
-                <div className="mt-10 flex items-center justify-center">
-                    <img
-                        src="https://drive.google.com/uc?id=16-VMhr8wY_qwKfeaHduWZTeB3oFuTc4b"
-                        alt="Plan your day illustration"
-                        className="w-[63.76%] mb-8"
-                    />
-                </div>
-
-                {/* Bottom Text */}
-                <div className="text-white mb-8">
-                    <p className="font-normal leading-none font-fredoka text-center" style={{ fontSize: '1vw' }}>It's time to<br />plan your day!</p>
-                </div>
-
-                {/* Bottom Button */}
-                <div className="mb-12">
-                    <button className="bg-custom-gray text-white py-3 px-10 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 border border-white">
-                        Plan Day
-                    </button>
-                </div>
-
-                {/* Logout  Button */}
-                <div className="mb-12 absolute bottom-8">
-                    <button onClick={handleLogout} className="bg-custom-gray text-xs text-white py-2 px-6 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 border border-white">
-                        Log Out
-                    </button>
-                </div>
-
-            </div>
+            <PlanDay/>
             {/*Rest of page */}
             <div className="w-full">
                 {/*Profile Header */}
