@@ -63,7 +63,7 @@ export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) =>
 
   return (
 <div>
-  <h2 className="text-2xl font-semibold mb-4 text-task-blue">Add Task</h2>
+  <h2 className="text-2xl font-semibold mb-4 ">Add Task</h2>
   <form onSubmit={handleSubmit}>
     <input 
       type="text" 
