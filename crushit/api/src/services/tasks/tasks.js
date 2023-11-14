@@ -16,7 +16,7 @@ export const createTask = async ({ input }) => {
   });
 
   if (!user) {
-    throw new Error(`User with firebaseUid ${input.createdBy} not found`);
+    throw new Error(user);
   }
 
   return db.task.create({

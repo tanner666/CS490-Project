@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import TaskGroup from '../TaskGroup/TaskGroup';
 import {useQuery, gql, useMutation} from '@redwoodjs/web';
 import AddTaskForm from '../AddTaskForm/AddTaskForm';
+import { DragDropContext } from 'react-beautiful-dnd';
+import { useTheme } from '../ThemeContext/ThemeContext';
+import { object } from 'prop-types';
+
 //import GetUserTasksOnDate from 'src/graphql/tasks.gql'
 //import {QUERY} from 'src/graphql/tasks';
 
@@ -69,17 +73,17 @@ const UPDATE_TASK_MUTATION = gql`
 `
 
 //ToDo is the parent task component, responsible for organizing and managing task groups and task cards
-const ToDo = ({userId, day, month, year, formVisibility}) => {
-  //onsole.log("UserId in ToDo: ", userId); // Log the entire input object
-  //console.log('Type of createdBy:', typeof userId);
-  const { data, loading, error } = useQuery(GetUserTasksOnDate, {
-    variables: { userId, day, month, year },
-  });
+const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) => {
+  console.log("UserId in ToDo: ", userId);
+  const {data, loading, error, refetch} = useQuery(GetUserTasksOnDate, {variables: {userId, day, month, year}});
+  const [updateTasks] = useMutation(UPDATE_TASK_MUTATION);
+  const { theme } = useTheme();
+
   const [isFormVisibile, setIsFormVisible] = useState(false);
 
   //define three array groups
   const [tasks, setTasks] = useState({
-    TopPriority: [],
+    'TopPriority': [],
     Important: [],
     Other: [],
   });
@@ -96,7 +100,7 @@ const ToDo = ({userId, day, month, year, formVisibility}) => {
   //function to sort tasks into priority groups
   const sortTasks = (tasks) => {
     const sortedTasks = {
-      TopPriority: [],
+      'TopPriority': [],
       Important: [],
       Other: [],
     };
@@ -104,13 +108,19 @@ const ToDo = ({userId, day, month, year, formVisibility}) => {
     tasks.forEach(task => {
       switch(task.ImportanceGroup) {
         case 'TopPriority':
-          sortedTasks.TopPriority.push(task);
+          // task.taskOrder = sortedTasks.TopPriority.length;
+          // task.taskOrder = sortedTasks.TopPriority.length;
+          sortedTasks["TopPriority"].push({...task, taskOrder: sortedTasks["TopPriority"].length});
+
+          // console.log("TopPriority", sortedTasks.TopPriority);
           break;
         case 'Important':
-          sortedTasks.Important.push(task);
+          // task.taskOrder = sortedTasks.Important.length;
+          sortedTasks.Important.push({...task, taskOrder: sortedTasks.Important.length});
           break;
         case 'Other':
-          sortedTasks.Other.push(task);
+          // task.taskOrder = sortedTasks.Other.length;
+          sortedTasks.Other.push({...task, taskOrder: sortedTasks.Other.length});
           break;
         default:
           // Handle tasks with no or unrecognized importance group
@@ -123,11 +133,31 @@ const ToDo = ({userId, day, month, year, formVisibility}) => {
 
   // Effect to update tasks when data is fetched
   useEffect(() => {
+    console.log("ToDo useEffect: ");
     if (data && data.userTasksOnDate) {
       const sortedTasks = sortTasks(data.userTasksOnDate);
       setTasks(sortedTasks);
+      console.log(tasks)
     }
   }, [data]);
+
+  useEffect(() => {
+    console.log(tasks)
+    Object.keys(tasks).forEach((group) => {
+      tasks[group].forEach((task) => {
+      // updateTasks({variables: {id: task.id, input: {ImportanceGroup: task.ImportanceGroup, taskOrder: task.taskOrder}}})
+        data.userTasksOnDate.filter((task2) =>{
+          if(task.id == task2.id){
+            if(task.ImportanceGroup !== task2.ImportanceGroup || task.taskOrder != task2.taskOrder){
+              console.log("Updating Task: ", task, task2)
+              updateTasks({variables: {id: task.id, input: {ImportanceGroup: task.ImportanceGroup, taskOrder: task.taskOrder}}})
+            }
+          }
+        })
+
+      })
+    })
+  }, [tasks]);
 
 
   //need to retrieve info from useState and/or database for this
@@ -138,79 +168,79 @@ const ToDo = ({userId, day, month, year, formVisibility}) => {
     }));
   };
 
-  const handleFormSubmit = async (newTask) => {
-    console.log('newTask:', newTask); // Log newTask here
-
-    const mutationString = CREATE_TASK_MUTATION.loc.source.body;
-    console.log('mutationString:', mutationString); // Log the mutation string
-
-    try {
-      const { data, errors } = await createTaskMutation({
-        variables: { input: newTask },
-      });
+  const handleFormSubmit = (newTask) => {
+    // Implement logic to add the new task
+    toggleFormVisibility()
+    refetch();
+  };
 
 
-      if (errors) {
-        console.error('GraphQL errors:', errors);
-      }
+  const handleStatusChange = (taskId, completed) => {
+    // Find which group the task belongs to and update the task's completed status
+  };
 
-      if (data && data.createTask) {
-        const taskGroup = data.createTask.ImportanceGroup;
-        addTask(taskGroup, data.createTask);
-      }
+  // const toggleFormVisibility = () => {
+  //   console.log("toggleFormVisibility", formVisibility);
+  //   setIsFormVisible(prevState => !prevState);
+  // };
 
-      setIsFormVisible(false);
-    } catch (error) {
-      console.error('Error creating task:', error);
+
+  const handleOnDragEnd = (result) => {
+    if (!result.destination) {
+      return; // Task dropped outside of a droppable area
     }
-  };
 
+    const sourceGroupId = result.source.droppableId;
+    const destinationGroupId = result.destination.droppableId;
 
-  const handleStatusChange = async (taskId, completed) => {
-    try {
-      const { data, errors } = await updateTaskMutation({
-        variables: { id: taskId, input: { completionStatus: completed } },
-      });
+    const updatedTasks = { ...tasks };
 
-      if (errors) {
-        console.error('GraphQL errors:', errors);
-      }
-
-      if (data && data.updateTask) {
-      }
-    } catch (error) {
-      console.error('Error updating task status:', error);
+    const [draggedTask] = updatedTasks[sourceGroupId].filter((task) => {
+      if(task.id.toString() === result.draggableId)
+        return task
     }
-  };
+      );
+    draggedTask.ImportanceGroup = destinationGroupId;
+    updatedTasks[sourceGroupId] = updatedTasks[sourceGroupId].filter((task) => task.id.toString() !== result.draggableId);
 
-  const toggleFormVisibility = () => {
-    setIsFormVisible((prev) => !prev);
-  };
+    const newOrder = result.destination.index;
+
+    if (destinationGroupId in updatedTasks) {
+      updatedTasks[destinationGroupId].splice(newOrder, 0, {
+        ...draggedTask,
+        taskOrder: newOrder,
+      });
+    } else {
+      updatedTasks[destinationGroupId] = [
+        {
+          ...draggedTask,
+          taskOrder: newOrder,
+        },
+      ];
+    }
+
+    Object.keys(updatedTasks).forEach((group) => {
+      for(let i = 0; i < updatedTasks[group].length; i++){
+        updatedTasks[group][i].taskOrder = i;
+      }
+    })
+
+    setTasks(updatedTasks);
+  }
 
   return (
-    <div className="todo-container ">
+    <div className={`todo-container ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
       {formVisibility && (
-        //<div className="w-1/3 h-1/3 top-20 mx-auto my-auto left-20 fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center ">
+        <div className="w-1/3 h-1/3 top-20 mx-auto my-auto left-20 fixed inset-0 bg-blue-500 shadow-lg rounded-xl bg-opacity-50 z-50 flex justify-center items-center">
           <AddTaskForm userId={userId} day={day} month={month} year={year} onSubmit={handleFormSubmit} onCancel={toggleFormVisibility} />
-        //</div>
+        </div>
       )}
-      <div className="p-6 my-2 w-full max-w-[52%] rounded-lg shadow-sm bg-white">
-
-        <TaskGroup
-          groupTitle="Top Priority"
-          tasks={tasks.TopPriority}
-          onStatusChange={handleStatusChange}
-        />
-         <TaskGroup
-          groupTitle="Important"
-          tasks={tasks.Important}
-          onStatusChange={handleStatusChange}
-        />
-         <TaskGroup
-          groupTitle="Other"
-          tasks={tasks.Other}
-          onStatusChange={handleStatusChange}
-        />
+      <div className={`p-6 my-2 w-full max-w-[52%] rounded-lg shadow-sm ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          <TaskGroup groupTitle="Top Priority" tasks={tasks["TopPriority"]} onStatusChange={handleStatusChange} />
+          <TaskGroup groupTitle="Important" tasks={tasks.Important} onStatusChange={handleStatusChange} />
+          <TaskGroup groupTitle="Other" tasks={tasks.Other} onStatusChange={handleStatusChange} />
+        </DragDropContext>
       </div>
     </div>
   );

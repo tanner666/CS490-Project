@@ -15,6 +15,7 @@ export const schema = gql`
   type Query {
     users: [User!]! @requireAuth
     user(firebaseUid: String!): User @requireAuth
+    userTheme(firebaseUid: String!): Boolean @requireAuth
   }
 
   input CreateUserInput {
@@ -39,6 +40,7 @@ export const schema = gql`
   }
 
   type Mutation {
+    updateTheme(firebaseUid: String!, darkMode: Boolean!) : User! @requireAuth
     updateUser(firebaseUid: String!, input: UpdateUserInput!): User! @requireAuth
     deleteUser(id: Int!): User! @requireAuth
 

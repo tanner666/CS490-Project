@@ -29,62 +29,76 @@ export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) =>
   const [createTask] = useMutation(CREATE_TASK_MUTATION);
 
 //creates task in database
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  console.log("Importance group value:", ImportanceGroup);
-  try {
-    const formattedTaskDates = [{ day, month, year }];
-    const response = await createTask({
-      variables: {
-        input: {
-          taskName,
-          description,
-          ImportanceGroup,
-          createdBy: userId,
-          completionStatus: false,
-          taskOrder: 0,
-          pomodoroTimers: 0,
-          pomodoroTimerType: 'pomodoro',
-          taskDates: formattedTaskDates, // Use the formatted taskDates array
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("useId: ", userId);
+    console.log("IMportance group value:", ImportanceGroup);
+    try {
+      const response = await createTask({
+        variables: {
+          input: {
+            taskName,
+            description,
+            ImportanceGroup,
+            createdBy: userId,
+            completionStatus: false,
+            taskOrder: 0, //need to add functionality to handle this for rearanging tasks
+            pomodoroTimers: 0, // Set default value or get from state
+            pomodoroTimerType: 'pomodoro', // Example value
+            taskDates: [{ day, month, year}], // Assuming taskDates is an array of dates
+          },
         },
-      },
-    });
-    console.log("response: ", response);
-    if (response && response.data && response.data.createTask) {
-      console.log('Task created:', response.data.createTask);
-      onSubmit(response.data.createTask);
+      });
+      console.log("response: ", response);
+      if (response && response.data && response.data.createTask) {
+        // Task creation successful
+        console.log('Task created:', response.data.createTask);
+        onSubmit(); // Invoke the onSubmit callback if needed
+      }
+    } catch (error) {
+      console.error('Error creating task:', error);
+      alert('Failed to create task.');
     }
-  } catch (error) {
-    console.error('Error creating task:', error);
-    alert('Failed to create task.');
-  }
-};
-
-
+  };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        value={taskName}
-        onChange={(e) => setTaskName(e.target.value)}
-        placeholder="Task Name"
-        required
-      />
-      <textarea
-        className = "w-full h-32"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        placeholder="Description"
-      />
-      <select value={ImportanceGroup} onChange={(e) => setImportanceGroup(e.target.value)}>
-        <option value="TopPriority">Top Priority</option>
-        <option value="Important">Important</option>
-        <option value="Other">Other</option>
-      </select>
-      <button className="bg-white" type="submit">Add Task</button>
-      <button className="bg-white" type="button" onClick={onCancel}>Cancel</button>
-    </form>
+<div>
+  <h2 className="text-2xl font-semibold mb-4 ">Add Task</h2>
+  <form onSubmit={handleSubmit}>
+    <input
+      type="text"
+      value={taskName}
+      onChange={(e) => setTaskName(e.target.value)}
+      placeholder="Task Name"
+      required
+      className="w-full p-2 mb-4 border rounded"
+    />
+    <textarea
+      className="w-full h-32 p-2 mb-4 border rounded"
+      value={description}
+      onChange={(e) => setDescription(e.target.value)}
+      placeholder="Description"
+    />
+    <select
+      value={ImportanceGroup}
+      onChange={(e) => setImportanceGroup(e.target.value)}
+      className="w-full p-2 mb-4 border rounded"
+    >
+      <option value="TopPriority">Top Priority</option>
+      <option value="Important">Important</option>
+      <option value="Other">Other</option>
+    </select>
+    <div className="flex space-x-4">
+      <button className="bg-white p-2 rounded" type="submit">
+        Add Task
+      </button>
+      <button className="bg-white p-2 rounded" type="button" onClick={onCancel}>
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>
+
   );
 };
 
