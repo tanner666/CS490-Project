@@ -10,7 +10,8 @@ import PlanDay from '../PlanDay/PlanDay';
 import ToDo from '../ToDo/ToDo';
 
 const ToDoAndAppts = ({userId, day, month, year}) => {
-  const { theme } = useTheme();
+  //const { theme } = useTheme();
+  const theme = 'light';
 
   const today = new Date();
   let [selectedDay, setSelectedDay] = React.useState(today.getDate());
