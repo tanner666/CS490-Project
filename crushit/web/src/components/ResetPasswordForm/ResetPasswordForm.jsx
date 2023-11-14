@@ -23,7 +23,10 @@ const ResetPasswordForm = () => {
 
   useEffect(() => {
     console.log('oobCode',oobCode);
-  }, []);
+    if (!oobCode || oobCode=='code') {
+      navigate('/forgot-password');
+    }
+  }, [oobCode]);
 
   const containsTwoCharacterTypes = (password) => {
     const hasUpper = /[A-Z]/.test(password)
@@ -106,12 +109,13 @@ const ResetPasswordForm = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button
-            className="absolute top-0 right-0 mr-2 mt-3 text-blue-500"
-            onClick={toggleShowPassword}
-          >
-            {showPassword ? 'Hide' : 'Show'}
-          </button>
+              <img
+          	src="https://drive.google.com/uc?id=1Js4L7DAzkvl-TCPZ2GQi7R7z8TAI26_L"
+          	alt={showPassword ? "Hide Password" : "Show Password"}
+          	className="absolute top-2 right-2 cursor-pointer"
+          	style={{ width: '18px', height: '18px' }}
+          	onClick={setShowPassword}
+              />
         </div>
       </div>
       <div className="mb-6">
@@ -127,12 +131,13 @@ const ResetPasswordForm = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
-          <button
-            className="absolute top-0 right-0 mr-2 mt-3 text-blue-500"
-            onClick={toggleShowConfirmPassword}
-          >
-            {showConfirmPassword ? 'Hide' : 'Show'}
-          </button>
+              <img
+          	src="https://drive.google.com/uc?id=1Js4L7DAzkvl-TCPZ2GQi7R7z8TAI26_L"
+          	alt={showConfirmPassword ? "Hide Password" : "Show Password"}
+          	className="absolute top-2 right-2 cursor-pointer"
+          	style={{ width: '18px', height: '18px' }}
+          	onClick={setConfirmPassword}
+              />
         </div>
       </div>
 
