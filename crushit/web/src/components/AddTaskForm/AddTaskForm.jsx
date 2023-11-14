@@ -8,6 +8,7 @@ const CREATE_TASK_MUTATION = gql`
       taskName
       ImportanceGroup
       completionStatus
+      taskStatus
       description
       pomodoroTimers
       pomodoroTimerType
@@ -40,6 +41,7 @@ export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) =>
             taskName,
             description,
             ImportanceGroup,
+            taskStatus: 'Not Started',
             createdBy: userId,
             completionStatus: false,
             taskOrder: 0, //need to add functionality to handle this for rearanging tasks

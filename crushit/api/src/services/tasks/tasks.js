@@ -24,6 +24,7 @@ export const createTask = async ({ input }) => {
       taskName: input.taskName,
       ImportanceGroup: input.ImportanceGroup,
       completionStatus: input.completionStatus,
+      taskStatus: input.taskStatus,
       description: input.description,
       pomodoroTimers: input.pomodoroTimers,
       pomodoroTimerType: input.pomodoroTimerType,

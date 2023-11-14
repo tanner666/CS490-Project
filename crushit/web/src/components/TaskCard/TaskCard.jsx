@@ -22,11 +22,11 @@ const TaskCard = ({ task, onStatusChange }) => {
   const [updateTaskStatus] = useMutation(UPDATE_TASK_STATUS_MUTATION);
 
   useEffect(() => {
-    const storedStatusIndex = localStorage.getItem('selectedStatusIndex');
+    const storedStatusIndex = localStorage.getItem(`selectedStatusIndex_${task.id}`);
     if (storedStatusIndex !== null) {
       setStatusIndex(parseInt(storedStatusIndex, 10));
     }
-  }, []);
+  }, [task.id]);
 
   const handleStatusChange = async (newIndex) => {
     try {
@@ -46,7 +46,7 @@ const TaskCard = ({ task, onStatusChange }) => {
       onStatusChange(task.id, completionStatus);
       setDropdownOpen(false);
       setOpenedDropdownIndex(null);
-      localStorage.setItem('selectedStatusIndex', newIndex.toString());
+      localStorage.setItem(`selectedStatusIndex_${task.id}`, newIndex.toString());
     } catch (error) {
       console.error('Error updating task status:', error);
     }

@@ -23,6 +23,7 @@ import { object } from 'prop-types';
       taskName
       ImportanceGroup
       completionStatus
+      taskStatus
       description
       pomodoroTimers
       pomodoroTimerType
@@ -44,6 +45,7 @@ const CREATE_TASK_MUTATION = gql`
       taskName
       ImportanceGroup
       completionStatus
+      taskStatus
       description
       pomodoroTimers
       pomodoroTimerType
