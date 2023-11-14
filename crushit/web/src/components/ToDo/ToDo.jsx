@@ -3,6 +3,7 @@ import TaskGroup from '../TaskGroup/TaskGroup';
 import {useQuery, useMutation} from '@redwoodjs/web';
 import AddTaskForm from '../AddTaskForm/AddTaskForm';
 import { DragDropContext } from 'react-beautiful-dnd';
+import { useTheme } from '../ThemeContext/ThemeContext';
 import { object } from 'prop-types';
 
 //import GetUserTasksOnDate from 'src/graphql/tasks.gql'
@@ -74,6 +75,7 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
   console.log("UserId in ToDo: ", userId);
   const {data, loading, error, refetch} = useQuery(GetUserTasksOnDate, {variables: {userId, day, month, year}});
   const [updateTasks] = useMutation(UPDATE_TASK_MUTATION);
+  const { theme } = useTheme();
   
   const [isFormVisibile, setIsFormVisible] = useState(false);
 
@@ -216,29 +218,17 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
   }
 
   return (
-    <div className="todo-container ">
+    <div className={`todo-container ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
       {formVisibility && (
-        <div className="w-1/3 h-1/3 top-20 mx-auto my-auto left-20 fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center ">
+        <div className="w-1/3 h-1/3 top-20 mx-auto my-auto left-20 fixed inset-0 bg-gray-700 bg-opacity-50 z-50 flex justify-center items-center">
           <AddTaskForm userId={userId} day={day} month={month} year={year} onSubmit={handleFormSubmit} onCancel={toggleFormVisibility} />
         </div>
       )}
-      <div className="p-6 my-2 w-full max-w-[52%] rounded-lg shadow-sm bg-white">
+      <div className={`p-6 my-2 w-full max-w-[52%] rounded-lg shadow-sm ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
         <DragDropContext onDragEnd={handleOnDragEnd}>
-        <TaskGroup
-          groupTitle="Top Priority"
-          tasks={tasks["TopPriority"]}
-          onStatusChange={handleStatusChange}
-        />
-         <TaskGroup
-          groupTitle="Important"
-          tasks={tasks.Important}
-          onStatusChange={handleStatusChange}
-        />
-         <TaskGroup
-          groupTitle="Other"
-          tasks={tasks.Other}
-          onStatusChange={handleStatusChange}
-        />
+          <TaskGroup groupTitle="Top Priority" tasks={tasks["TopPriority"]} onStatusChange={handleStatusChange} />
+          <TaskGroup groupTitle="Important" tasks={tasks.Important} onStatusChange={handleStatusChange} />
+          <TaskGroup groupTitle="Other" tasks={tasks.Other} onStatusChange={handleStatusChange} />
         </DragDropContext>
       </div>
     </div>
