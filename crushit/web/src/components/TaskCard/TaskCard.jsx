@@ -57,39 +57,36 @@ const TaskCard = ({ task, onStatusChange }) => {
         <h3>{task.title}</h3>
         {/* Replaced this checkbox with status images */}
         {/* Checkbox */}
-        <button className='w-7 h-7' onClick={() => onStatusChange(task.id, !task.completed)}>
+        <button className='w-7 h-7' onClick={() => {
+          onStatusChange(task.id, !task.completed);
+          setDropdownOpen(!isDropdownOpen);
+          setOpenedDropdownIndex(isDropdownOpen ? null : statusIndex);
+        }}>
           <img src="https://drive.google.com/uc?export=view&id=1JbmEUFBK5MHBXKQNh0MvHDI8eSG8z1sP" />
         </button>
+        {isDropdownOpen && (
+          <div
+           className="absolute transform translate-x-[6%] mt-4 bg-white shadow-md z-10"
+          >
+            <ul>
+              {statuses.map((status, index) => (
+                <li
+                  key={status}
+                  onClick={() => handleStatusChange(index)}
+                  className={`cursor-pointer px-4 py-2 hover:bg-gray-200 ${index === statusIndex ? 'bg-task-blue text-white' : ''}`}
+                >
+                  {status}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         <p className="ml-2 text-md text-task-blue">{task.taskName}</p>
         <div className="relative ml-auto">
           {/* Dropdown */}
           <img
             src="https://drive.google.com/uc?id=14p4ndBlSZ1Bv681-Ze2XyxrxYxTosUP8"
-            alt="Status"
-            onClick={() => {
-              setDropdownOpen(!isDropdownOpen);
-              setOpenedDropdownIndex(isDropdownOpen ? null : statusIndex);
-            }}
-            className="ml-2 px-2 py-1 cursor-pointer"
           />
-          {isDropdownOpen && (
-            <div
-              className="absolute top-8 right-0 bg-white shadow-md mt-1"
-              style={{ zIndex: openedDropdownIndex === statusIndex ? 2 : 1 }}
-            >
-              <ul>
-                {statuses.map((status, index) => (
-                  <li
-                    key={status}
-                    onClick={() => handleStatusChange(index)}
-                    className={`cursor-pointer px-4 py-2 hover:bg-gray-200 ${index === statusIndex ? 'bg-task-blue text-white' : ''}`}
-                  >
-                    {status}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
         </div>
       </div><div className="border mt-2 mx-auto h-0.4 w-[98%] bg-bar-grey"></div><div className="flex items-center justify-between mx-1 mt-3">
           <p className="text-xs text-task-black">Number of Pomodoro Timers (30 mins each) </p>
