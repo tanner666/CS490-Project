@@ -141,9 +141,6 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
               <img src="https://drive.google.com/uc?export=view&id=1psd6NBXctlxs7lN-5CJpXSCylzaWHVg1"/>
             </button>
           </div>
-          <button className='w-6 h-6'onClick={() => onStatusChange(task.id, !task.completed)}>
-          <img src="https://drive.google.com/uc?export=view&id=1JbmEUFBK5MHBXKQNh0MvHDI8eSG8z1sP"/>
-          </button>
           <div style={{ maxHeight: '75vh', overflowY: 'auto' }} className="custom-scrollbar">
             <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility}/>
           </div>
