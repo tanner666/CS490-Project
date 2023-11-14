@@ -5,7 +5,9 @@ export const schema = gql`
     short: Int!
     long: Int!
     userId: Int!
+    taskId: Int!
     user: User!
+    task: Task!
   }
 
   type Query {
@@ -18,6 +20,7 @@ export const schema = gql`
     short: Int!
     long: Int!
     userId: Int!
+    taskId: Int!
   }
 
   input UpdatePomodoroTimerInput {
@@ -25,6 +28,7 @@ export const schema = gql`
     short: Int
     long: Int
     userId: Int
+    taskId: Int
   }
 
   type Mutation {

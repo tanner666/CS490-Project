@@ -32,6 +32,9 @@ const  GetUserTasksOnDate = gql`
         month
         year
       }
+      pomodoro{
+        id
+      }
     }
   }
 `;
@@ -52,6 +55,9 @@ const CREATE_TASK_MUTATION = gql`
         month
         year
       }
+      pomodoro{
+        id
+      }
     }
   }
 `
@@ -66,6 +72,9 @@ const UPDATE_TASK_MUTATION = gql`
       pomodoroTimers
       pomodoroTimerType
       taskOrder
+      pomodoro{
+        id
+      }
     }
   }
 `
@@ -148,6 +157,11 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
     })    
   }, [tasks]);
 
+  const saveTimerCount = async (taskID, pomodoroCount) =>{
+    console.log("saveTimerCount", taskID, pomodoroCount)
+    await updateTasks({variables:{id: taskID, input:{pomodoroTimers: pomodoroCount}}})
+  }
+
 
   //need to retrieve info from useState and/or database for this
   const addTask = (group, newTask) =>{
@@ -168,10 +182,6 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
     // Find which group the task belongs to and update the task's completed status
   };
 
-  // const toggleFormVisibility = () => {
-  //   console.log("toggleFormVisibility", formVisibility);
-  //   setIsFormVisible(prevState => !prevState);
-  // };
 
 
   const handleOnDragEnd = (result) => {
@@ -226,9 +236,9 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
       )}
       <div className={`p-6 my-2 w-full max-w-[52%] rounded-lg shadow-sm ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
         <DragDropContext onDragEnd={handleOnDragEnd}>
-          <TaskGroup groupTitle="Top Priority" tasks={tasks["TopPriority"]} onStatusChange={handleStatusChange} />
-          <TaskGroup groupTitle="Important" tasks={tasks.Important} onStatusChange={handleStatusChange} />
-          <TaskGroup groupTitle="Other" tasks={tasks.Other} onStatusChange={handleStatusChange} />
+          <TaskGroup groupTitle="Top Priority" tasks={tasks["TopPriority"]} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} />
+          <TaskGroup groupTitle="Important" tasks={tasks.Important} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} />
+          <TaskGroup groupTitle="Other" tasks={tasks.Other} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} />
         </DragDropContext>
       </div>
     </div>

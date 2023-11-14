@@ -51,6 +51,7 @@ model Task {
   createdBy         String
   created_by        User             @relation("UserTasks", fields: [createdBy], references: [firebaseUid], onDelete: Cascade)
   taskDates         TaskDate[]       @relation("TaskDate") 
+  pomodoro          PomodoroTimer[]  @relation("TaskTimer")
 }
 
 model TaskDate {
@@ -68,5 +69,7 @@ model PomodoroTimer {
   short    Int  // Time in minutes for short breaks
   long     Int  // Time in minutes for long breaks
   userId   Int
+  taskId   Int
   user     User @relation("UserTimer", fields: [userId], references: [id], onDelete: Cascade)
+  task    Task  @relation("TaskTimer", fields: [taskId], references: [id], onDelete: Cascade)
 }
