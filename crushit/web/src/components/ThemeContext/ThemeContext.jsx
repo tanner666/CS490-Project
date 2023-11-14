@@ -34,15 +34,18 @@ export const ThemeProvider = ({ children }) => {
 
   const [theme, setTheme] = useState('light'); // default
 
+  console.log("data: ", data);
   //set theme accordingly
   useEffect(() => {
     if (data && data.userTheme) {
+      console.log("Madei therere");
       if (data.userTheme.darkMode){
         setTheme('dark');
       }
     }
   }, [data]);
 
+  console.log("Theme in Context: ", theme);
   const toggleTheme = () => {
     setTheme((curr) => (curr === 'light' ? 'dark' : 'light'));
   };
