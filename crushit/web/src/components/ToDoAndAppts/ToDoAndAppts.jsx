@@ -113,7 +113,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
   const handleNextYear = () => {
     setSelectedYear((prevYear) => prevYear + 1);
   };
-  
+
   const daysInMonth = (year, month) => new Date(year, month, 0).getDate();
 
   const [formVisibility, setFormVisibility] = useState(false);
