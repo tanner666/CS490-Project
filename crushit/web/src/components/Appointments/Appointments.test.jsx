@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import ToDo from './ToDo'
+import Appointments from './Appointments'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
-describe('ToDo', () => {
+describe('Appointments', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<ToDo />)
+      render(<Appointments />)
     }).not.toThrow()
   })
 })

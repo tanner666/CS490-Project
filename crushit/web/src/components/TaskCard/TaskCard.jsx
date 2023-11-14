@@ -1,10 +1,13 @@
 import TaskGroup from "../TaskGroup/TaskGroup"
 import { useTheme } from '../ThemeContext/ThemeContext'
+import { Draggable } from "react-beautiful-dnd"
 
 
 const TaskCard = ({ task, onStatusChange }) => {
   return (
-      <div className="p-2 my-3 mx-auto w-full w-[95.5%] rounded-lg shadow-sm bg-white font-dm font-bold">
+
+      <div className="p-2 my-3 mx-auto w-full w-[94%] rounded-lg shadow-sm bg-white font-dm font-bold">
+
         <div className="task-card flex items-center mt-1">
         <h3>{task.title}</h3>
         {/* REplace this checkbox with status images */}
@@ -25,8 +28,9 @@ const TaskCard = ({ task, onStatusChange }) => {
         <p className="whitespace-normal break-words text-sm text-task-black w-full mx-1 rounded-md mt-1 pt-1 pb-1">
           {task.description}
         </p>
-        
+
       </div>
+
   )
 }
 

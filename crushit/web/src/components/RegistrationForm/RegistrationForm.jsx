@@ -54,8 +54,8 @@ const RegistrationForm = () => {
       return
     }
 
-    if (setPasswordMatchError) {
-      setRegistrationError('Password does not match.')
+    if (passwordMatchError) {
+      setRegistrationError('Password adsfjasdlfkjaslkdf not match.')
     }
 
     try {
@@ -99,6 +99,17 @@ const RegistrationForm = () => {
 
     return typesCount >= 2
   }
+
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = (field) => {
+    if (field === 'password') {
+      setPasswordVisible(!passwordVisible);
+    } else if (field === 'confirmPassword') {
+      setConfirmPasswordVisible(!confirmPasswordVisible);
+    }
+  };
 
   return (
     <div className="bg-light-gray min-h-screen flex">
@@ -157,52 +168,72 @@ const RegistrationForm = () => {
           </div>
 
           <div className="mb-6">
-             <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="password">
-               <span className="flex items-center">
-                 <img
-                   src="https://drive.google.com/uc?id=1pA2Xu-YP86YyJFPSJb4Q6LfOYcmEM1Gc"
-                   alt="Password Icon"
-                   className="mr-2"
-                   style={{ width: '18px', height: '18px' }}
-                 />
-               Password
-               </span>
-             </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {passwordRequired && (
-              <p className="text-red-500 text-sm mt-2">Password is required.</p>
-            )}
-          </div>
+    <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="password">
+      <span className="flex items-center">
+        <img
+          src="https://drive.google.com/uc?id=1pA2Xu-YP86YyJFPSJb4Q6LfOYcmEM1Gc"
+          alt="Password Icon"
+          className="mr-2"
+          style={{ width: '18px', height: '18px' }}
+        />
+        Password
+      </span>
+    </label>
+    <div className="relative">
+      <input
+        className="shadow appearance-none border rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
+        id="password"
+        type={passwordVisible ? 'text' : 'password'}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        autoComplete="new-password"
+      />
+      <img
+        src="https://drive.google.com/uc?id=1Js4L7DAzkvl-TCPZ2GQi7R7z8TAI26_L"
+        alt={passwordVisible ? 'Hide Password' : 'Show Password'}
+        className="absolute top-2 right-2 cursor-pointer"
+        style={{ width: '18px', height: '18px' }}
+        onClick={() => togglePasswordVisibility('password')}
+      />
+    </div>
+    {passwordRequired && (
+      <p className="text-red-500 text-sm mt-2">Password is required.</p>
+    )}
+  </div>
 
-          <div className="mb-6">
-             <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="password">
-               <span className="flex items-center">
-                 <img
-                   src="https://drive.google.com/uc?id=1pA2Xu-YP86YyJFPSJb4Q6LfOYcmEM1Gc"
-                   alt="Password Icon"
-                   className="mr-2"
-                   style={{ width: '18px', height: '18px' }}
-                 />
-               Confirm Password
-               </span>
-             </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
-              id="confirm-password"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-            {passwordMatchError && (
-              <p className="text-red-500 text-sm mt-2">Passwords do not match.</p>
-            )}
-          </div>
+  <div className="mb-6">
+    <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="confirm-password">
+      <span className="flex items-center">
+        <img
+          src="https://drive.google.com/uc?id=1pA2Xu-YP86YyJFPSJb4Q6LfOYcmEM1Gc"
+          alt="Password Icon"
+          className="mr-2"
+          style={{ width: '18px', height: '18px' }}
+        />
+        Confirm Password
+      </span>
+    </label>
+    <div className="relative">
+      <input
+        className="shadow appearance-none border rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
+        id="confirm-password"
+        type={confirmPasswordVisible ? 'text' : 'password'}
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        autoComplete="new-password"
+      />
+      <img
+        src="https://drive.google.com/uc?id=1Js4L7DAzkvl-TCPZ2GQi7R7z8TAI26_L"
+        alt={confirmPasswordVisible ? 'Hide Password' : 'Show Password'}
+        className="absolute top-2 right-2 cursor-pointer"
+        style={{ width: '18px', height: '18px' }}
+        onClick={() => togglePasswordVisibility('confirmPassword')}
+      />
+    </div>
+    {passwordMatchError && (
+      <p className="text-red-500 text-sm mt-2">Passwords do not match.</p>
+    )}
+  </div>
 
           <div className="flex items-center justify-center">
             <button

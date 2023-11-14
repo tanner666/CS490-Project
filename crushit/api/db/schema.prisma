@@ -45,12 +45,12 @@ model Task {
   ImportanceGroup   ImportanceGroup? // TopPriority, Important, or Other
   completionStatus  Boolean          @default(false)
   description       String?
-  pomodoroTimers    Int // Number of times it runs a given day. May be unneeded.
+  pomodoroTimers    Int              // Number of times it runs a given day. May be unneeded.
   pomodoroTimerType String?
-  taskOrder         Int // Must be filled in at the backend. Represents the order of tasks within their respective groupStatus. The value must be calculated based on the tasks within the same groupStatus.
+  taskOrder         Int              // Must be filled in at the backend. Represents the order of tasks within their respective groupStatus. The value must be calculated based on the tasks within the same groupStatus.
   createdBy         String
-  created_by        User             @relation("UserTasks", fields: [createdBy], references: [firebaseUid])
-  taskDates         TaskDate[]       @relation("TaskDate")
+  created_by        User             @relation("UserTasks", fields: [createdBy], references: [firebaseUid], onDelete: Cascade)
+  taskDates         TaskDate[]       @relation("TaskDate") 
 }
 
 model TaskDate {
@@ -59,14 +59,14 @@ model TaskDate {
   month  Int
   year   Int
   taskId Int
-  task   Task @relation("TaskDate", fields: [taskId], references: [id])
+  task   Task @relation("TaskDate", fields: [taskId], references: [id], onDelete: Cascade)
 }
 
 model PomodoroTimer {
   id       Int  @id @default(autoincrement())
-  pomodoro Int // Time in minutes for regular pomodoros
-  short    Int // Time in minutes for short breaks
-  long     Int // Time in minutes for long breaks
+  pomodoro Int  // Time in minutes for regular pomodoros
+  short    Int  // Time in minutes for short breaks
+  long     Int  // Time in minutes for long breaks
   userId   Int
-  user     User @relation("UserTimer", fields: [userId], references: [id])
+  user     User @relation("UserTimer", fields: [userId], references: [id], onDelete: Cascade)
 }
