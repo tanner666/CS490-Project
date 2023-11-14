@@ -54,8 +54,8 @@ const RegistrationForm = () => {
       return
     }
 
-    if (setPasswordMatchError) {
-      setRegistrationError('Password does not match.')
+    if (passwordMatchError) {
+      setRegistrationError('Password adsfjasdlfkjaslkdf not match.')
     }
 
     try {

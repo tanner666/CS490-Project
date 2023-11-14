@@ -5,9 +5,9 @@ import { Draggable } from "react-beautiful-dnd"
 
 const TaskCard = ({ task, onStatusChange }) => {
   return (
-      
-      <div className="p-2 my-3 mx-auto w-[95%] rounded-lg shadow-sm bg-white font-dm font-bold"
-      >
+
+      <div className="p-2 my-3 mx-auto w-full w-[94%] rounded-lg shadow-sm bg-white font-dm font-bold">
+
         <div className="task-card flex items-center mt-1">
         <h3>{task.title}</h3>
         {/* REplace this checkbox with status images */}
