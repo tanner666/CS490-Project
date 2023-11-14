@@ -10,13 +10,10 @@ const TaskCard = ({ task, onStatusChange }) => {
 
         <div className="task-card flex items-center mt-1">
         <h3>{task.title}</h3>
-        {/* REplace this checkbox with status images */}
-          <input
-            type="checkbox"
-            checked={task.completed}
-            onChange={(e) => onStatusChange(task.id, e.target.checked)}
-            className="form-checkbox h-4 w-5"
-          />
+        {/* REplaced this checkbox with status images */}
+          <button className='w-7 h-7'onClick={() => onStatusChange(task.id, !task.completed)}>
+          <img src="https://drive.google.com/uc?export=view&id=1JbmEUFBK5MHBXKQNh0MvHDI8eSG8z1sP"/>
+          </button>
           <p className="ml-2 text-md text-task-blue">{task.taskName}</p>
         </div>
         <div className="border mt-2 mx-auto h-0.4 w-[98%] bg-bar-grey"></div>
