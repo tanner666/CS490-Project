@@ -29,11 +29,12 @@ const TaskCard = ({ task, onStatusChange }) => {
     }
   }, [task.id]);
 
-  const handleStatusChange = async (newIndex) => {
+  const handleStatusChange = async () => {
     try {
+      // Increment the status index in a circular manner
+      const newIndex = (statusIndex + 1) % statuses.length;
       const newStatus = statuses[newIndex];
       const completionStatus = newStatus === 'Complete';
-      setStatusIndex(newIndex);
 
       const response = await updateTaskStatus({
         variables: {
@@ -43,10 +44,9 @@ const TaskCard = ({ task, onStatusChange }) => {
       });
 
       console.log('Update Task Status Response:', response);
+
       setStatusIndex(newIndex);
       onStatusChange(task.id, completionStatus);
-      setDropdownOpen(false);
-      setOpenedDropdownIndex(null);
       localStorage.setItem(`selectedStatusIndex_${task.id}`, newIndex.toString());
     } catch (error) {
       console.error('Error updating task status:', error);
@@ -57,31 +57,24 @@ const TaskCard = ({ task, onStatusChange }) => {
       <div className="task-card flex items-center mt-1">
         <h3>{task.title}</h3>
         {/* Replaced this checkbox with status images */}
-        {/* Checkbox */}
-        <button className='w-7 h-7' onClick={() => {
-          onStatusChange(task.id, !task.completed);
-          setDropdownOpen(!isDropdownOpen);
-          setOpenedDropdownIndex(isDropdownOpen ? null : statusIndex);
-        }}>
-          <img src="https://drive.google.com/uc?export=view&id=1JbmEUFBK5MHBXKQNh0MvHDI8eSG8z1sP" />
+        {/* Status */}
+        <button
+          className={`w-${task.taskStatus === 'Complete' ? '5' : '8'} h-${task.taskStatus !== 'Complete' ? '9' : '7'}`}
+          onClick={handleStatusChange}
+        >
+          {task.taskStatus === 'Complete' && (
+            <img src="https://drive.google.com/uc?id=1AMVLk1OUD4tKJ6C3yT25b7OIunfU7TGA" alt="Complete" />
+          )}
+          {task.taskStatus === 'Not Started' && (
+            <img src="https://drive.google.com/uc?id=1K5uTrydwCXSBTG8-6YVu9kibvzlqmlpg" alt="Not Started" />
+          )}
+          {task.taskStatus === 'In Progress' && (
+            <img src="https://drive.google.com/uc?id=1EAgXSX1V2YIPJnUTfEx16jMO-TeC1_oo" alt="In Progress" />
+          )}
+          {task.taskStatus === 'Rolled Over' && (
+            <img src="https://drive.google.com/uc?id=1EAgXSX1V2YIPJnUTfEx16jMO-TeC1_oo" alt="Rolled Over" />
+          )}
         </button>
-        {isDropdownOpen && (
-          <div
-           className="absolute transform translate-x-[6%] mt-4 bg-white shadow-md z-10"
-          >
-            <ul>
-              {statuses.map((status, index) => (
-                <li
-                  key={status}
-                  onClick={() => handleStatusChange(index)}
-                  className={`cursor-pointer px-4 py-2 hover:bg-gray-200 ${index === statusIndex ? 'bg-task-blue text-white' : ''}`}
-                >
-                  {status}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
         <p className="ml-2 text-md text-task-blue">{task.taskName}</p>
         <div className="ml-auto flex items-center">
           {/* Move button */}
