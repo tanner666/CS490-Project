@@ -58,6 +58,22 @@ export const updateUser = ({ firebaseUid, input }) => {
   })
 }
 
+export const updateTheme = async ({ firebaseUid, darkMode }) => {
+  return db.user.update({
+    where: { firebaseUid },
+    data: { darkMode },
+  })
+}
+
+export const userTheme = async ({ firebaseUid }) => {
+  // Assuming you have a db object that allows you to interact with your database
+  const user = await db.user.findUnique({
+    where: { firebaseUid },
+    select: { darkMode: true }, // Only select the 'theme' field
+  });
+  return user?.darkMode; // Return only the 'theme' value
+}
+
 // Not completely functional yet, removes from firebase but not database;
 export const deleteUser = async (input) => {
   const {firebaseUid} = input

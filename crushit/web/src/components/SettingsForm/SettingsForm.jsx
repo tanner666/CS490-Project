@@ -209,7 +209,7 @@ export const SettingsForm = ({ userId }) => {
                 <div className="forms ml-[3%] mr-[3%]">
                     <div className="flex justify-between items-center">
                         <h2 className={`text-xl font-dm font-semibold mt-6 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>User Info</h2>
-                        <ThemeToggle />
+                        <ThemeToggle userId={userId}/>
                     </div>
                     <div className={`pb-5 px-8 w-full mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
                         <div className="grid grid-cols-2 gap-8">
