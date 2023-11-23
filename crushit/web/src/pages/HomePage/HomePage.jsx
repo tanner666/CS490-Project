@@ -1,6 +1,7 @@
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import ToDoAndAppts from 'src/components/ToDoAndAppts/ToDoAndAppts';
+import FocusTime from 'src/components/FocusTime/FocusTime';
 import ThemeToggle from 'src/components/ThemeToggle/ThemeToggle';
 import { useEffect, useState } from 'react';
 import { getUserUid, useAuth } from 'src/auth';
@@ -31,11 +32,14 @@ const HomePage = () => {
     <>
       <MetaTags title="Home" description="Home page" />
       <div>
-      {uid ? (
-          <ToDoAndAppts userId={uid} day={day} month={month} year={year}/>
+       {uid ? (
+          <>
+            <ToDoAndAppts userId={uid} day={day} month={month} year={year} />
+            <FocusTime />
+          </>
         ) : (
           <p>Loading or no UID available...</p>
-        )} 
+       )} 
       </div>
     </>
   )
