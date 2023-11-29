@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import TaskGroup from '../TaskGroup/TaskGroup';
-import {useQuery, gql, useMutation} from '@redwoodjs/web';
+
+import { useMutation, useQuery } from '@redwoodjs/web';
 import AddTaskForm from '../AddTaskForm/AddTaskForm';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { useTheme } from '../ThemeContext/ThemeContext';
@@ -13,10 +14,10 @@ import { object } from 'prop-types';
 //query ... defiens a graphql query names userTasksON... with parameters (! means parameter is required)
 //second line with userTasksOnDate corresponds to graphql schema resolver on server side
 //inside this field, spcify data in GraphQL schema
-  //inside this, specify what you want to retrieve (here is is an array of Tasks (per the gql schema def), all with the listed fields below)
+//inside this, specify what you want to retrieve (here is is an array of Tasks (per the gql schema def), all with the listed fields below)
 
 
-  const GetUserTasksOnDate = gql`
+const GetUserTasksOnDate = gql` 
   query userTasksOnDate($userId: String!, $day: Int!, $month: Int!, $year: Int!) {
     userTasksOnDate(userId: $userId, day: $day, month: $month, year: $year) {
       id
@@ -34,6 +35,9 @@ import { object } from 'prop-types';
         day
         month
         year
+      }
+      pomodoro{
+        id
       }
     }
   }
@@ -56,6 +60,9 @@ const CREATE_TASK_MUTATION = gql`
         month
         year
       }
+      pomodoro{
+        id
+      }
     }
   }
 `
@@ -70,14 +77,17 @@ const UPDATE_TASK_MUTATION = gql`
       pomodoroTimers
       pomodoroTimerType
       taskOrder
+      pomodoro{
+        id
+      }
     }
   }
 `
 
 //ToDo is the parent task component, responsible for organizing and managing task groups and task cards
-const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) => {
+const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility }) => {
   console.log("UserId in ToDo: ", userId);
-  const {data, loading, error, refetch} = useQuery(GetUserTasksOnDate, {variables: {userId, day, month, year}});
+  const { data, loading, error, refetch } = useQuery(GetUserTasksOnDate, { variables: { userId, day, month, year } });
   const [updateTasks] = useMutation(UPDATE_TASK_MUTATION);
   const { theme } = useTheme();
 
@@ -108,21 +118,21 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
     };
 
     tasks.forEach(task => {
-      switch(task.ImportanceGroup) {
+      switch (task.ImportanceGroup) {
         case 'TopPriority':
           // task.taskOrder = sortedTasks.TopPriority.length;
           // task.taskOrder = sortedTasks.TopPriority.length;
-          sortedTasks["TopPriority"].push({...task, taskOrder: sortedTasks["TopPriority"].length});
+          sortedTasks["TopPriority"].push({ ...task, taskOrder: sortedTasks["TopPriority"].length });
 
           // console.log("TopPriority", sortedTasks.TopPriority);
           break;
         case 'Important':
           // task.taskOrder = sortedTasks.Important.length;
-          sortedTasks.Important.push({...task, taskOrder: sortedTasks.Important.length});
+          sortedTasks.Important.push({ ...task, taskOrder: sortedTasks.Important.length });
           break;
         case 'Other':
           // task.taskOrder = sortedTasks.Other.length;
-          sortedTasks.Other.push({...task, taskOrder: sortedTasks.Other.length});
+          sortedTasks.Other.push({ ...task, taskOrder: sortedTasks.Other.length });
           break;
         default:
           // Handle tasks with no or unrecognized importance group
@@ -147,12 +157,13 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
     console.log(tasks)
     Object.keys(tasks).forEach((group) => {
       tasks[group].forEach((task) => {
+
       // updateTasks({variables: {id: task.id, input: {ImportanceGroup: task.ImportanceGroup, taskOrder: task.taskOrder}}})
         data.userTasksOnDate.filter((task2) =>{
           if(task.id == task2.id){
             if(task.ImportanceGroup !== task2.ImportanceGroup || task.taskOrder != task2.taskOrder){
               console.log("Updating Task: ", task, task2)
-              updateTasks({variables: {id: task.id, input: {ImportanceGroup: task.ImportanceGroup, taskOrder: task.taskOrder}}})
+              updateTasks({ variables: { id: task.id, input: { ImportanceGroup: task.ImportanceGroup, taskOrder: task.taskOrder } } })
             }
           }
         })
@@ -161,9 +172,24 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
     })
   }, [tasks]);
 
+  const saveTimerCount = async (task, pomodoroCount) => {
+    if(pomodoroCount > 0){
+      const pomodoros = task.pomodoro ? [...task.pomodoro] : []
+      if (pomodoroCount-task.pomodoroTimers > 0) {
+        for (let i = 0; i < pomodoroCount-task.pomodoroTimers; i++) {
+          pomodoros.push({ pomodoro: 30, short: 5, long: 15, userId: task.createdBy, taskId: task.id })
+        }
+  
+      } 
+      console.log(pomodoros)
+      await updateTasks({ variables: { id: task.id, input: { pomodoroTimers: pomodoroCount, pomodoro: pomodoros } } })
+    }else{
+      await updateTasks({ variables: { id: task.id, input: { pomodoroTimers: pomodoroCount} } })
+    }
+  }
 
   //need to retrieve info from useState and/or database for this
-  const addTask = (group, newTask) =>{
+  const addTask = (group, newTask) => {
     setTasks((prevTasks) => ({
       ...prevTasks,
       [group]: [...prevTasks[group], newTask],
@@ -181,10 +207,6 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
     // Find which group the task belongs to and update the task's completed status
   };
 
-  // const toggleFormVisibility = () => {
-  //   console.log("toggleFormVisibility", formVisibility);
-  //   setIsFormVisible(prevState => !prevState);
-  // };
 
 
   const handleOnDragEnd = (result) => {
@@ -198,10 +220,10 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
     const updatedTasks = { ...tasks };
 
     const [draggedTask] = updatedTasks[sourceGroupId].filter((task) => {
-      if(task.id.toString() === result.draggableId)
+      if (task.id.toString() === result.draggableId)
         return task
     }
-      );
+    );
     draggedTask.ImportanceGroup = destinationGroupId;
     updatedTasks[sourceGroupId] = updatedTasks[sourceGroupId].filter((task) => task.id.toString() !== result.draggableId);
 
@@ -222,7 +244,7 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
     }
 
     Object.keys(updatedTasks).forEach((group) => {
-      for(let i = 0; i < updatedTasks[group].length; i++){
+      for (let i = 0; i < updatedTasks[group].length; i++) {
         updatedTasks[group][i].taskOrder = i;
       }
     })
@@ -239,9 +261,9 @@ const ToDo = ({userId, day, month, year, formVisibility, toggleFormVisibility}) 
       )}
       <div className={`p-6 my-2 w-full max-w-[52%] rounded-lg shadow-sm ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
         <DragDropContext onDragEnd={handleOnDragEnd}>
-          <TaskGroup groupTitle="Top Priority" tasks={tasks["TopPriority"]} onStatusChange={handleStatusChange} />
-          <TaskGroup groupTitle="Important" tasks={tasks.Important} onStatusChange={handleStatusChange} />
-          <TaskGroup groupTitle="Other" tasks={tasks.Other} onStatusChange={handleStatusChange} />
+          <TaskGroup groupTitle="Top Priority" tasks={tasks["TopPriority"]} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} />
+          <TaskGroup groupTitle="Important" tasks={tasks.Important} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} />
+          <TaskGroup groupTitle="Other" tasks={tasks.Other} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} />
         </DragDropContext>
       </div>
     </div>

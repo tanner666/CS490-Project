@@ -19,6 +19,9 @@ const CREATE_TASK_MUTATION = gql`
         month
         year
       }
+      pomodoro{
+        id
+      }
     }
   }
 `
@@ -48,6 +51,7 @@ export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) =>
             pomodoroTimers: 0, // Set default value or get from state
             pomodoroTimerType: 'pomodoro', // Example value
             taskDates: [{ day, month, year}], // Assuming taskDates is an array of dates
+            pomodoro: []
           },
         },
       });

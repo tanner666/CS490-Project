@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://admin:adminPass@localhost:5433/crushit"
+  url      = "postgresql://admin:adminPass@localhost:5432/crushit"
 }
 
 generator client {
@@ -51,7 +51,9 @@ model Task {
   taskOrder         Int              // Must be filled in at the backend. Represents the order of tasks within their respective groupStatus. The value must be calculated based on the tasks within the same groupStatus.
   createdBy         String
   created_by        User             @relation("UserTasks", fields: [createdBy], references: [firebaseUid], onDelete: Cascade)
+  pomodoro          PomodoroTimer[]  @relation("TaskTimer")
   taskDates         TaskDate[]       @relation("TaskDate")
+
 }
 
 model TaskDate {
@@ -68,6 +70,8 @@ model PomodoroTimer {
   pomodoro Int  // Time in minutes for regular pomodoros
   short    Int  // Time in minutes for short breaks
   long     Int  // Time in minutes for long breaks
-  userId   Int
-  user     User @relation("UserTimer", fields: [userId], references: [id], onDelete: Cascade)
+  userId   String 
+  taskId   Int
+  user     User @relation("UserTimer", fields: [userId], references: [firebaseUid], onDelete: Cascade)
+  task    Task  @relation("TaskTimer", fields: [taskId], references: [id], onDelete: Cascade)
 }
