@@ -9,10 +9,11 @@ import { getUserUid, useAuth } from 'src/auth';
 
 const HomePage = () => {
   const [uid, setUID] = useState('');
+  const [showFocusTime, setShowFocusTime] = useState(true); // State to control visibility
   //change these to retreive the current values in the navigation bar
   const currentDate = new Date();
   const day = currentDate.getDate();
-  const month = currentDate.getMonth() + 1; //MOnth is 0-indexed 
+  const month = currentDate.getMonth() + 1; //MOnth is 0-indexed
   const year = currentDate.getFullYear();
 
   useEffect(() => {
@@ -26,7 +27,11 @@ const HomePage = () => {
       });
 
   }, []);
-  
+
+  const handleClose = () => {
+    setShowFocusTime(false); // This function will close the FocusTime component
+  };
+
   //passes the current date when initially loading page
   return (
     <>
@@ -35,11 +40,11 @@ const HomePage = () => {
        {uid ? (
           <>
             <ToDoAndAppts userId={uid} day={day} month={month} year={year} />
-            <FocusTime />
+            {showFocusTime && <FocusTime onClose={handleClose} />}
           </>
         ) : (
           <p>Loading or no UID available...</p>
-       )} 
+       )}
       </div>
     </>
   )

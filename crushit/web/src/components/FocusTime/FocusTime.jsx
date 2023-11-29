@@ -164,7 +164,7 @@ const FocusTime = ({ onClose }) => {
     fontSize: '12px', // Adjust the font size as needed
     fontWeight: 500,
   };
-  
+
   const editableTextStyle = {
     fontFamily: 'DM Sans',
     fontSize: '12px',
@@ -175,7 +175,7 @@ const FocusTime = ({ onClose }) => {
     margin: '0', // Add this line to remove the default margin
   };
 
-  
+
   const handleEditButtonClick = () => {
     setIsEditingNotes(true);
   };
@@ -202,7 +202,7 @@ const FocusTime = ({ onClose }) => {
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
   };
- 
+
   const timersBoxStyle = {
     marginTop: '80px',
     width: '420px',
@@ -214,7 +214,7 @@ const FocusTime = ({ onClose }) => {
     alignItems: 'center',
     borderRadius: '8px',
     marginRight: '80px',
-    position: 'absolute', 
+    position: 'absolute',
     right: '-70px',
   };
 
@@ -231,7 +231,7 @@ const FocusTime = ({ onClose }) => {
     fontWeight: 700,
     color: 'white',
   };
-  
+
   const numberStyle = {
     color: 'rgba(64, 123, 255, 1)',
     fontWeight: 700,
@@ -243,7 +243,7 @@ const FocusTime = ({ onClose }) => {
   const finishTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
   return finishTime;
 };
- 
+
   const finishTime = getFinishTime(timerSeconds);
 
   useEffect(() => {
@@ -262,11 +262,14 @@ const FocusTime = ({ onClose }) => {
 
   return (
     <div style={containerStyle}>
-      <img
-        src="https://drive.google.com/uc?id=1VudJIDv_lVnYBlRQlWeiY3YJatBeWsfJ"
-        alt="Close Button"
-        style={closeButtonStyle}
-      />
+      <button>
+        <img
+          src="https://drive.google.com/uc?id=1VudJIDv_lVnYBlRQlWeiY3YJatBeWsfJ"
+          alt="Close Button"
+          style={closeButtonStyle}
+          onClick={onClose} // Use the onClose prop here
+        />
+      </button>
       <div style={optionsContainerStyle}>
         <span
           onClick={() => handleOptionClick('pomodoro')}
@@ -334,7 +337,7 @@ const FocusTime = ({ onClose }) => {
         <div style={numberStyle}> {finishTime} </div>
       </div>
     </div>
-    
+
   );
 };
 
