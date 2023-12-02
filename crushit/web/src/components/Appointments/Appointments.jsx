@@ -10,40 +10,59 @@ const Appointments = () => {
 
   const [showPopup, setShowPopup] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedTask, setSelectedTask] = useState(null);
 
-  const handleTimeClick = (time) => {
+  const handleDescription = (time) => {
     setSelectedTime(time);
     setShowPopup(true);
   };
 
-  const TaskSelectionPopup = () => (
+  const tasks = {
+    // examples
+    // '7 AM': 'Focus Time • Assign Leader for Task 1',
+    // '8 AM': 'Meeting with Counselor',
+    // '9 AM': 'Focus Time • Assign Leader for Task 1',
+    // ... add additional tasks as needed
+  };
+  const TaskDescriptionPopup = () => (
     <div className="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-4 rounded">
-        <h3 className="font-bold text-lg mb-4">Select Task for {selectedTime}</h3>
-        {/* Placeholder for task selection logic */}
-        <p>Select your task here</p>
-        <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700" onClick={() => setShowPopup(false)}>Close</button>
+      <div className="bg-white p-4 rounded-lg">
+        <h3 className="font-bold text-lg mb-4">Task Details for {selectedTime}</h3>
+        {/* Display the selected task detail */}
+        <p>{selectedTask}</p>
+        <button
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+          onClick={() => setShowPopup(false)}
+        >
+          Close
+        </button>
       </div>
     </div>
   );
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-gray-600 mb-3">Appointments</h2>
-      <div className="bg-white rounded-lg shadow p-4 overflow-y-auto" style={{ height: "60vh" }}>
-        {times.map((time, index) => (
-          <button
-            key={index}
-            className="flex items-center justify-between w-full px-3 py-2 text-sm text-gray-700 font-medium hover:bg-gray-100"
-            onClick={() => handleTimeClick(time)}
-          >
-            {time}
-          </button>
+      <h2 className="text-[30px] font-bold text-black mb-3">Appointments</h2>
+      <div className="bg-white rounded-lg shadow p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100 rounded" style={{ height: "60vh" }}>
+        {times.map((time) => (
+          <div key={time} className="flex items-center justify-between px-4 py-2">
+            <span className="text-lg text-gray-700 font-semibold">{time}</span>
+            {tasks[time] ? (
+              <button
+                onClick={() => handleDescription(time)}
+                className="ml-4 bg-blue-100 text-blue-800 text-sm px-2 py-1 rounded-md shadow focus:outline-none focus:ring focus:border-blue-300"
+              >
+                {tasks[time]}
+              </button>
+            ) : (
+              // Render an empty space if there's no task for the time slot
+              <span className="ml-4 text-sm px-2 py-1"></span>
+            )}
+          </div>
         ))}
       </div>
-      {showPopup && <TaskSelectionPopup />}
+      {showPopup && <TaskDescriptionPopup />}
     </div>
   );
 };
-
 export default Appointments;

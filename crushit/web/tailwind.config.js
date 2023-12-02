@@ -22,7 +22,14 @@ module.exports = {
         'notes-grey': '#545454',
       }
     },
+    scrollbar: (theme) => ({
+      thumb: {
+        'rounded': 'rounded',
+      },
+    }),
   },
   variants: {},
-  plugins: [],
+  plugins: [
+    require("tailwind-scrollbar")
+  ],
 }
