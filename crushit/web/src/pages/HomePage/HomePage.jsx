@@ -58,7 +58,6 @@ const HomePage = () => {
                </div>
             </>
           )}
-           <Appointments />
             </>
          ) : (
            <p>Loading or no UID available...</p>
