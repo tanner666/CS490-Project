@@ -42,8 +42,8 @@ const Appointments = () => {
 
   return (
     <div>
-      <h2 className="text-[30px] font-bold text-black mb-3">Appointments</h2>
-      <div className="bg-white rounded-lg shadow p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100 rounded" style={{ height: "60vh" }}>
+      <h2 className="text-[30px] font-bold font-dm text-gray-900 mb-3">Appointments</h2>
+      <div className="bg-white rounded-lg shadow p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100" style={{ height: "72vh" }}>
         {times.map((time) => (
           <div key={time} className="flex items-center justify-between px-4 py-2">
             <span className="text-lg text-gray-700 font-semibold">{time}</span>

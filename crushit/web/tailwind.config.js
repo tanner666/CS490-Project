@@ -8,7 +8,7 @@ module.exports = {
         'light-gray': '#F5F7F9',
         'dark-gray': '#3E3F42',
         'almost-black': '#1F1F1F',
-        
+
       },
       fontFamily: {
         'fredoka': ['Fredoka One', 'sans-serif'],

@@ -114,7 +114,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
   const handleNextYear = () => {
     setSelectedYear((prevYear) => prevYear + 1);
   };
-  
+
   const daysInMonth = (year, month) => new Date(year, month, 0).getDate();
 
   const [formVisibility, setFormVisibility] = useState(false);
@@ -150,7 +150,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
         </div>
         <div className="pt-12 pl-6 flex"> {/* Add flex here to create a flex container */}
           {/* Tasks Section */}
-          <div style={{ flex: 1, maxHeight: '75vh', overflowY: 'auto' }} className="custom-scrollbar pr-2"> {/* Adjusted to share space */}
+          <div style={{ flex: 1, maxHeight: '79vh'}} className="custom-scrollbar"> {/* Adjusted to share space */}
             <div className="flex items-center justify-start">
               <h2 className={`text-[30px] font-dm font-bold mt-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Tasks</h2>
               <button className="pl-4" onClick={toggleFormVisibility}>
@@ -159,16 +159,16 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
             </div>
             <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility}/>
           </div>
-          
+
           {/* Appointments Section */}
-          <div style={{ flex: 1, maxHeight: '75vh', overflowY: 'auto' }} className="custom-scrollbar"> {/* Adjusted to share space */}
+          <div style={{ flex: 1, maxHeight: '70vh'}} className="custom-scrollbar"> {/* Adjusted to share space */}
             <Appointments />
           </div>
         </div>
       </div>
     </div>
   );
-  
+
 };
 
 export default ToDoAndAppts;
