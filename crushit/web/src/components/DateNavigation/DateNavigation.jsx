@@ -10,6 +10,7 @@ const DateNavigation = ({selectedDay, selectedMonth, selectedYear, handleDayChan
 
   // Get today's date
   const today = new Date();
+  
 
 
   const blueBoxStyle = {
@@ -94,7 +95,10 @@ const DateNavigation = ({selectedDay, selectedMonth, selectedYear, handleDayChan
     </div>
   );
 
-  const DayDropdownBox = ({ selectedValue, onChange }) => (
+  const DayDropdownBox = ({ selectedValue, onChange, year, month }) => {
+    
+    const numberOfDays = daysInMonth(year, month);
+    return (
     <div style={roundedBoxStyle}>
       <select
         className="ml-2"
@@ -103,14 +107,15 @@ const DateNavigation = ({selectedDay, selectedMonth, selectedYear, handleDayChan
         onChange={onChange}
         data-testid="dayDropdown" // Assign the data-testid here
       >
-        {Array.from({ length: 31 }, (_, i) => (
+        {Array.from({ length: numberOfDays }, (_, i) => (
           <option key={i + 1} value={i + 1}>
             {i + 1}
           </option>
         ))}
       </select>
     </div>
-  );
+    );
+};
 
   const YearDropdownBox = ({ selectedValue, onChange }) => (
     <div style={roundedBoxStyle}>
@@ -140,7 +145,7 @@ const DateNavigation = ({selectedDay, selectedMonth, selectedYear, handleDayChan
             {ImageBox("https://drive.google.com/uc?id=11WQmToUHDMwNKwAMmdrmgbsXWdPvkJmX", handleNextMonth, 'Next Month')}
             {ImageBox("https://drive.google.com/uc?id=1yvUV6NAFgWMWYrNoDOUuHZ92uiHXwyyA", handlePrevDay, 'Previous Day')}
             {/* Using DayDropdownBox for the day */}
-            <DayDropdownBox selectedValue={selectedDay} onChange={handleDayChange} />
+            <DayDropdownBox selectedValue={selectedDay} onChange={handleDayChange} year={selectedYear} month={selectedMonth}/>
             {ImageBox("https://drive.google.com/uc?id=11WQmToUHDMwNKwAMmdrmgbsXWdPvkJmX", handleNextDay, 'Next Day')}
             {ImageBox("https://drive.google.com/uc?id=1yvUV6NAFgWMWYrNoDOUuHZ92uiHXwyyA", handlePrevYear, 'Previous Year')}
             {/* Using YearDropdownBox for the year */}
