@@ -8,7 +8,7 @@ module.exports = {
         'light-gray': '#F5F7F9',
         'dark-gray': '#3E3F42',
         'almost-black': '#1F1F1F',
-        
+
       },
       fontFamily: {
         'fredoka': ['Fredoka One', 'sans-serif'],
@@ -22,7 +22,14 @@ module.exports = {
         'notes-grey': '#545454',
       }
     },
+    scrollbar: (theme) => ({
+      thumb: {
+        'rounded': 'rounded',
+      },
+    }),
   },
   variants: {},
-  plugins: [],
+  plugins: [
+    require("tailwind-scrollbar")
+  ],
 }
