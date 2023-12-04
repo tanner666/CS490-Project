@@ -5,16 +5,17 @@
 /* Custom Scrollbar styles */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px; /* Width of the scrollbar */
+  border-radius: 9999px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
   background: #d1d5db; /* Light grey track color */
-  border-radius: 10px; /* Rounded edges on the track */
+  border-radius: 9999px; /* Rounded edges on the track */
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #3B82F6; /* Blue thumb color */
-  border-radius: 10px; /* Rounded edges on the thumb */
+  border-radius: 9999px; /* Rounded edges on the thumb */
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
