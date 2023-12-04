@@ -5,7 +5,7 @@ import { Draggable } from "react-beautiful-dnd"
 
 import { useMutation } from '@redwoodjs/web';
 
-const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime }) => {
+const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updateTaskInList, group}) => {
   const [statusIndex, setStatusIndex] = useState(0);
   const [openedDropdownIndex, setOpenedDropdownIndex] = useState(null);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -19,11 +19,15 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime }) => 
 
   const handleIncrement = () => {
     setPomodoroCount(prevCount => prevCount + 1);
+    updateTaskInList(task, group);
+
   };
 
   const handleDecrement = () => {
     if (pomodoroCount > 0) {
       setPomodoroCount(prevCount => prevCount - 1);
+      updateTaskInList(task, group);
+
     }
   };
 

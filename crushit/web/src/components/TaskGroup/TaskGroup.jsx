@@ -3,7 +3,7 @@ import ThemeToggle from '../ThemeToggle/ThemeToggle'
 import { useTheme } from '../ThemeContext/ThemeContext'
 import { Droppable, Draggable } from "react-beautiful-dnd"
 
-const TaskGroup = ({groupTitle, tasks, onStatusChange, saveTimerCount, toggleFocusTime}) => {
+const TaskGroup = ({groupTitle, tasks, onStatusChange, saveTimerCount, toggleFocusTime, updateTaskInList}) => {
   const { theme } = useTheme();
 
   return (
@@ -16,7 +16,7 @@ const TaskGroup = ({groupTitle, tasks, onStatusChange, saveTimerCount, toggleFoc
         <Draggable key={task.id.toString()} draggableId={task.id.toString()} index={task.taskOrder}>
         {(dragProvided) => (
           <div {...dragProvided.draggableProps} {...dragProvided.dragHandleProps} ref={dragProvided.innerRef}  >
-          <TaskCard task={task} onStatusChange={onStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} />
+          <TaskCard task={task} onStatusChange={onStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList} group={groupTitle.replace(/\s+/g, '')} />
           </div>
         )}
       </Draggable>

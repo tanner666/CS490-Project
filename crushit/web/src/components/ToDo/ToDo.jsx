@@ -103,12 +103,6 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
   const [createTaskMutation] = useMutation(CREATE_TASK_MUTATION);
   const [updateTaskMutation] = useMutation(UPDATE_TASK_MUTATION);
 
-  useEffect(() => {
-    if (data && data.userTasksOnDate) {
-      const sortedTasks = sortTasks(data.userTasksOnDate);
-      setTasks(sortedTasks);
-    }
-  }, [data]);
   //function to sort tasks into priority groups
   const sortTasks = (tasks) => {
     const sortedTasks = {
@@ -154,7 +148,6 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
   }, [data]);
 
   useEffect(() => {
-    setFocusTask(getDefaultTaskForFocusTimer(tasks))
     Object.keys(tasks).forEach((group) => {
       tasks[group].forEach((task) => {
 
@@ -170,6 +163,9 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
 
       })
     })
+    setFocusTask(getDefaultTaskForFocusTimer(tasks))
+    console.log('updated task', getDefaultTaskForFocusTimer(tasks))
+
   }, [tasks]);
 
   const saveTimerCount = async (task, pomodoroCount) => {
@@ -275,6 +271,21 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
     }
     return defaultTask;
   };
+
+  const updateTaskInList = (updatedTask, taskGroup) => {
+    // Logic to update the task list with the updated task
+    // For example:
+    console.log('updateTaskList',tasks[taskGroup])
+    const updatedTasks = tasks[taskGroup].map((task) =>
+      task.id === updatedTask.id ? updatedTask : task
+    );
+    let temp = tasks
+    temp[taskGroup] = updatedTasks
+    console.log('updateTaskList', temp, tasks)
+    // console.log(''updatedTasks)
+    // setTasks(updatedTasks);
+  };
+  
   
 
   return (
@@ -286,9 +297,9 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
       )}
       <div className={`p-6 my-2 w-full max-w-[52%] rounded-lg shadow-sm ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
         <DragDropContext onDragEnd={handleOnDragEnd}>
-          <TaskGroup groupTitle="Top Priority" tasks={tasks["TopPriority"]} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime}/>
-          <TaskGroup groupTitle="Important" tasks={tasks.Important} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime}/>
-          <TaskGroup groupTitle="Other" tasks={tasks.Other} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime}/>
+          <TaskGroup groupTitle="Top Priority" tasks={tasks["TopPriority"]} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList}/>
+          <TaskGroup groupTitle="Important" tasks={tasks.Important} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList}/>
+          <TaskGroup groupTitle="Other" tasks={tasks.Other} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList}/>
         </DragDropContext>
       </div>
     </div>

@@ -6,12 +6,15 @@ const FocusTime = ({ onClose, task }) => {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [isEditingNotes, setIsEditingNotes] = useState(false);
   const [notes, setNotes] = useState('');
+  const [pomosCompleted, setPomosCompleted] = useState(0);
+  const [pomoTimers, setPomoTimers] = useState(0);
 
   useEffect(() => {
     if (task != undefined){
       console.log('task 2',task.description)
       setNotes(task.description);
-      console.log('task 2', notes)
+      setPomoTimers(task.pomodoroTimers);
+      console.log('task 2', task)
     }
   }, [task]);
 
@@ -348,7 +351,7 @@ const FocusTime = ({ onClose, task }) => {
       </div>
      <div style={timersBoxStyle}>
         <div style={timerIndicatorStyle}>Pomos:</div>
-        <div style={numberStyle}> 0/3 </div>
+        <div style={numberStyle}> {pomosCompleted}/{pomoTimers} </div>
         <div style={finishAtStyle}>Finish At: </div>
         <div style={numberStyle}> {finishTime} </div>
       </div>
