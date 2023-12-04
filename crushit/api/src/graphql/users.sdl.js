@@ -10,6 +10,7 @@ export const schema = gql`
     pomodoroLong:  Int!
     darkMode: Boolean!
     pomodoros: [PomodoroTimer]!
+    refreshToken: String!
   }
 
   type Query {

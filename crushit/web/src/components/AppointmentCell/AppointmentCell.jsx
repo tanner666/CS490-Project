@@ -1,9 +1,9 @@
-import { useQuery } from "@redwoodjs/web"
+import { useQuery, gql} from "@redwoodjs/web"
 import React from "react"
 
 export const QUERY = gql`
-  query calendar_demo($start: String!, $end: String!, $code: String!) {
-    getEvents(start: $start, end: $end, code: $code) {
+  query calendar_demo($start: String!, $end: String!, $code: String!, $uid: String!) {
+    getEvents(start: $start, end: $end, code: $code, uid: $uid) {
       code
       events {
         summary
@@ -14,16 +14,16 @@ export const QUERY = gql`
     }
   }
 `
+export const AppointmentCell = ({ start, end, code, uid }) => {
+  console.log("inside appointment: ", start, end, code, uid);
+  const { data, error, loading } = useQuery(QUERY, {
+    variables: { start, end, code, uid },
+  });
 
-export const Loading = () => <div>Loading...</div>
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div style={{ color: 'blue' }}>Error: {error.message}</div>;
 
-export const Empty = () => <div>Empty</div>
-
-export const Failure = ({ error }) => (
-  <div style={{ color: 'blue' }}>Error: {error?.message}</div>
-)
-
-export const Success = ({ getEvents }) => {
+  const { getEvents} = data;
   return (
     <>
        <div className="overflow-x-auto relative">
@@ -57,4 +57,4 @@ export const Success = ({ getEvents }) => {
       </div>
     </>
   )
-}
+};

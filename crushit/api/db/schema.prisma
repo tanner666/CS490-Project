@@ -31,6 +31,7 @@ model User {
   pomodoros          PomodoroTimer[] @relation("UserTimer")
   tasks              Task[]          @relation("UserTasks")
   appointments       Appointment[]   @relation("UserAppointments")
+  refreshToken       String          @default("")
 }
 
 // To be done next sprint: uncompleted items need to rolled over to the next day and have their group level dropped by one

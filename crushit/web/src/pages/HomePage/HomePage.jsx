@@ -14,9 +14,7 @@ const HomePage = () => {
   const [showFocusTime, setShowFocusTime] = useState(true);
   const queryParams = new URLSearchParams(window.location.search)
   const code = queryParams.get('code')
-
-  const start = '2023-05-01T12:00:00Z'
-  const end = '2023-06-01T12:00:00Z'
+  console.log("code: ", code);
 
   if (code === null) {
     return <AuthorizeCell></AuthorizeCell>
@@ -27,6 +25,14 @@ const HomePage = () => {
   const day = currentDate.getDate();
   const month = currentDate.getMonth() + 1; // Month is 0-indexed
   const year = currentDate.getFullYear();
+  const formattedMonth = month.toString().padStart(2,'0');
+  const formattedDay = day.toString().padStart(2, '0');
+
+  //for google calendar api
+  //const start = `${year}-${formattedMonth}-${formattedDay}T12:00:00Z`;
+  //const end = `${year}-${formattedMonth}-${formattedDay}T12:00:00Z`;
+  const start = '2023-05-01T12:00:00Z'
+  const end = '2023-06-01T12:00:00Z'
 
   useEffect(() => {
     getUserUid()
@@ -55,6 +61,8 @@ const HomePage = () => {
     justifyContent: 'center',
   };
 
+  console.log("Values: ", start, end, code, "UID: ", uid);
+
   return (
     <>
       <MetaTags title="Home" description="Home page" />
@@ -73,6 +81,7 @@ const HomePage = () => {
           start={start}
           end={end}
           code={code}
+          uid={uid}
         ></AppointmentCell>
       ) : (
         <div></div>

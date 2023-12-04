@@ -1,7 +1,41 @@
 //retrieve tokens/ make api request
-export const getEvents = async ({ start, end, code }) => {
-  const { google } = require('googleapis')
+import {db} from 'src/lib/db'
 
+const { google } = require('googleapis');
+
+async function getNewTokensWithRefreshToken(refreshToken) {
+  const oauth2Client = new google.auth.OAuth2(
+    process.env.CLIENT_ID,
+    process.env.CLIENT_SECRET,
+    process.env.REDIRECT_URL
+  );
+
+  oauth2Client.setCredentials({ refresh_token: refreshToken });
+  const { tokens } = await oauth2Client.refreshAccessToken();
+  return tokens;
+}
+
+export const getRefreshTokenByFirebaseUid = async (firebaseUid) => {
+  console.log("GetRefreshTokens: ");
+  try {
+    const user = await db.user.findUnique({
+      where: { firebaseUid },
+      select: { refreshToken: true }, // Only select the refreshToken field
+    });
+
+    if (!user) {
+      throw new Error(`User with Firebase UID ${firebaseUid} not found`);
+    }
+
+    return user.refreshToken; // Return the refreshToken
+  } catch (error) {
+    // Handle or throw the error appropriately
+    throw new Error(`Error retrieving refreshToken: ${error.message}`);
+  }
+}
+
+export const getEvents = async ({ start, end, code, uid }) => {
+  console.log("GetEvents: ", uid);
   //obtain Oauth2 client object
   const oauth2Client = new google.auth.OAuth2(
     process.env.CLIENT_ID,
@@ -10,7 +44,17 @@ export const getEvents = async ({ start, end, code }) => {
   )
 
   //obtain jwt from Oauth2/ set jwt in oauth2client
-  let { tokens } = await oauth2Client.getToken(code)
+  //only use authentication code if no previously stored refresh token
+  let tokens;
+  const storedRefreshToken = getRefreshTokenByFirebaseUid(uid);
+
+  if (storedRefreshToken){
+    tokens = await getNewTokensWithRefreshToken(storedRefreshToken);
+  }
+  else{
+    tokens = (await oauth2Client.getToken(code)).tokens;
+  }
+
   oauth2Client.setCredentials(tokens)
   const calendar = google.calendar({ version: 'v3', auth: oauth2Client })
   let userCredential = tokens
