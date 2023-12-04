@@ -26,13 +26,13 @@ export const schema = gql`
   }
 
   extend type Query {
-    getAppointments: [Appointment!]!
-    getAppointment(id: Int!): Appointment
+    getAppointments: [Appointment!]! @requireAuth
+    getAppointment(id: Int!): Appointment @requireAuth
   }
 
   extend type Mutation {
-    createAppointment(input: CreateAppointment!): Appointment!
-    updateAppointment(id: Int!, input: UpdateAppointment!): Appointment!
-    deleteAppointment(id: Int!): Appointment
+    createAppointment(input: CreateAppointment!): Appointment! @requireAuth
+    updateAppointment(id: Int!, input: UpdateAppointment!): Appointment! @requireAuth
+    deleteAppointment(id: Int!): Appointment @requireAuth
   }
 `
