@@ -204,7 +204,19 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount }) => {
           className={`w-${task.taskStatus === 'Complete' ? '5' : '8'} h-${task.taskStatus !== 'Complete' ? '9' : '7'}`}
           onClick={handleStatusChange}
         >
-          {/* Status images */}
+        {task.taskStatus === 'Complete' && (
+          <img src="https://drive.google.com/uc?id=1AMVLk1OUD4tKJ6C3yT25b7OIunfU7TGA" alt="Complete" />
+        )}
+        {task.taskStatus === 'Not Started' && (
+          <img src="https://drive.google.com/uc?id=1K5uTrydwCXSBTG8-6YVu9kibvzlqmlpg" alt="Not Started" />
+        )}
+        {task.taskStatus === 'In Progress' && (
+          <img src="https://drive.google.com/uc?id=1EAgXSX1V2YIPJnUTfEx16jMO-TeC1_oo" alt="In Progress" />
+        )}
+        {task.taskStatus === 'Rolled Over' && (
+          <img src="https://drive.google.com/uc?id=15MpHv4HVjiysSd5_bahlb5jBG90GGg5Q" alt="Rolled Over" />
+        )}
+        {/* Status images */}
         </button>
         <p className="ml-2 text-md text-task-blue">{task.taskName}</p>
         <div className="ml-auto flex items-center">
