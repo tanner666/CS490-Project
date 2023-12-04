@@ -30,6 +30,7 @@ model User {
   darkMode           Boolean         @default(false)
   pomodoros          PomodoroTimer[] @relation("UserTimer")
   tasks              Task[]          @relation("UserTasks")
+  appointments       Appointment[]   @relation("UserAppointments")
 }
 
 // To be done next sprint: uncompleted items need to rolled over to the next day and have their group level dropped by one
@@ -53,7 +54,19 @@ model Task {
   created_by        User             @relation("UserTasks", fields: [createdBy], references: [firebaseUid], onDelete: Cascade)
   pomodoro          PomodoroTimer[]  @relation("TaskTimer")
   taskDates         TaskDate[]       @relation("TaskDate")
+  appointments      Appointment[]    @relation("TaskAppointment")
+}
 
+model Appointment {
+  id           Int        @id @default(autoincrement())
+  name         String?
+  startTime    DateTime
+  endTime      DateTime
+  category     String
+  userId       String
+  user         User       @relation("UserAppointments", fields: [userId], references: [firebaseUid], onDelete: Cascade)
+  taskID       Int
+  task         Task       @relation("TaskAppointment", fields: [taskID], references: [id], onDelete: Cascade)
 }
 
 model TaskDate {
@@ -70,7 +83,7 @@ model PomodoroTimer {
   pomodoro Int  // Time in minutes for regular pomodoros
   short    Int  // Time in minutes for short breaks
   long     Int  // Time in minutes for long breaks
-  userId   String 
+  userId   String
   taskId   Int
   user     User @relation("UserTimer", fields: [userId], references: [firebaseUid], onDelete: Cascade)
   task    Task  @relation("TaskTimer", fields: [taskId], references: [id], onDelete: Cascade)

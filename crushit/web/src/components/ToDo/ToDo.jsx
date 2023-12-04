@@ -17,7 +17,7 @@ import { object } from 'prop-types';
 //inside this, specify what you want to retrieve (here is is an array of Tasks (per the gql schema def), all with the listed fields below)
 
 
-const GetUserTasksOnDate = gql` 
+const GetUserTasksOnDate = gql`
   query userTasksOnDate($userId: String!, $day: Int!, $month: Int!, $year: Int!) {
     userTasksOnDate(userId: $userId, day: $day, month: $month, year: $year) {
       id
@@ -175,8 +175,8 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
         for (let i = 0; i < pomodoroCount-task.pomodoroTimers; i++) {
           pomodoros.push({ pomodoro: 30, short: 5, long: 15, userId: task.createdBy, taskId: task.id })
         }
-  
-      } 
+
+      }
       console.log(pomodoros)
       await updateTasks({ variables: { id: task.id, input: { pomodoroTimers: pomodoroCount, pomodoro: pomodoros } } })
     }else{
@@ -295,7 +295,7 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
           <AddTaskForm userId={userId} day={day} month={month} year={year} onSubmit={handleFormSubmit} onCancel={toggleFormVisibility} />
         </div>
       )}
-      <div className={`p-6 my-2 w-full max-w-[52%] rounded-lg shadow-sm ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+        <div className={`p-6 my-2 w-full max-w-[98%] rounded-lg shadow-sm ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100`} style={{ height: "72vh" }}>
         <DragDropContext onDragEnd={handleOnDragEnd}>
           <TaskGroup groupTitle="Top Priority" tasks={tasks["TopPriority"]} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList}/>
           <TaskGroup groupTitle="Important" tasks={tasks.Important} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList}/>

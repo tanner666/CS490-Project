@@ -20023,6 +20023,7 @@ __metadata:
     "@redwoodjs/auth-firebase-setup": 6.3.2
     "@redwoodjs/core": 6.3.2
     tailwind: ^4.0.0
+    tailwind-scrollbar: ^3.0.5
   languageName: unknown
   linkType: soft
 
@@ -21442,6 +21443,15 @@ __metadata:
     systeminformation: lib/cli.js
   checksum: ee94bb9213fa136c1e2d7545582eac0719dafcd5a353e7db4d887670d00fe03634e5dbd83a1a6968387e48058ebc3c31cdddd7920f42542968d6c04e67a4c8fd
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
+  languageName: node
+  linkType: hard
+
+"tailwind-scrollbar@npm:^3.0.5":
+  version: 3.0.5
+  resolution: "tailwind-scrollbar@npm:3.0.5"
+  peerDependencies:
+    tailwindcss: 3.x
+  checksum: cdce9ade4856cd1eccc4ed9b3330aa98952eab8e892ec4cdf5766c185eb75cb0e9bd7eb057ecbe585169be0ef3a167cc83e43d89cd48cd0ff898da7cea459d75
   languageName: node
   linkType: hard
 
