@@ -32,6 +32,10 @@ const HomePage = () => {
     setShowFocusTime(false); // This function will close the FocusTime component
   };
 
+  const toggleFocusTime = () => {
+    setShowFocusTime(prevState => !prevState); // Toggle the state of showFocusTime
+  };
+
   //passes the current date when initially loading page
   return (
     <>
@@ -39,7 +43,7 @@ const HomePage = () => {
       <div>
        {uid ? (
           <>
-            <ToDoAndAppts userId={uid} day={day} month={month} year={year} />
+            <ToDoAndAppts userId={uid} day={day} month={month} year={year} toggleFocusTime={toggleFocusTime} />
             {showFocusTime && <FocusTime onClose={handleClose} />}
           </>
         ) : (

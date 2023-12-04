@@ -9,7 +9,7 @@ import DateNavigation from '../DateNavigation/DateNavigation';
 import PlanDay from '../PlanDay/PlanDay';
 import ToDo from '../ToDo/ToDo';
 
-const ToDoAndAppts = ({userId, day, month, year}) => {
+const ToDoAndAppts = ({userId, day, month, year, toggleFocusTime}) => {
   //const { theme } = useTheme();
   const theme = 'light';
 
@@ -123,6 +123,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
     setFormVisibility(prevState => !prevState);
   };
 
+
   return (
     <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
       <PlanDay/>
@@ -147,7 +148,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
           </button>
           </div>
           <div style={{ maxHeight: '75vh', overflowY: 'auto' }} className="custom-scrollbar">
-            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility}/>
+            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility} toggleFocusTime={toggleFocusTime}/>
           </div>
         </div>
       </div>
