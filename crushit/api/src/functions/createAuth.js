@@ -30,9 +30,9 @@ export const handler = async (event, context) => {
    * https://console.cloud.google.com/apis/credentials.
    */
   const oauth2Client = new google.auth.OAuth2(
-    process.env.YOUR_CLIENT_ID,
-    process.env.YOUR_CLIENT_SECRET,
-    process.env.YOUR_REDIRECT_URL
+    process.env.CLIENT_ID,
+    process.env.CLIENT_SECRET,
+    process.env.REDIRECT_URL
   )
 
   // Access scopes for calendar events.

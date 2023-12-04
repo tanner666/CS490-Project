@@ -12967,6 +12967,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"googleapis@npm:^129.0.0":
+  version: 129.0.0
+  resolution: "googleapis@npm:129.0.0"
+  dependencies:
+    google-auth-library: ^9.0.0
+    googleapis-common: ^7.0.0
+  checksum: a1e078b2c3da1a1fe3ba1de1233700872c973fb49a6254c59a83c2c1884f4493b059fe43e7bb65226b9493c429da69e09e842368c82abb8c52118d2dbc657da3
+  languageName: node
+  linkType: hard
+
 "gopd@npm:^1.0.1":
   version: 1.0.1
   resolution: "gopd@npm:1.0.1"
@@ -19726,6 +19736,7 @@ __metadata:
   dependencies:
     "@redwoodjs/auth-firebase-setup": 6.3.2
     "@redwoodjs/core": 6.3.2
+    googleapis: ^129.0.0
     tailwind: ^4.0.0
     tailwind-scrollbar: ^3.0.5
   languageName: unknown

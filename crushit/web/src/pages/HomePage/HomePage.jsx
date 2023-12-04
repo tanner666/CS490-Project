@@ -6,9 +6,11 @@ import AuthorizeCell from 'src/components/AuthorizeCell/AuthorizeCell'
 import ThemeToggle from 'src/components/ThemeToggle/ThemeToggle';
 import { useEffect, useState } from 'react';
 import { getUserUid, useAuth } from 'src/auth';
+import AppointmentCell from 'src/components/AppointmentCell';
 
 const HomePage = () => {
   const [uid, setUID] = useState('');
+  const [showEvents, setShowEvents] = useState(false)
   const [showFocusTime, setShowFocusTime] = useState(true);
   const queryParams = new URLSearchParams(window.location.search)
   const code = queryParams.get('code')
@@ -55,20 +57,27 @@ const HomePage = () => {
 
   return (
     <>
-    {/*<Box borderRadius="lg" p={4} maxW="md" borderWidth="1px">
-        <Button onClick={() => setShowEvents(true)}>Appointments</Button>
-      </Box>
+      <MetaTags title="Home" description="Home page" />
+
+      <div className="border rounded-lg p-4 max-w-md border-gray-200">
+          <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => setShowEvents(true)}
+          >
+              Appointments
+          </button>
+      </div>
+
       {showEvents ? (
-        <Appointments
+        <AppointmentCell
           start={start}
           end={end}
           code={code}
-        ></Appointments>
+        ></AppointmentCell>
       ) : (
         <div></div>
-      )} */}
+      )}
 
-      <MetaTags title="Home" description="Home page" />
       <div>
         {uid ? (
           <>
