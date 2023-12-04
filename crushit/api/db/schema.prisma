@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://admin:adminPass@localhost:5432/crushit"
+  url      = "postgresql://admin:adminPass@localhost:5433/crushit"
 }
 
 generator client {

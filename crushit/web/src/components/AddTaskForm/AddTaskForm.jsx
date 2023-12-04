@@ -32,11 +32,10 @@ export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) =>
   const [ImportanceGroup, setImportanceGroup] = useState('Other'); // default value
   const [createTask] = useMutation(CREATE_TASK_MUTATION);
 
-//creates task in database
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("useId: ", userId);
-    console.log("IMportance group value:", ImportanceGroup);
+    //console.log("useId: ", userId);
+    //console.log("Importance group value:", ImportanceGroup);
     try {
       const response = await createTask({
         variables: {
