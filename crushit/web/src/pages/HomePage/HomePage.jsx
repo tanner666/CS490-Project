@@ -10,6 +10,7 @@ import { getUserUid, useAuth } from 'src/auth';
 const HomePage = () => {
   const [uid, setUID] = useState('');
   const [showFocusTime, setShowFocusTime] = useState(true); // State to control visibility
+  const [FocusTask, setFocusTask] = useState(null);
   //change these to retreive the current values in the navigation bar
   const currentDate = new Date();
   const day = currentDate.getDate();
@@ -27,12 +28,16 @@ const HomePage = () => {
       });
 
   }, []);
+  useEffect(() => {
+    console.log('current focus,', FocusTask)
+  },[FocusTask]);
 
   const handleClose = () => {
     setShowFocusTime(false); // This function will close the FocusTime component
   };
 
-  const toggleFocusTime = () => {
+  const toggleFocusTime = (task) => {
+    setFocusTask(task);
     setShowFocusTime(prevState => !prevState); // Toggle the state of showFocusTime
   };
 
@@ -43,8 +48,8 @@ const HomePage = () => {
       <div>
        {uid ? (
           <>
-            <ToDoAndAppts userId={uid} day={day} month={month} year={year} toggleFocusTime={toggleFocusTime} />
-            {showFocusTime && <FocusTime onClose={handleClose} />}
+            <ToDoAndAppts userId={uid} day={day} month={month} year={year} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} />
+            {showFocusTime && <FocusTime onClose={handleClose} task={FocusTask}/>}
           </>
         ) : (
           <p>Loading or no UID available...</p>

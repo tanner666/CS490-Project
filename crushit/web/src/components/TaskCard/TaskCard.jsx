@@ -81,7 +81,7 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime }) => 
     }
   };
   const handleToggleFocusTime = () => {
-    toggleFocusTime(); // Call the toggleFocusTime function from props
+    toggleFocusTime(task); // Call the toggleFocusTime function from props
   };
   return (
     <div className="p-2 my-3 mx-auto w-[94%] rounded-lg shadow-sm bg-white font-dm font-bold">

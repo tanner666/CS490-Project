@@ -9,7 +9,7 @@ import DateNavigation from '../DateNavigation/DateNavigation';
 import PlanDay from '../PlanDay/PlanDay';
 import ToDo from '../ToDo/ToDo';
 
-const ToDoAndAppts = ({userId, day, month, year, toggleFocusTime}) => {
+const ToDoAndAppts = ({userId, day, month, year, toggleFocusTime, setFocusTask}) => {
   //const { theme } = useTheme();
   const theme = 'light';
 
@@ -148,7 +148,7 @@ const ToDoAndAppts = ({userId, day, month, year, toggleFocusTime}) => {
           </button>
           </div>
           <div style={{ maxHeight: '75vh', overflowY: 'auto' }} className="custom-scrollbar">
-            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility} toggleFocusTime={toggleFocusTime}/>
+            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask}/>
           </div>
         </div>
       </div>

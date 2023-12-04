@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react';
 
-const FocusTime = ({ onClose }) => {
+const FocusTime = ({ onClose, task }) => {
   const [selectedOption, setSelectedOption] = useState('pomodoro');
   const [timerSeconds, setTimerSeconds] = useState(25 * 60); // Initial timer duration for Pomodoro in seconds
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [isEditingNotes, setIsEditingNotes] = useState(false);
-  const [notes, setNotes] = useState('Task Notes');
+  const [notes, setNotes] = useState('');
+
+  useEffect(() => {
+    if (task != undefined){
+      console.log('task 2',task.description)
+      setNotes(task.description);
+      console.log('task 2', notes)
+    }
+  }, [task]);
 
   const containerStyle = {
     position: 'absolute',
@@ -260,6 +268,14 @@ const FocusTime = ({ onClose }) => {
     };
   }, [isTimerRunning, timerSeconds]);
 
+  if (!task) {
+    return (
+      <div style={containerStyle}>
+        <div>Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div style={containerStyle}>
       <button>
@@ -298,7 +314,7 @@ const FocusTime = ({ onClose }) => {
           </button>
         </div>
       </div>
-      <div style={taskNameTextStyle}>Task Name</div>
+      <div style={taskNameTextStyle}>{task.taskName}</div>
       <div style={notesBoxStyle}>
         <div style={notesTextStyle}>Notes</div>
         {isEditingNotes ? (

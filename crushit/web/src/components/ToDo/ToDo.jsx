@@ -85,7 +85,7 @@ const UPDATE_TASK_MUTATION = gql`
 `
 
 //ToDo is the parent task component, responsible for organizing and managing task groups and task cards
-const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, toggleFocusTime}) => {
+const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, toggleFocusTime, setFocusTask}) => {
   console.log("UserId in ToDo: ", userId);
   const { data, loading, error, refetch } = useQuery(GetUserTasksOnDate, { variables: { userId, day, month, year } });
   const [updateTasks] = useMutation(UPDATE_TASK_MUTATION);
@@ -149,12 +149,12 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
     if (data && data.userTasksOnDate) {
       const sortedTasks = sortTasks(data.userTasksOnDate);
       setTasks(sortedTasks);
-      console.log(tasks)
+      // console.log(tasks)
     }
   }, [data]);
 
   useEffect(() => {
-    console.log(tasks)
+    setFocusTask(getDefaultTaskForFocusTimer(tasks))
     Object.keys(tasks).forEach((group) => {
       tasks[group].forEach((task) => {
 
@@ -251,6 +251,31 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
 
     setTasks(updatedTasks);
   }
+
+  const getDefaultTaskForFocusTimer = (tasks) => {
+    let defaultTask = null;
+  
+    const priorityGroups = ['TopPriority', 'Important', 'Other'];
+  
+    for (let i = 0; i < priorityGroups.length; i++) {
+      const group = tasks[priorityGroups[i]];
+      // console.log('finding tasks', group)
+      if (group.length > 0) {
+        for (let j = 0; j < group.length; j++) {
+          const task = group[j];
+          // Check if the task is incomplete
+          if (task.completionStatus !== 'COMPLETED') {
+            // If defaultTask is null or the task's group has a higher priority, update the defaultTask
+            if (!defaultTask || priorityGroups.indexOf(task.ImportanceGroup) < priorityGroups.indexOf(defaultTask.ImportanceGroup)) {
+              defaultTask = task;
+            }
+          }
+        }
+      }
+    }
+    return defaultTask;
+  };
+  
 
   return (
     <div className={`todo-container ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
