@@ -85,9 +85,6 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount }) => {
     }
   `;
 
-
-
-
   const [updateTaskRollover] = useMutation(UPDATE_TASK_ROLLOVER_MUTATION);
 
   const toggleDescriptionEditing = async () => {
