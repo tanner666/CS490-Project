@@ -33,6 +33,7 @@ export const schema = gql`
     pomodoroLong:  Int
     darkMode: Boolean
     firebaseUid: String
+    refreshToken: String
   }
 
   input LoginUserInput {

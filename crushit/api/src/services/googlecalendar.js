@@ -15,6 +15,20 @@ async function getNewTokensWithRefreshToken(refreshToken) {
   return tokens;
 }
 
+export const updateRefreshToken = async (firebaseUid, refreshToken) => {
+  try {
+    const updatedUser = await db.user.update({
+      where: { firebaseUid: firebaseUid },
+      data: { refreshToken: refreshToken },
+    });
+    return updatedUser;
+  } catch (error) {
+    // Handle or throw the error
+    console.error('Error updating refresh token:', error);
+    throw new Error('Unable to update refresh token');
+  }
+}
+
 export const getRefreshTokenByFirebaseUid = async (firebaseUid) => {
   console.log("GetRefreshTokens: ");
   try {
@@ -48,11 +62,14 @@ export const getEvents = async ({ start, end, code, uid }) => {
   let tokens;
   const storedRefreshToken = getRefreshTokenByFirebaseUid(uid);
 
+  //if previous token
   if (storedRefreshToken){
     tokens = await getNewTokensWithRefreshToken(storedRefreshToken);
   }
+  // if no previous token
   else{
     tokens = (await oauth2Client.getToken(code)).tokens;
+    updateRefreshToken(uid, tokens.refresh_token)
   }
 
   oauth2Client.setCredentials(tokens)
