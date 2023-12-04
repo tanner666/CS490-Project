@@ -2,7 +2,7 @@ import { Link, routes } from '@redwoodjs/router';
 import { MetaTags } from '@redwoodjs/web';
 import ToDoAndAppts from 'src/components/ToDoAndAppts/ToDoAndAppts';
 import FocusTime from 'src/components/FocusTime/FocusTime';
-import Appointments from 'src/components/Appointments/Appointments';
+import AuthorizeCell from 'src/components/AuthorizeCell/AuthorizeCell'
 import ThemeToggle from 'src/components/ThemeToggle/ThemeToggle';
 import { useEffect, useState } from 'react';
 import { getUserUid, useAuth } from 'src/auth';
@@ -10,6 +10,15 @@ import { getUserUid, useAuth } from 'src/auth';
 const HomePage = () => {
   const [uid, setUID] = useState('');
   const [showFocusTime, setShowFocusTime] = useState(true);
+  const queryParams = new URLSearchParams(window.location.search)
+  const code = queryParams.get('code')
+
+  const start = '2023-05-01T12:00:00Z'
+  const end = '2023-06-01T12:00:00Z'
+
+  if (code === null) {
+    return <AuthorizeCell></AuthorizeCell>
+  }
 
   //change these to retrieve the current values in the navigation bar
   const currentDate = new Date();
@@ -46,11 +55,24 @@ const HomePage = () => {
 
   return (
     <>
+    {/*<Box borderRadius="lg" p={4} maxW="md" borderWidth="1px">
+        <Button onClick={() => setShowEvents(true)}>Appointments</Button>
+      </Box>
+      {showEvents ? (
+        <Appointments
+          start={start}
+          end={end}
+          code={code}
+        ></Appointments>
+      ) : (
+        <div></div>
+      )} */}
+
       <MetaTags title="Home" description="Home page" />
       <div>
         {uid ? (
           <>
-            <ToDoAndAppts userId={uid} day={day} month={month} year={year} />
+            <ToDoAndAppts userId={uid} day={day} month={month} year={year} start={start} end={end} code={code}/>
             {showFocusTime && (
             <>
                <div style={overlayStyles}>

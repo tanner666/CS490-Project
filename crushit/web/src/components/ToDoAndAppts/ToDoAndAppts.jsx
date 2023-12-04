@@ -10,7 +10,7 @@ import PlanDay from '../PlanDay/PlanDay';
 import ToDo from '../ToDo/ToDo';
 import Appointments from '../Appointments/Appointments';
 
-const ToDoAndAppts = ({userId, day, month, year}) => {
+const ToDoAndAppts = ({userId, day, month, year, start, end, code}) => {
   const { theme } = useTheme();
 
   const today = new Date();
@@ -162,7 +162,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
 
           {/* Appointments Section */}
           <div style={{ flex: 1, maxHeight: '70vh'}} className="custom-scrollbar"> {/* Adjusted to share space */}
-            <Appointments />
+            <Appointments start={start} end={end} code={code}/>
           </div>
         </div>
       </div>
