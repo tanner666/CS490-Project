@@ -28,6 +28,7 @@ const GetUserTasksOnDate = gql`
       description
       pomodoroTimers
       pomodoroTimerType
+      pomodorosCompleted
       taskOrder
       createdBy
       taskDates {

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useMutation, useQuery } from '@redwoodjs/web';
 
 
-const UPDATE_USER_MUTATION = gql`
-  mutation updateUser($firebaseUid: String!, $input: UpdateUserInput!) {
-    updateUser(firebaseUid: $firebaseUid, input: $input) {
+const UPDATE_TASK_MUTATION = gql`
+  mutation updateTask($id: Int!, $input: UpdateTaskInput!) {
+    updateTask(id: $id, input: $input) {
       pomodorosCompleted
     }
   }
@@ -37,7 +37,7 @@ const FocusTime = ({ userId, onClose, task }) => {
   const [pomosCompleted, setPomosCompleted] = useState(0);
   const [pomoTimers, setPomoTimers] = useState(0);
   const [taskName, setTaskName] = useState('');
-  const [updateUser] = useMutation(UPDATE_USER_MUTATION);
+  const [updateTask] = useMutation(UPDATE_TASK_MUTATION);
   const [isTimerStarted, setIsTimerStarted] = useState(false);
 
   useEffect(() => {
@@ -46,7 +46,8 @@ const FocusTime = ({ userId, onClose, task }) => {
       setPomodoroTimer(data.user.pomodoroLength * 60);
       setShortTimer(data.user.pomodoroShort * 60);
       setLongTimer(data.user.pomodoroLong * 60);
-      setPomosCompleted(data.user.pomodorosCompleted);
+      console.log("POmos compo:", task.id);
+      setPomosCompleted(task.pomodorosCompleted);
     }
   }, [data]);
 
@@ -317,7 +318,7 @@ const FocusTime = ({ userId, onClose, task }) => {
       if (selectedOption == "pomodoro"){
         setPomosCompleted(pomosCompleted+1);
         console.log("Pomos completed: ", pomosCompleted);
-        updateUser({variables: {firebaseUid: userId, input: {pomodorosCompleted: data.user.pomodorosCompleted+1}}});
+        updateTask({variables: {id: task.id, input: {pomodorosCompleted: task.pomodorosCompleted+1}}});
 
         handleOptionClick("shortBreak");
       }
