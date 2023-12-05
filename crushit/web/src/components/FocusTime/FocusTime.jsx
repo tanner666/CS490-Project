@@ -2,19 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useMutation, useQuery } from '@redwoodjs/web';
 
 
-const UPDATE_TASK_MUTATION = gql`
-  mutation updateTask($id: Int!, $input: UpdateTaskInput!) {
-    updateTask(id: $id, input: $input) {
-      taskName
-      ImportanceGroup
-      completionStatus
-      description
-      pomodoroTimers
-      pomodoroTimerType
-      taskOrder
-      pomodoro{
-        id
-      }
+const UPDATE_USER_MUTATION = gql`
+  mutation updateUser($firebaseUid: String!, $input: UpdateUserInput!) {
+    updateUser(firebaseUid: $firebaseUid, input: $input) {
+      pomodorosCompleted
     }
   }
 `
@@ -25,6 +16,7 @@ const GET_USER = gql`
       pomodoroLength
       pomodoroShort
       pomodoroLong
+      pomodorosCompleted
     }
   }
 `
@@ -45,13 +37,15 @@ const FocusTime = ({ userId, onClose, task }) => {
   const [pomosCompleted, setPomosCompleted] = useState(0);
   const [pomoTimers, setPomoTimers] = useState(0);
   const [taskName, setTaskName] = useState('');
-  const [updateTasks] = useMutation(UPDATE_TASK_MUTATION);
+  const [updateUser] = useMutation(UPDATE_USER_MUTATION);
 
   useEffect(() => {
     if (data && data.user){
+      setTimerSeconds(data.user.pomodoroLength * 60);
       setPomodoroTimer(data.user.pomodoroLength * 60);
       setShortTimer(data.user.pomodoroShort * 60);
       setLongTimer(data.user.pomodoroLong * 60);
+      setPomosCompleted(data.user.pomodorosCompleted);
     }
   }, [data]);
 
@@ -314,6 +308,13 @@ const FocusTime = ({ userId, onClose, task }) => {
       timer = setInterval(() => {
         setTimerSeconds((prevSeconds) => prevSeconds - 1);
       }, 1000);
+    }else if(isTimerRunning && timerSeconds == 0){
+      setPomosCompleted(pomosCompleted+1);
+      console.log("Pomos completed: ", pomosCompleted);
+      updateUser({variables: {firebaseUid: userId, input: {pomodorosCompleted: data.user.pomodorosCompleted+1}}});
+      setIsTimerRunning(false);
+      handleOptionClick("shortBreak");
+      //setIsTimerRunning(true);
     }
 
     return () => {
