@@ -8,12 +8,14 @@ const FocusTime = ({ onClose, task }) => {
   const [notes, setNotes] = useState('');
   const [pomosCompleted, setPomosCompleted] = useState(0);
   const [pomoTimers, setPomoTimers] = useState(0);
+  const [taskName, setTaskName] = useState('');
 
   useEffect(() => {
     if (task != undefined){
       console.log('task 2',task.description)
       setNotes(task.description);
       setPomoTimers(task.pomodoroTimers);
+      setTaskName(task.taskName);
       console.log('task 2', task)
     }
   }, [task]);
@@ -271,13 +273,13 @@ const FocusTime = ({ onClose, task }) => {
     };
   }, [isTimerRunning, timerSeconds]);
 
-  if (!task) {
-    return (
-      <div style={containerStyle}>
-        <div>Loading...</div>
-      </div>
-    );
-  }
+  // if (!task) {
+  //   return (
+  //     <div style={containerStyle}>
+  //       <div>Loading...</div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div style={containerStyle}>
@@ -317,7 +319,7 @@ const FocusTime = ({ onClose, task }) => {
           </button>
         </div>
       </div>
-      <div style={taskNameTextStyle}>{task.taskName}</div>
+      <div style={taskNameTextStyle}>{taskName}</div>
       <div style={notesBoxStyle}>
         <div style={notesTextStyle}>Notes</div>
         {isEditingNotes ? (
