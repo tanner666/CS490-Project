@@ -1,14 +1,54 @@
 import React, { useState, useEffect } from 'react';
+import { useMutation, useQuery } from '@redwoodjs/web';
 
-const FocusTime = ({ onClose, task }) => {
+
+const UPDATE_USER_MUTATION = gql`
+  mutation updateUser($firebaseUid: String!, $input: UpdateUserInput!) {
+    updateUser(firebaseUid: $firebaseUid, input: $input) {
+      pomodorosCompleted
+    }
+  }
+`
+
+const GET_USER = gql`
+  query user($firebaseUid: String!){
+    user(firebaseUid: $firebaseUid){
+      pomodoroLength
+      pomodoroShort
+      pomodoroLong
+      pomodorosCompleted
+    }
+  }
+`
+
+
+const FocusTime = ({ userId, onClose, task }) => {
+  const { data, loading, error } = useQuery(GET_USER, { variables: { firebaseUid: userId} });
   const [selectedOption, setSelectedOption] = useState('pomodoro');
-  const [timerSeconds, setTimerSeconds] = useState(25 * 60); // Initial timer duration for Pomodoro in seconds
+  const [timerSeconds, setTimerSeconds] = useState(25*60); // Initial timer duration for Pomodoro in seconds
+  const [pomodoroTimer, setPomodoroTimer] = useState(25 * 60)
+  const [shortTimer, setShortTimer] = useState(5 * 60); // Initial timer duration for Pomodoro in seconds
+  const [longTimer, setLongTimer] = useState(15 * 60); // Initial timer duration for Pomodoro in seconds
+
+  console.log("TimerSeconds:", timerSeconds);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [isEditingNotes, setIsEditingNotes] = useState(false);
   const [notes, setNotes] = useState('');
   const [pomosCompleted, setPomosCompleted] = useState(0);
   const [pomoTimers, setPomoTimers] = useState(0);
   const [taskName, setTaskName] = useState('');
+  const [updateUser] = useMutation(UPDATE_USER_MUTATION);
+  const [isTimerStarted, setIsTimerStarted] = useState(false);
+
+  useEffect(() => {
+    if (data && data.user){
+      setTimerSeconds(data.user.pomodoroLength * 60);
+      setPomodoroTimer(data.user.pomodoroLength * 60);
+      setShortTimer(data.user.pomodoroShort * 60);
+      setLongTimer(data.user.pomodoroLong * 60);
+      setPomosCompleted(data.user.pomodorosCompleted);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (task != undefined){
@@ -110,18 +150,20 @@ const FocusTime = ({ onClose, task }) => {
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
+    console.log("Time: ", getInitialTimerDuration(option))
     setTimerSeconds(getInitialTimerDuration(option));
     setIsTimerRunning(false);
+    setIsTimerStarted(false);
   };
 
   const getInitialTimerDuration = (option) => {
     switch (option) {
       case 'pomodoro':
-        return 25 * 60;
+        return pomodoroTimer;
       case 'shortBreak':
-        return 5 * 60;
+        return shortTimer;
       case 'longBreak':
-        return 15 * 60;
+        return longTimer;
       default:
         return 25 * 60;
     }
@@ -129,6 +171,7 @@ const FocusTime = ({ onClose, task }) => {
 
   const handleStartStopClick = () => {
     setIsTimerRunning(!isTimerRunning);
+    setIsTimerStarted(true);
   };
 
   const taskNameTextStyle = {
@@ -268,6 +311,14 @@ const FocusTime = ({ onClose, task }) => {
       timer = setInterval(() => {
         setTimerSeconds((prevSeconds) => prevSeconds - 1);
       }, 1000);
+    }else if(isTimerRunning && timerSeconds == 0){
+      setPomosCompleted(pomosCompleted+1);
+      console.log("Pomos completed: ", pomosCompleted);
+      updateUser({variables: {firebaseUid: userId, input: {pomodorosCompleted: data.user.pomodorosCompleted+1}}});
+      setIsTimerRunning(false);
+      setIsTimerStarted(false);
+      handleOptionClick("shortBreak");
+      //setIsTimerRunning(true);
     }
 
     return () => {
@@ -357,7 +408,7 @@ const FocusTime = ({ onClose, task }) => {
         <div style={timerIndicatorStyle}>Pomos:</div>
         <div style={numberStyle}> {pomosCompleted}/{pomoTimers} </div>
         <div style={finishAtStyle}>Finish At: </div>
-        <div style={numberStyle}> {finishTime} </div>
+        <div style={numberStyle}> {isTimerStarted && finishTime} </div>
       </div>
     </div>
 

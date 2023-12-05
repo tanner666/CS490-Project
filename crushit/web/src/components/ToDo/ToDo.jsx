@@ -250,9 +250,9 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
 
   const getDefaultTaskForFocusTimer = (tasks) => {
     let defaultTask = null;
-  
+
     const priorityGroups = ['TopPriority', 'Important', 'Other'];
-  
+
     for (let i = 0; i < priorityGroups.length; i++) {
       const group = tasks[priorityGroups[i]];
       // console.log('finding tasks', group)
@@ -285,8 +285,8 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
     // console.log(''updatedTasks)
     // setTasks(updatedTasks);
   };
-  
-  
+
+
 
   return (
     <div className={`todo-container ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>

@@ -150,8 +150,11 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, code, toggleFocusTi
       <PlanDay />
       <div className="w-full">
         {/* Home Bar Top page */}
-        <div className={`pt-1 pb-1 w-full mx-auto shadow-sm ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
+        <div className={`flex pt-1 pb-1 w-full mx-auto shadow-sm ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
           <h2 className={`text-2xl font-dm font-bold mt-2 mb-2 ml-[3%] ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Home</h2>
+          <p className="ml-[84%]">
+            <a href="/settings" className="text-blue-500 hover:underline">Settings</a>
+          </p>
         </div>
         {/* Date Nav Bar */}
         <div className="flex pt-2 justify-between items-center">

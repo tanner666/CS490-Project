@@ -10,7 +10,7 @@ import AppointmentCell from 'src/components/AppointmentCell';
 
 const HomePage = () => {
   const [uid, setUID] = useState('');
-  const [showFocusTime, setShowFocusTime] = useState(true); // State to control visibility
+  const [showFocusTime, setShowFocusTime] = useState(false); // State to control visibility
   const [FocusTask, setFocusTask] = useState(null);
   const queryParams = new URLSearchParams(window.location.search)
   const code = queryParams.get('code')
@@ -104,7 +104,7 @@ const HomePage = () => {
             {showFocusTime && (
             <>
                <div style={overlayStyles}>
-                 <FocusTime onClose={handleClose} task={FocusTask} />
+                 <FocusTime userId={uid} onClose={handleClose} task={FocusTask} />
                </div>
             </>
           )}
