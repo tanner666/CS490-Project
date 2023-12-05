@@ -102,10 +102,10 @@ const Appointments = ({start, end, code, uid}) => {
       <div className="bg-white rounded-lg shadow p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100" style={{ height: "72vh" }}>
         {times.map((time, index) => (
           // Container for the time and task description
-          <div key={index} className="relative px-4 py-2">
+          <div key={index} className="relative px-2 py-2">
             <span className="text-sm text-task-black font-semibold">{time}</span>
             {eventMap[time] && eventMap[time].map((event, eventIndex) => (
-              <div key={eventIndex} className="absolute top-6 right-0 w-[86%] h-[101%] border-2 border-bar-grey">
+              <div key={eventIndex} className="absolute top-6 right-2 w-[88%] h-[101%] border-2 border-bar-grey">
                 <button
                   onClick={() => { setSelectedTask(event.description); handleDescription(event.start, event.summary, event.end); }}
                   className="text-task-black font-semibold text-sm px-2 py-1 focus:outline-none focus:ring focus:border-blue-300 my-1"

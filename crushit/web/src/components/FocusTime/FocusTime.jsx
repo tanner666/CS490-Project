@@ -152,6 +152,8 @@ const FocusTime = ({ onClose, task }) => {
     backgroundColor: 'rgba(245, 247, 249, 1)',
     borderRadius: '8px',
     padding: '10px',
+    wordWrap: 'break-word',  // This ensures that words break to go to the next line
+    overflowWrap: 'break-word',  // This is a standard CSS property to handle long words
   };
 
   const notesTextStyle = {
