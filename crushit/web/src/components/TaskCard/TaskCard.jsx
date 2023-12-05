@@ -212,7 +212,7 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updat
             </div>
           </div>
           <p className="text-xs font-medium text-notes-grey mt-4 mx-1">Notes</p>
-          <p className="whitespace-normal break-words text-sm text-task-black w-full mx rounded-md mt-1 pt-1 pb-1">
+          <div className="whitespace-normal break-words text-sm text-task-black w-full mx rounded-md mt-1 pt-1 pb-1">
               {isEditingNotes ? (
               <>
                 <textarea
@@ -246,7 +246,7 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updat
               </div>
 
             )}
-          </p>
+          </div>
         </>
       )}
     </div>

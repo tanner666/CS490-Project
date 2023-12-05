@@ -6,7 +6,6 @@ import AuthorizeCell from 'src/components/AuthorizeCell/AuthorizeCell'
 import ThemeToggle from 'src/components/ThemeToggle/ThemeToggle';
 import { useEffect, useState } from 'react';
 import { getUserUid, useAuth } from 'src/auth';
-import AppointmentCell from 'src/components/AppointmentCell';
 
 const HomePage = () => {
   const [uid, setUID] = useState('');

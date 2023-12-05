@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import AppointmentCell from 'src/components/AppointmentCell';
 import { gql, useQuery } from '@redwoodjs/web';
 import { parseISO, format } from 'date-fns';
 

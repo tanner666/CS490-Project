@@ -1,6 +1,8 @@
 import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './AuthorizeCell'
 import { standard } from './AuthorizeCell.mock'
+import { Success as AuthorizeCellSuccess } from './AuthorizeCell';
+
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
@@ -34,8 +36,11 @@ describe('AuthorizeCell', () => {
   // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
 
   it('renders Success successfully', async () => {
+    const mockGetAuthorizationURL = { url: 'https://example.com' };
+
+    // Render the component with the mocked prop
     expect(() => {
-      render(<Success authorize={standard().authorize} />)
+      render(<AuthorizeCellSuccess getAuthorizationURL={mockGetAuthorizationURL} />);
     }).not.toThrow()
   })
 })

@@ -374,7 +374,7 @@ const FocusTime = ({ userId, onClose, task }) => {
       <div style={{ textAlign: 'center' }}>
         <div style={optionBoxStyle}>
           <div style={timerStyle}>{formatTime(timerSeconds)}</div>
-          <button style={startStopButtonStyle} onClick={handleStartStopClick}>
+          <button data-testid="stopStart" id="stopStart" style={startStopButtonStyle} onClick={handleStartStopClick}>
             {isTimerRunning ? 'Stop' : 'Start'}
           </button>
         </div>
