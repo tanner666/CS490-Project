@@ -38,6 +38,7 @@ const FocusTime = ({ userId, onClose, task }) => {
   const [pomoTimers, setPomoTimers] = useState(0);
   const [taskName, setTaskName] = useState('');
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
+  const [isTimerStarted, setIsTimerStarted] = useState(false);
 
   useEffect(() => {
     if (data && data.user){
@@ -152,6 +153,7 @@ const FocusTime = ({ userId, onClose, task }) => {
     console.log("Time: ", getInitialTimerDuration(option))
     setTimerSeconds(getInitialTimerDuration(option));
     setIsTimerRunning(false);
+    setIsTimerStarted(false);
   };
 
   const getInitialTimerDuration = (option) => {
@@ -169,6 +171,7 @@ const FocusTime = ({ userId, onClose, task }) => {
 
   const handleStartStopClick = () => {
     setIsTimerRunning(!isTimerRunning);
+    setIsTimerStarted(true);
   };
 
   const taskNameTextStyle = {
@@ -313,6 +316,7 @@ const FocusTime = ({ userId, onClose, task }) => {
       console.log("Pomos completed: ", pomosCompleted);
       updateUser({variables: {firebaseUid: userId, input: {pomodorosCompleted: data.user.pomodorosCompleted+1}}});
       setIsTimerRunning(false);
+      setIsTimerStarted(false);
       handleOptionClick("shortBreak");
       //setIsTimerRunning(true);
     }
@@ -404,7 +408,7 @@ const FocusTime = ({ userId, onClose, task }) => {
         <div style={timerIndicatorStyle}>Pomos:</div>
         <div style={numberStyle}> {pomosCompleted}/{pomoTimers} </div>
         <div style={finishAtStyle}>Finish At: </div>
-        <div style={numberStyle}> {finishTime} </div>
+        <div style={numberStyle}> {isTimerStarted && finishTime} </div>
       </div>
     </div>
 
