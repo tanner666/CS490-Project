@@ -106,6 +106,7 @@ const Appointments = ({start, end, code, uid}) => {
         </table>
       </div>
 
+
     </div>
   );
 };

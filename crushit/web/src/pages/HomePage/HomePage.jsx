@@ -66,7 +66,7 @@ const HomePage = () => {
   return (
     <>
       <MetaTags title="Home" description="Home page" />
-
+      {/*
       <div className="border rounded-lg p-4 max-w-md border-gray-200">
           <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -86,6 +86,7 @@ const HomePage = () => {
       ) : (
         <div></div>
       )}
+      */}
 
       <div>
         {uid ? (

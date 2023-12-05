@@ -14,6 +14,7 @@ export const getNewTokensWithRefreshToken = async (refreshToken) => {
 }
 
 export const updateRefreshToken = async (firebaseUid, refreshToken) => {
+  console.log("Update Refresh Token: ", firebaseUid, " Tok: ", refreshToken);
   try {
     const updatedUser = await db.user.update({
       where: { firebaseUid: firebaseUid },
@@ -42,7 +43,8 @@ export const getRefreshTokenByFirebaseUid = async (firebaseUid) => {
     return user.refreshToken; // Return the refreshToken
   } catch (error) {
     // Handle or throw the error appropriately
-    throw new Error(`Error retrieving refreshToken: ${error.message}`);
+    console.log("No refresh token in database");
+    return null;
   }
 }
 
