@@ -11,10 +11,25 @@ export const pomodoroTimer = ({ id }) => {
 }
 
 export const createPomodoroTimer = ({ input }) => {
+  console.log('Input\n',input);
+  const defaultValues = {
+    currentPomo: input.pomodoro, // Default value for currentPomo
+    currentShort: input.short, // Default value for currentShort
+    currentLong: input.long, // Default value for currentLong
+  };
+
+  const dataWithDefaults = {
+    ...defaultValues,
+    ...input,
+  };
+
+  console.log('Data with defaults\n',dataWithDefaults);
+
   return db.pomodoroTimer.create({
-    data: input,
-  })
-}
+    data: dataWithDefaults,
+  });
+};
+
 
 export const updatePomodoroTimer = ({ id, input }) => {
   return db.pomodoroTimer.update({

@@ -49,11 +49,18 @@ export const updateTask = async ({ id, input }) => {
   if(pomodoro && input.pomodoroTimers > 0){
       createdPomodoros = await Promise.all(
           pomodoro.map(async pomo => {
-            const createdTimer = await db.pomodoroTimer.create({
-                data:{
-                  ...pomo
-                }
-            })
+            const data = {...pomo}
+            if (typeof pomo.currentPomo === 'undefined') {
+              data.currentPomo = pomo.pomodoro;
+            }
+            if (typeof pomo.currentShort === 'undefined') {
+              data.currentShort = pomo.short;
+            }
+            if (typeof pomo.currentLong === 'undefined') {
+              data.currentLong = pomo.long;
+            }
+            console.log("Pomo Data: ", data)
+            const createdTimer = await db.pomodoroTimer.create({data})
             return createdTimer
           })
       )
