@@ -17,7 +17,15 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, code}) => {
   let [selectedDay, setSelectedDay] = React.useState(today.getDate());
   let [selectedMonth, setSelectedMonth] = React.useState(today.getMonth() + 1); // Using the month index
   let [selectedYear, setSelectedYear] = React.useState(today.getFullYear());
+  const formattedMonth = selectedMonth.toString().padStart(2,'0');
+  const formattedDay = selectedDay.toString().padStart(2, '0');
+  let selectedStart = `${selectedYear}-${formattedMonth}-${formattedDay}T00:00:00Z`;
+  let selectedEnd = `${selectedYear}-${formattedMonth}-${formattedDay}T23:59:59Z`;
 
+  const handleTimeChange = () => {
+    selectedStart = `${selectedYear}-${formattedMonth}-${formattedDay}T00:00:00Z`;
+    let selectedEnd = `${selectedYear}-${formattedMonth}-${formattedDay}T23:59:59Z`;
+  }
   const handleDayChange = (event) => {
     const newDay = parseInt(event.target.value, 10);
     const daysInNewMonth = daysInMonth(selectedYear, selectedMonth);
@@ -28,6 +36,7 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, code}) => {
     } else {
       setSelectedDay(newDay);
     }
+    handleTimeChange();
   };
 
   const handleMonthChange = (event) => {
@@ -40,6 +49,7 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, code}) => {
     if (selectedDay > daysInNewMonth) {
       setSelectedDay(daysInNewMonth);
     }
+    handleTimeChange();
   };
 
   const handleYearChange = (event) => {
@@ -53,6 +63,7 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, code}) => {
     if (selectedDay > Math.min(daysInCurrentMonth, daysInNewMonth)) {
       setSelectedDay(Math.min(daysInCurrentMonth, daysInNewMonth));
     }
+    handleTimeChange();
   };
 
   const handlePrevMonth = () => {
@@ -62,6 +73,7 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, code}) => {
     if (isPrevDayInPrevMonth) {
       handlePrevDay();
     }
+    handleTimeChange();
   };
 
   const handleNextMonth = () => {
@@ -71,6 +83,7 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, code}) => {
     if (isNextDayInNextMonth) {
       handleNextDay();
     }
+    handleTimeChange();
   };
 
   const handlePrevDay = () => {
@@ -88,6 +101,8 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, code}) => {
       } else {
         setSelectedDay(prevDay);
       }
+      handleTimeChange();
+
   };
 
   const handleNextDay = () => {
@@ -105,14 +120,20 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, code}) => {
     } else {
       setSelectedDay(nextDay);
     }
+    handleTimeChange();
+
   };
 
   const handlePrevYear = () => {
     setSelectedYear((prevYear) => prevYear - 1);
+    handleTimeChange();
+
   };
 
   const handleNextYear = () => {
     setSelectedYear((prevYear) => prevYear + 1);
+    handleTimeChange();
+
   };
 
   const daysInMonth = (year, month) => new Date(year, month, 0).getDate();
@@ -162,7 +183,7 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, code}) => {
 
           {/* Appointments Section */}
           <div style={{ flex: 1, maxHeight: '70vh'}} className="custom-scrollbar"> {/* Adjusted to share space */}
-            <Appointments start={start} end={end} code={code} uid={userId}/>
+            <Appointments start={selectedStart} end={selectedEnd} code={code} uid={userId}/>
           </div>
         </div>
       </div>
