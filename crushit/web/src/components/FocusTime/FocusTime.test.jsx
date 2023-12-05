@@ -101,3 +101,15 @@ describe('FocusTime component', () => {
     expect(pomodoroTimerElement).toBeInTheDocument();
   });
 });
+
+
+describe('FocusTime format time', () => {
+  it('renders the formatted time correctly', () => {
+    render(<FocusTime />);
+    const time = 1500; // 25 minutes in seconds
+    const formattedTime = '25:00';
+
+    const formattedTimeElement = screen.getByText(formattedTime);
+    expect(formattedTimeElement).toBeInTheDocument();
+  });
+});
