@@ -2,20 +2,37 @@ import { Link, routes } from '@redwoodjs/router';
 import { MetaTags } from '@redwoodjs/web';
 import ToDoAndAppts from 'src/components/ToDoAndAppts/ToDoAndAppts';
 import FocusTime from 'src/components/FocusTime/FocusTime';
-import Appointments from 'src/components/Appointments/Appointments';
+import AuthorizeCell from 'src/components/AuthorizeCell/AuthorizeCell'
 import ThemeToggle from 'src/components/ThemeToggle/ThemeToggle';
 import { useEffect, useState } from 'react';
 import { getUserUid, useAuth } from 'src/auth';
+import AppointmentCell from 'src/components/AppointmentCell';
 
 const HomePage = () => {
   const [uid, setUID] = useState('');
   const [showFocusTime, setShowFocusTime] = useState(true); // State to control visibility
   const [FocusTask, setFocusTask] = useState(null);
+  const queryParams = new URLSearchParams(window.location.search)
+  const code = queryParams.get('code')
+  console.log("code: ", code);
+
+  if (code === null) {
+    return <AuthorizeCell></AuthorizeCell>
+  }
+
   //change these to retreive the current values in the navigation bar
   const currentDate = new Date();
   const day = currentDate.getDate();
   const month = currentDate.getMonth() + 1; // Month is 0-indexed
   const year = currentDate.getFullYear();
+  const formattedMonth = month.toString().padStart(2,'0');
+  const formattedDay = day.toString().padStart(2, '0');
+
+  //once other issue is fixed, use these values below
+  const start = `${year}-${formattedMonth}-${formattedDay}T00:00:00Z`;
+  const end = `${year}-${formattedMonth}-${formattedDay}T23:59:59Z`;
+  //const start = '2023-12-04T12:00:00Z'
+  //const end = '2023-12-05T12:00:00Z'
 
   useEffect(() => {
     getUserUid()
@@ -55,14 +72,35 @@ const HomePage = () => {
     justifyContent: 'center',
   };
 
-
   return (
     <>
       <MetaTags title="Home" description="Home page" />
+      {/*
+      <div className="border rounded-lg p-4 max-w-md border-gray-200">
+          <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => setShowEvents(true)}
+          >
+              Appointments
+          </button>
+      </div>
+
+      {showEvents ? (
+        <AppointmentCell
+          start={start}
+          end={end}
+          code={code}
+          uid={uid}
+        ></AppointmentCell>
+      ) : (
+        <div></div>
+      )}
+      */}
+
       <div>
         {uid ? (
           <>
-            <ToDoAndAppts userId={uid} day={day} month={month} year={year} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} />
+            <ToDoAndAppts userId={uid} day={day} month={month} year={year} start={start} end={end} code={code} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} />
             {showFocusTime && (
             <>
                <div style={overlayStyles}>

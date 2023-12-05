@@ -10,6 +10,7 @@ export const schema = gql`
     pomodoroLong:  Int!
     darkMode: Boolean!
     pomodoros: [PomodoroTimer]!
+    refreshToken: String!
   }
 
   type Query {
@@ -32,6 +33,7 @@ export const schema = gql`
     pomodoroLong:  Int
     darkMode: Boolean
     firebaseUid: String
+    refreshToken: String
   }
 
   input LoginUserInput {
