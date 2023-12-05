@@ -6,6 +6,7 @@ const UPDATE_TASK_MUTATION = gql`
   mutation updateTask($id: Int!, $input: UpdateTaskInput!) {
     updateTask(id: $id, input: $input) {
       pomodorosCompleted
+      description
     }
   }
 `
@@ -241,6 +242,8 @@ const FocusTime = ({ userId, onClose, task }) => {
 
   const handleCheckboxClick = () => {
     setIsEditingNotes(false);
+    console.log("Notes: ", notes);
+    updateTask({ variables: { id: task.id, input: {description: notes } } })
   };
 
   const [checkboxImage, setCheckboxImage] = useState(
@@ -385,10 +388,11 @@ const FocusTime = ({ userId, onClose, task }) => {
               contentEditable={true}
               style={editableTextStyle}
               onBlur={(e) => {
+
                 setNotes(e.target.innerText);
-                setIsEditingNotes(false);
+
               }}
-            >
+              >
               {notes}
             </div>
             <div
