@@ -56,9 +56,6 @@ const FocusTime = ({ userId, onClose, task }) => {
   const [updatePomo] = useMutation(UPDATE_POMODORO_MUTATION);
   const [isTimerStarted, setIsTimerStarted] = useState(false);
 
-  const [timerInterval, setTimerInterval] = useState(null);
-
-
   useEffect(() => {
     if (data && data.user){
       // setTimerSeconds(data.user.pomodoroLength * 60);
@@ -90,32 +87,6 @@ const FocusTime = ({ userId, onClose, task }) => {
     
   }, [task]);
 
-  useEffect(() => {
-    if (isTimerRunning) {
-      // Start the timer and store the interval ID
-      const intervalId = setInterval(() => {
-        setTimerSeconds((prevSeconds) => {
-          if (prevSeconds > 0) {
-            return prevSeconds - 1;
-          } else {
-            // Clear the interval when timer reaches 0
-            clearInterval(intervalId);
-            return 0;
-          }
-        });
-      }, 1000);
-
-      // Store the interval ID
-      setTimerInterval(intervalId);
-    }
-
-    // Clean up the interval when the component is unmounted or when the focus timer is toggled off
-    return () => {
-      if (timerInterval) {
-        clearInterval(timerInterval);
-      }
-    };
-  }, [isTimerRunning]);
 
   const containerStyle = {
     position: 'absolute',
@@ -241,8 +212,11 @@ const FocusTime = ({ userId, onClose, task }) => {
       currentLong
     }
     console.log('input fo promo', input, selectedOption)
+    if(task !== undefined){
     const newPomo = await updatePomo({ variables: { id: task.pomodoro[0].id, input: input } })
     console.log('newPomo', newPomo)
+
+    }
   };
 
   const taskNameTextStyle = {
@@ -443,7 +417,7 @@ const FocusTime = ({ userId, onClose, task }) => {
       <div style={{ textAlign: 'center' }}>
         <div style={optionBoxStyle}>
           <div style={timerStyle}>{formatTime(timerSeconds)}</div>
-          <button style={startStopButtonStyle} onClick={handleStartStopClick}>
+          <button role="startStop" style={startStopButtonStyle} onClick={handleStartStopClick}>
             {isTimerRunning ? 'Stop' : 'Start'}
           </button>
         </div>
@@ -454,6 +428,7 @@ const FocusTime = ({ userId, onClose, task }) => {
         {isEditingNotes ? (
           <>
             <div
+              role='notesEdit'
               contentEditable={true}
               style={editableTextStyle}
               onBlur={(e) => {
@@ -465,14 +440,16 @@ const FocusTime = ({ userId, onClose, task }) => {
               {notes}
             </div>
             <div
+              role='editNotes'
               style={checkboxStyle}
               onClick={handleCheckboxClick}
             ></div>
           </>
         ) : (
           <>
-            <div style={taskNotesTextStyle}>{notes}</div>
+            <div role='notesEdit' style={taskNotesTextStyle}>{notes}</div>
             <img
+            role='editNotes'
               src="https://drive.google.com/uc?id=17gw2LHM85_aRYh91KjKkjAkzIKMxkKHT"
               alt="Edit Button"
               style={editButtonStyle}
