@@ -30,6 +30,11 @@ const Appointments = ({start, end, code, uid}) => {
     return format(date, 'h a'); // Formats to 'X AM/PM'
   };
 
+  const formatDescriptionTime = (dateTimeString) => {
+    const date = parseISO(dateTimeString);
+    return format(date, 'h:mm a'); // Formats to 'X AM/PM'
+  };
+
   const events = data?.getEvents?.events || [];
 
   // Example appointment times
@@ -46,9 +51,9 @@ const Appointments = ({start, end, code, uid}) => {
   const [selectedEventSummary, setSelectedEventSummary] = useState(null);
 
 
-  const handleDescription = (time, eventSummary, end) => {
-    setSelectedTime(time);
-    setEndTime(formatEventTime(end));
+  const handleDescription = (start, eventSummary, end) => {
+    setSelectedTime(formatDescriptionTime(start));
+    setEndTime(formatDescriptionTime(end));
     setSelectedEventSummary(eventSummary);
     setShowPopup(true);
   };
@@ -102,7 +107,7 @@ const Appointments = ({start, end, code, uid}) => {
             {eventMap[time] && eventMap[time].map((event, eventIndex) => (
               <div key={eventIndex} className="absolute top-6 right-0 w-[86%] h-[101%] border-2 border-bar-grey">
                 <button
-                  onClick={() => { setSelectedTask(event.description); handleDescription(time, event.summary, event.end); }}
+                  onClick={() => { setSelectedTask(event.description); handleDescription(event.start, event.summary, event.end); }}
                   className="text-task-black font-semibold text-sm px-2 py-1 focus:outline-none focus:ring focus:border-blue-300 my-1"
                 >
                   {event.summary}
