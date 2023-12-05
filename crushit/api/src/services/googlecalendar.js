@@ -1,9 +1,7 @@
-//retrieve tokens/ make api request
 import {db} from 'src/lib/db'
+const { google } = require('googleapis')
 
-const { google } = require('googleapis');
-
-async function getNewTokensWithRefreshToken(refreshToken) {
+export const getNewTokensWithRefreshToken = async (refreshToken) => {
   const oauth2Client = new google.auth.OAuth2(
     process.env.CLIENT_ID,
     process.env.CLIENT_SECRET,
@@ -49,8 +47,7 @@ export const getRefreshTokenByFirebaseUid = async (firebaseUid) => {
 }
 
 export const getEvents = async ({ start, end, code, uid }) => {
-  console.log("GetEvents: ", uid);
-  //obtain Oauth2 client object
+  const { google } = require('googleapis')
   const oauth2Client = new google.auth.OAuth2(
     process.env.CLIENT_ID,
     process.env.CLIENT_SECRET,
@@ -59,20 +56,46 @@ export const getEvents = async ({ start, end, code, uid }) => {
 
   //obtain jwt from Oauth2/ set jwt in oauth2client
   //only use authentication code if no previously stored refresh token
-  let tokens;
-  const storedRefreshToken = getRefreshTokenByFirebaseUid(uid);
-
+  //let tokens;
+  const storedRefreshToken = await getRefreshTokenByFirebaseUid(uid);
+  console.log("Stored Refresh Toek: ", storedRefreshToken);
   //if previous token
-  if (storedRefreshToken){
-    tokens = await getNewTokensWithRefreshToken(storedRefreshToken);
-  }
+  //if (storedRefreshToken){
+    //tokens = await getNewTokensWithRefreshToken(storedRefreshToken);
+  //}
   // if no previous token
+  //else{
+    //let {tokens} = await oauth2Client.getToken(code)
+    //updateRefreshToken(uid, tokens.refresh_token)
+  //}
+  //if refresh token in db already:
+  let tokens = ''
+  if (storedRefreshToken){
+    oauth2Client.setCredentials({ refresh_token: storedRefreshToken });
+    oauth2Client.refreshAccessToken()
+      .then(response => {
+          // The tokens are now updated in the OAuth2 client
+          tokens = response.credentials;
+          console.log("Access Token:", tokens.access_token);
+          // If a new refresh token is provided, save it
+          if (tokens.refresh_token) {
+              console.log("New Refresh Token:", tokens.refresh_token);
+              // Save the new refresh token in your storage
+              updateRefreshToken(uid, tokens.refresh_token)
+          }
+      })
+      .catch(error => {
+          // Handle error (e.g., refresh token might be invalid or expired)
+          console.error("Error refreshing access token:", error);
+      });
+  }
+  //if no token in db yet:
   else{
-    tokens = (await oauth2Client.getToken(code)).tokens;
+    let { tokens } = await oauth2Client.getToken(code)
+    oauth2Client.setCredentials(tokens)
     updateRefreshToken(uid, tokens.refresh_token)
   }
 
-  oauth2Client.setCredentials(tokens)
   const calendar = google.calendar({ version: 'v3', auth: oauth2Client })
   let userCredential = tokens
 
@@ -94,7 +117,6 @@ export const getEvents = async ({ start, end, code, uid }) => {
     })
   }, dist - 10000) // 10 seconds before expiry, make an API call to refresh the access token - it will automatically update within the oauth client
 
-  //use google api to call calendar
   console.log({ tokens })
   const res = await calendar.events.list({
     calendarId: 'primary',
@@ -111,7 +133,6 @@ export const getEvents = async ({ start, end, code, uid }) => {
     return
   }
 
-  //map results
   console.log('Upcoming 100 events:')
   const events = calendarEvents.map((item, i) => {
     const start = item.start.dateTime || item.start.date

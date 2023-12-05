@@ -28,11 +28,11 @@ const HomePage = () => {
   const formattedMonth = month.toString().padStart(2,'0');
   const formattedDay = day.toString().padStart(2, '0');
 
-  //for google calendar api
-  //const start = `${year}-${formattedMonth}-${formattedDay}T12:00:00Z`;
-  //const end = `${year}-${formattedMonth}-${formattedDay}T12:00:00Z`;
-  const start = '2023-05-01T12:00:00Z'
-  const end = '2023-06-01T12:00:00Z'
+  //once other issue is fixed, use these values below
+  const start = `${year}-${formattedMonth}-${formattedDay}T12:00:00Z`;
+  const end = `${year}-${formattedMonth}-${formattedDay}T12:00:00Z`;
+  //const start = '2023-05-01T12:00:00Z'
+  //const end = '2023-06-01T12:00:00Z'
 
   useEffect(() => {
     getUserUid()
