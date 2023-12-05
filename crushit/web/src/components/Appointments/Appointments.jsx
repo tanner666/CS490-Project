@@ -20,20 +20,20 @@ const GET_EVENTS_QUERY = gql`
 const Appointments = ({start, end, code, uid}) => {
 
    // Execute the query
-   //const { data, loading, error } = useQuery(GET_EVENTS_QUERY, {
-    //variables: { start, end, code, uid },
-  //});
+   const { data, loading, error } = useQuery(GET_EVENTS_QUERY, {
+    variables: { start, end, code, uid },
+  });
 
-  //if (loading) return <div>Loading...</div>;
+  //if (loading){ return <div>Loading...</div>;};
   //if (error) return <div>Error: {error.message}</div>;
 
-  //const events = data?.getEvents?.events || [];
+  const events = data?.getEvents?.events || [];
 
   // Example appointment times
   const times = [
-    '8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM',
+    '5 AM', '6 AM', '7 AM', '8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM',
     '5 PM', '6 PM', '7 PM', '8 PM', '9 PM', '10 PM', '11 PM',
-    '12 AM', '1 AM', '2 AM', '3 AM', '4 AM', '5 AM', '6 AM', '7 AM',
+    '12 AM', '1 AM', '2 AM', '3 AM', '4 AM',
   ];
 
   const [showPopup, setShowPopup] = useState(false);
@@ -91,7 +91,7 @@ const Appointments = ({start, end, code, uid}) => {
         ))}
       </div>
       {showPopup && <TaskDescriptionPopup />}
-      {/*
+
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <tbody className="bg-white divide-y divide-gray-200">
@@ -105,7 +105,7 @@ const Appointments = ({start, end, code, uid}) => {
           </tbody>
         </table>
       </div>
-    */}
+
     </div>
   );
 };
