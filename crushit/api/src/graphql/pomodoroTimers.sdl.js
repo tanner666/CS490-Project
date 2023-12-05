@@ -4,9 +4,9 @@ export const schema = gql`
     pomodoro: Int!
     short: Int!
     long: Int!
-    currentPomo: Int  # New field for current pomodoro value
-    currentShort: Int  # New field for current short break value
-    currentLong: Int  # New field for current long break value
+    currentPomo: Float  # New field for current pomodoro value
+    currentShort: Float  # New field for current short break value
+    currentLong: Float  # New field for current long break value
     userId: String!
     taskId: Int!
     user: User!
@@ -22,9 +22,9 @@ export const schema = gql`
     pomodoro: Int!
     short: Int!
     long: Int!
-    currentPomo: Int  # New field for current pomodoro value
-    currentShort: Int  # New field for current short break value
-    currentLong: Int  # New field for current long break value
+    currentPomo: Float  # New field for current pomodoro value
+    currentShort: Float  # New field for current short break value
+    currentLong: Float  # New field for current long break value
     userId: String!
     taskId: Int!
   }
@@ -33,9 +33,9 @@ export const schema = gql`
     pomodoro: Int
     short: Int
     long: Int
-    currentPomo: Int  # New field for current pomodoro value
-    currentShort: Int  # New field for current short break value
-    currentLong: Int  # New field for current long break value
+    currentPomo: Float  # New field for current pomodoro value
+    currentShort: Float  # New field for current short break value
+    currentLong: Float  # New field for current long break value
     userId: String
     taskId: Int
   }

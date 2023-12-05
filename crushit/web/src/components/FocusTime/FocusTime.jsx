@@ -7,6 +7,20 @@ const UPDATE_TASK_MUTATION = gql`
     updateTask(id: $id, input: $input) {
       pomodorosCompleted
       description
+      pomodoro
+    }
+  }
+`
+
+const UPDATE_POMODORO_MUTATION = gql`
+  mutation updatePomodoroTimer($id: Int!, $input: UpdatePomodoroTimerInput!) {
+    updatePomodoroTimer(id: $id, input: $input) {
+      pomodoro
+      short
+      long
+      currentPomo
+      currentShort
+      currentLong
     }
   }
 `
@@ -39,14 +53,18 @@ const FocusTime = ({ userId, onClose, task }) => {
   const [pomoTimers, setPomoTimers] = useState(0);
   const [taskName, setTaskName] = useState('');
   const [updateTask] = useMutation(UPDATE_TASK_MUTATION);
+  const [updatePomo] = useMutation(UPDATE_POMODORO_MUTATION);
   const [isTimerStarted, setIsTimerStarted] = useState(false);
+
+  const [timerInterval, setTimerInterval] = useState(null);
+
 
   useEffect(() => {
     if (data && data.user){
-      setTimerSeconds(data.user.pomodoroLength * 60);
-      setPomodoroTimer(data.user.pomodoroLength * 60);
-      setShortTimer(data.user.pomodoroShort * 60);
-      setLongTimer(data.user.pomodoroLong * 60);
+      // setTimerSeconds(data.user.pomodoroLength * 60);
+      // setPomodoroTimer(data.user.pomodoroLength * 60);
+      // setShortTimer(data.user.pomodoroShort * 60);
+      // setLongTimer(data.user.pomodoroLong * 60);
       console.log("POmos compo:", task.id);
       setPomosCompleted(task.pomodorosCompleted);
     }
@@ -54,13 +72,50 @@ const FocusTime = ({ userId, onClose, task }) => {
 
   useEffect(() => {
     if (task != undefined){
-      console.log('task 2',task.description)
       setNotes(task.description);
       setPomoTimers(task.pomodoroTimers);
       setTaskName(task.taskName);
-      console.log('task 2', task)
+      console.log('task2', task.pomodoro[0])
+      if(task.pomodoro[0]!= undefined){
+        setTimerSeconds(task.pomodoro[0].currentPomo * 60);
+        setPomodoroTimer(task.pomodoro[0].currentPomo * 60);
+        setShortTimer(task.pomodoro[0].currentShort * 60);
+        setLongTimer(task.pomodoro[0].currentLong * 60);
+      }
+      // setTimerSeconds(task.pomodoro[0] * 60);
+      // setPomodoroTimer(data.user.pomodoroLength * 60);
+      // setShortTimer(data.user.pomodoroShort * 60);
+      // setLongTimer(data.user.pomodoroLong * 60);
     }
+    
   }, [task]);
+
+  useEffect(() => {
+    if (isTimerRunning) {
+      // Start the timer and store the interval ID
+      const intervalId = setInterval(() => {
+        setTimerSeconds((prevSeconds) => {
+          if (prevSeconds > 0) {
+            return prevSeconds - 1;
+          } else {
+            // Clear the interval when timer reaches 0
+            clearInterval(intervalId);
+            return 0;
+          }
+        });
+      }, 1000);
+
+      // Store the interval ID
+      setTimerInterval(intervalId);
+    }
+
+    // Clean up the interval when the component is unmounted or when the focus timer is toggled off
+    return () => {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+    };
+  }, [isTimerRunning]);
 
   const containerStyle = {
     position: 'absolute',
@@ -171,9 +226,23 @@ const FocusTime = ({ userId, onClose, task }) => {
     }
   };
 
-  const handleStartStopClick = () => {
+  const handleStartStopClick = async () => {
     setIsTimerRunning(!isTimerRunning);
     setIsTimerStarted(true);
+    // updateTasks({ variables: { id: task.id, input: { ImportanceGroup: task.ImportanceGroup, taskOrder: task.taskOrder } } })
+    // console.log('updatign pomo', timerSeconds/60, pomodoroTimer)
+    let currentPomo = selectedOption === 'pomodoro'? timerSeconds/60.0 :  pomodoroTimer/60
+    let currentShort = selectedOption === 'shortBreak'? timerSeconds/60 :  shortTimer/60
+    let currentLong = selectedOption === 'longBreak'? timerSeconds/60 :  longTimer/60
+
+    const input = {
+      currentPomo,
+      currentShort,
+      currentLong
+    }
+    console.log('input fo promo', input, selectedOption)
+    const newPomo = await updatePomo({ variables: { id: task.pomodoro[0].id, input: input } })
+    console.log('newPomo', newPomo)
   };
 
   const taskNameTextStyle = {

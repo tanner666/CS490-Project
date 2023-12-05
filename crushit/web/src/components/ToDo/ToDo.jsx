@@ -39,6 +39,12 @@ const GetUserTasksOnDate = gql`
       }
       pomodoro{
         id
+        pomodoro
+        short
+        long
+        currentPomo
+        currentShort
+        currentLong
       }
     }
   }
@@ -63,6 +69,12 @@ const CREATE_TASK_MUTATION = gql`
       }
       pomodoro{
         id
+        pomodoro
+        short
+        long
+        currentPomo
+        currentShort
+        currentLong
       }
     }
   }
@@ -80,6 +92,12 @@ const UPDATE_TASK_MUTATION = gql`
       taskOrder
       pomodoro{
         id
+        pomodoro
+        short
+        long
+        currentPomo
+        currentShort
+        currentLong
       }
     }
   }
@@ -143,6 +161,7 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
     console.log("ToDo useEffect: ");
     if (data && data.userTasksOnDate) {
       const sortedTasks = sortTasks(data.userTasksOnDate);
+      console.log("sortedTasks: ", sortedTasks);
       setTasks(sortedTasks);
       // console.log(tasks)
     }

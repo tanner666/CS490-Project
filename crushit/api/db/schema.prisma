@@ -85,9 +85,9 @@ model PomodoroTimer {
   pomodoro Int  // Time in minutes for regular pomodoros
   short    Int  // Time in minutes for short breaks
   long     Int  // Time in minutes for long breaks
-  currentPomo Int   
-  currentShort Int
-  currentLong  Int
+  currentPomo Float   
+  currentShort Float
+  currentLong  Float
   userId   String
   taskId   Int
   user     User @relation("UserTimer", fields: [userId], references: [firebaseUid], onDelete: Cascade)
