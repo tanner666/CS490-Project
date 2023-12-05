@@ -14,7 +14,7 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #3B82F6; /* Blue thumb color */
+  background: #2563EB; /* Blue thumb color */
   border-radius: 9999px; /* Rounded edges on the thumb */
 }
 

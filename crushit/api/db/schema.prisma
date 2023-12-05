@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://admin:adminPass@localhost:5432/crushit"
+  url      = "postgresql://admin:adminPass@localhost:5433/crushit"
 }
 
 generator client {
@@ -31,6 +31,7 @@ model User {
   pomodoros          PomodoroTimer[] @relation("UserTimer")
   tasks              Task[]          @relation("UserTasks")
   appointments       Appointment[]   @relation("UserAppointments")
+  refreshToken       String          @default("")
 }
 
 // To be done next sprint: uncompleted items need to rolled over to the next day and have their group level dropped by one
@@ -41,20 +42,21 @@ enum ImportanceGroup {
 }
 
 model Task {
-  id                Int              @id @default(autoincrement())
-  taskName          String
-  ImportanceGroup   ImportanceGroup? // TopPriority, Important, or Other
-  completionStatus  Boolean          @default(false)
-  taskStatus        String           @default("Not Started")
-  description       String?
-  pomodoroTimers    Int              // Number of times it runs a given day. May be unneeded.
-  pomodoroTimerType String?
-  taskOrder         Int              // Must be filled in at the backend. Represents the order of tasks within their respective groupStatus. The value must be calculated based on the tasks within the same groupStatus.
-  createdBy         String
-  created_by        User             @relation("UserTasks", fields: [createdBy], references: [firebaseUid], onDelete: Cascade)
-  pomodoro          PomodoroTimer[]  @relation("TaskTimer")
-  taskDates         TaskDate[]       @relation("TaskDate")
-  appointments      Appointment[]    @relation("TaskAppointment")
+  id                 Int              @id @default(autoincrement())
+  taskName           String
+  ImportanceGroup    ImportanceGroup? // TopPriority, Important, or Other
+  completionStatus   Boolean          @default(false)
+  taskStatus         String           @default("Not Started")
+  description        String?
+  pomodoroTimers     Int              // Number of times it runs a given day. May be unneeded.
+  pomodorosCompleted Int?             @default(0)
+  pomodoroTimerType  String?
+  taskOrder          Int              // Must be filled in at the backend. Represents the order of tasks within their respective groupStatus. The value must be calculated based on the tasks within the same groupStatus.
+  createdBy          String
+  created_by         User             @relation("UserTasks", fields: [createdBy], references: [firebaseUid], onDelete: Cascade)
+  pomodoro           PomodoroTimer[]  @relation("TaskTimer")
+  taskDates          TaskDate[]       @relation("TaskDate")
+  appointments       Appointment[]    @relation("TaskAppointment")
 }
 
 model Appointment {

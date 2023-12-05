@@ -1,6 +1,7 @@
 //ToDoAndAppts
 
 import React from 'react';
+import {useQuery } from '@redwoodjs/web';
 import { useState } from 'react';
 import { useTheme } from '../ThemeContext/ThemeContext';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
@@ -10,14 +11,22 @@ import PlanDay from '../PlanDay/PlanDay';
 import ToDo from '../ToDo/ToDo';
 import Appointments from '../Appointments/Appointments';
 
-const ToDoAndAppts = ({userId, day, month, year}) => {
+const ToDoAndAppts = ({userId, day, month, year, start, end, code, toggleFocusTime, setFocusTask}) => {
   const { theme } = useTheme();
 
   const today = new Date();
   let [selectedDay, setSelectedDay] = React.useState(today.getDate());
   let [selectedMonth, setSelectedMonth] = React.useState(today.getMonth() + 1); // Using the month index
   let [selectedYear, setSelectedYear] = React.useState(today.getFullYear());
+  const formattedMonth = selectedMonth.toString().padStart(2,'0');
+  const formattedDay = selectedDay.toString().padStart(2, '0');
+  let selectedStart = `${selectedYear}-${formattedMonth}-${formattedDay}T00:00:00Z`;
+  let selectedEnd = `${selectedYear}-${formattedMonth}-${formattedDay}T23:59:59Z`;
 
+  const handleTimeChange = () => {
+    selectedStart = `${selectedYear}-${formattedMonth}-${formattedDay}T00:00:00Z`;
+    let selectedEnd = `${selectedYear}-${formattedMonth}-${formattedDay}T23:59:59Z`;
+  }
   const handleDayChange = (event) => {
     const newDay = parseInt(event.target.value, 10);
     const daysInNewMonth = daysInMonth(selectedYear, selectedMonth);
@@ -28,6 +37,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
     } else {
       setSelectedDay(newDay);
     }
+    handleTimeChange();
   };
 
   const handleMonthChange = (event) => {
@@ -40,6 +50,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
     if (selectedDay > daysInNewMonth) {
       setSelectedDay(daysInNewMonth);
     }
+    handleTimeChange();
   };
 
   const handleYearChange = (event) => {
@@ -53,6 +64,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
     if (selectedDay > Math.min(daysInCurrentMonth, daysInNewMonth)) {
       setSelectedDay(Math.min(daysInCurrentMonth, daysInNewMonth));
     }
+    handleTimeChange();
   };
 
   const handlePrevMonth = () => {
@@ -62,6 +74,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
     if (isPrevDayInPrevMonth) {
       handlePrevDay();
     }
+    handleTimeChange();
   };
 
   const handleNextMonth = () => {
@@ -71,6 +84,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
     if (isNextDayInNextMonth) {
       handleNextDay();
     }
+    handleTimeChange();
   };
 
   const handlePrevDay = () => {
@@ -88,6 +102,8 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
       } else {
         setSelectedDay(prevDay);
       }
+      handleTimeChange();
+
   };
 
   const handleNextDay = () => {
@@ -105,14 +121,20 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
     } else {
       setSelectedDay(nextDay);
     }
+    handleTimeChange();
+
   };
 
   const handlePrevYear = () => {
     setSelectedYear((prevYear) => prevYear - 1);
+    handleTimeChange();
+
   };
 
   const handleNextYear = () => {
     setSelectedYear((prevYear) => prevYear + 1);
+    handleTimeChange();
+
   };
 
   const daysInMonth = (year, month) => new Date(year, month, 0).getDate();
@@ -123,13 +145,17 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
     setFormVisibility(prevState => !prevState);
   };
 
+
   return (
     <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
       <PlanDay />
       <div className="w-full">
         {/* Home Bar Top page */}
-        <div className={`pt-1 pb-1 w-full mx-auto shadow-sm ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
+        <div className={`flex pt-1 pb-1 w-full mx-auto shadow-sm ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
           <h2 className={`text-2xl font-dm font-bold mt-2 mb-2 ml-[3%] ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Home</h2>
+          <p className="ml-[84%]">
+            <a href="/settings" className="text-blue-500 hover:underline">Settings</a>
+          </p>
         </div>
         {/* Date Nav Bar */}
         <div className="flex pt-2 justify-between items-center">
@@ -157,12 +183,12 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
                 <img src="https://drive.google.com/uc?export=view&id=1psd6NBXctlxs7lN-5CJpXSCylzaWHVg1"/>
               </button>
             </div>
-            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility}/>
+            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask}/>
           </div>
 
           {/* Appointments Section */}
           <div style={{ flex: 1, maxHeight: '70vh'}} className="custom-scrollbar"> {/* Adjusted to share space */}
-            <Appointments />
+            <Appointments start={selectedStart} end={selectedEnd} code={code} uid={userId}/>
           </div>
         </div>
       </div>

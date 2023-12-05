@@ -8,6 +8,7 @@ export const schema = gql`
     description: String
     pomodoroTimers: Int!
     pomodoroTimerType: String
+    pomodorosCompleted: Int!
     taskOrder: Int!
     createdBy: String!
     created_by: User!
@@ -49,6 +50,7 @@ export const schema = gql`
     description: String
     pomodoroTimers: Int
     pomodoroTimerType: String
+    pomodorosCompleted: Int
     taskOrder: Int
     createdBy: String
     taskDates: [TaskDateInput]

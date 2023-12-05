@@ -1,11 +1,66 @@
 import React, { useState, useEffect } from 'react';
+import { useMutation, useQuery } from '@redwoodjs/web';
 
-const FocusTime = ({ onClose }) => {
+
+const UPDATE_TASK_MUTATION = gql`
+  mutation updateTask($id: Int!, $input: UpdateTaskInput!) {
+    updateTask(id: $id, input: $input) {
+      pomodorosCompleted
+      description
+    }
+  }
+`
+
+const GET_USER = gql`
+  query user($firebaseUid: String!){
+    user(firebaseUid: $firebaseUid){
+      pomodoroLength
+      pomodoroShort
+      pomodoroLong
+      pomodorosCompleted
+    }
+  }
+`
+
+
+const FocusTime = ({ userId, onClose, task }) => {
+  const { data, loading, error } = useQuery(GET_USER, { variables: { firebaseUid: userId} });
   const [selectedOption, setSelectedOption] = useState('pomodoro');
-  const [timerSeconds, setTimerSeconds] = useState(25 * 60); // Initial timer duration for Pomodoro in seconds
+  const [timerSeconds, setTimerSeconds] = useState(25*60); // Initial timer duration for Pomodoro in seconds
+  const [pomodoroTimer, setPomodoroTimer] = useState(25 * 60)
+  const [shortTimer, setShortTimer] = useState(5 * 60); // Initial timer duration for Pomodoro in seconds
+  const [longTimer, setLongTimer] = useState(15 * 60); // Initial timer duration for Pomodoro in seconds
+
+  console.log("TimerSeconds:", timerSeconds);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [isEditingNotes, setIsEditingNotes] = useState(false);
-  const [notes, setNotes] = useState('Task Notes');
+  const [notes, setNotes] = useState('');
+  const [pomosCompleted, setPomosCompleted] = useState(0);
+  const [pomoTimers, setPomoTimers] = useState(0);
+  const [taskName, setTaskName] = useState('');
+  const [updateTask] = useMutation(UPDATE_TASK_MUTATION);
+  const [isTimerStarted, setIsTimerStarted] = useState(false);
+
+  useEffect(() => {
+    if (data && data.user){
+      setTimerSeconds(data.user.pomodoroLength * 60);
+      setPomodoroTimer(data.user.pomodoroLength * 60);
+      setShortTimer(data.user.pomodoroShort * 60);
+      setLongTimer(data.user.pomodoroLong * 60);
+      console.log("POmos compo:", task.id);
+      setPomosCompleted(task.pomodorosCompleted);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (task != undefined){
+      console.log('task 2',task.description)
+      setNotes(task.description);
+      setPomoTimers(task.pomodoroTimers);
+      setTaskName(task.taskName);
+      console.log('task 2', task)
+    }
+  }, [task]);
 
   const containerStyle = {
     position: 'absolute',
@@ -97,18 +152,20 @@ const FocusTime = ({ onClose }) => {
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
+    console.log("Time: ", getInitialTimerDuration(option))
     setTimerSeconds(getInitialTimerDuration(option));
     setIsTimerRunning(false);
+    setIsTimerStarted(false);
   };
 
   const getInitialTimerDuration = (option) => {
     switch (option) {
       case 'pomodoro':
-        return 25 * 60;
+        return pomodoroTimer;
       case 'shortBreak':
-        return 5 * 60;
+        return shortTimer;
       case 'longBreak':
-        return 15 * 60;
+        return longTimer;
       default:
         return 25 * 60;
     }
@@ -116,6 +173,7 @@ const FocusTime = ({ onClose }) => {
 
   const handleStartStopClick = () => {
     setIsTimerRunning(!isTimerRunning);
+    setIsTimerStarted(true);
   };
 
   const taskNameTextStyle = {
@@ -139,6 +197,8 @@ const FocusTime = ({ onClose }) => {
     backgroundColor: 'rgba(245, 247, 249, 1)',
     borderRadius: '8px',
     padding: '10px',
+    wordWrap: 'break-word',  // This ensures that words break to go to the next line
+    overflowWrap: 'break-word',  // This is a standard CSS property to handle long words
   };
 
   const notesTextStyle = {
@@ -182,6 +242,8 @@ const FocusTime = ({ onClose }) => {
 
   const handleCheckboxClick = () => {
     setIsEditingNotes(false);
+    console.log("Notes: ", notes);
+    updateTask({ variables: { id: task.id, input: {description: notes } } })
   };
 
   const [checkboxImage, setCheckboxImage] = useState(
@@ -253,12 +315,31 @@ const FocusTime = ({ onClose }) => {
       timer = setInterval(() => {
         setTimerSeconds((prevSeconds) => prevSeconds - 1);
       }, 1000);
+    }else if(isTimerRunning && timerSeconds == 0){
+      setIsTimerRunning(false);
+      setIsTimerStarted(false);
+      if (selectedOption == "pomodoro"){
+        setPomosCompleted(pomosCompleted+1);
+        console.log("Pomos completed: ", pomosCompleted);
+        updateTask({variables: {id: task.id, input: {pomodorosCompleted: task.pomodorosCompleted+1}}});
+
+        handleOptionClick("shortBreak");
+      }
+      //setIsTimerRunning(true);
     }
 
     return () => {
       clearInterval(timer);
     };
   }, [isTimerRunning, timerSeconds]);
+
+  // if (!task) {
+  //   return (
+  //     <div style={containerStyle}>
+  //       <div>Loading...</div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div style={containerStyle}>
@@ -293,12 +374,12 @@ const FocusTime = ({ onClose }) => {
       <div style={{ textAlign: 'center' }}>
         <div style={optionBoxStyle}>
           <div style={timerStyle}>{formatTime(timerSeconds)}</div>
-          <button style={startStopButtonStyle} onClick={handleStartStopClick}>
+          <button data-testid="stopStart" id="stopStart" style={startStopButtonStyle} onClick={handleStartStopClick}>
             {isTimerRunning ? 'Stop' : 'Start'}
           </button>
         </div>
       </div>
-      <div style={taskNameTextStyle}>Task Name</div>
+      <div style={taskNameTextStyle}>{taskName}</div>
       <div style={notesBoxStyle}>
         <div style={notesTextStyle}>Notes</div>
         {isEditingNotes ? (
@@ -307,10 +388,11 @@ const FocusTime = ({ onClose }) => {
               contentEditable={true}
               style={editableTextStyle}
               onBlur={(e) => {
+
                 setNotes(e.target.innerText);
-                setIsEditingNotes(false);
+
               }}
-            >
+              >
               {notes}
             </div>
             <div
@@ -332,9 +414,9 @@ const FocusTime = ({ onClose }) => {
       </div>
      <div style={timersBoxStyle}>
         <div style={timerIndicatorStyle}>Pomos:</div>
-        <div style={numberStyle}> 0/3 </div>
+        <div style={numberStyle}> {pomosCompleted}/{pomoTimers} </div>
         <div style={finishAtStyle}>Finish At: </div>
-        <div style={numberStyle}> {finishTime} </div>
+        <div style={numberStyle}> {isTimerStarted && finishTime} </div>
       </div>
     </div>
 

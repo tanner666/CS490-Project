@@ -28,6 +28,7 @@ const GetUserTasksOnDate = gql`
       description
       pomodoroTimers
       pomodoroTimerType
+      pomodorosCompleted
       taskOrder
       createdBy
       taskDates {
@@ -85,7 +86,7 @@ const UPDATE_TASK_MUTATION = gql`
 `
 
 //ToDo is the parent task component, responsible for organizing and managing task groups and task cards
-const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility }) => {
+const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, toggleFocusTime, setFocusTask}) => {
   //console.log("UserId in ToDo: ", userId);
   const { data, loading, error, refetch } = useQuery(GetUserTasksOnDate, { variables: { userId, day, month, year } });
   const [updateTasks] = useMutation(UPDATE_TASK_MUTATION);
@@ -103,12 +104,6 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility }
   const [createTaskMutation] = useMutation(CREATE_TASK_MUTATION);
   const [updateTaskMutation] = useMutation(UPDATE_TASK_MUTATION);
 
-  useEffect(() => {
-    if (data && data.userTasksOnDate) {
-      const sortedTasks = sortTasks(data.userTasksOnDate);
-      setTasks(sortedTasks);
-    }
-  }, [data]);
   //function to sort tasks into priority groups
   const sortTasks = (tasks) => {
     const sortedTasks = {
@@ -149,12 +144,11 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility }
     if (data && data.userTasksOnDate) {
       const sortedTasks = sortTasks(data.userTasksOnDate);
       setTasks(sortedTasks);
-      console.log(tasks)
+      // console.log(tasks)
     }
   }, [data]);
 
   useEffect(() => {
-    console.log(tasks)
     Object.keys(tasks).forEach((group) => {
       tasks[group].forEach((task) => {
 
@@ -170,6 +164,9 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility }
 
       })
     })
+    setFocusTask(getDefaultTaskForFocusTimer(tasks))
+    console.log('updated task', getDefaultTaskForFocusTimer(tasks))
+
   }, [tasks]);
 
   const saveTimerCount = async (task, pomodoroCount) => {
@@ -206,7 +203,6 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility }
   const handleStatusChange = (taskId, completed) => {
     // Find which group the task belongs to and update the task's completed status
   };
-
 
 
   const handleOnDragEnd = (result) => {
@@ -252,6 +248,46 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility }
     setTasks(updatedTasks);
   }
 
+  const getDefaultTaskForFocusTimer = (tasks) => {
+    let defaultTask = null;
+
+    const priorityGroups = ['TopPriority', 'Important', 'Other'];
+
+    for (let i = 0; i < priorityGroups.length; i++) {
+      const group = tasks[priorityGroups[i]];
+      // console.log('finding tasks', group)
+      if (group.length > 0) {
+        for (let j = 0; j < group.length; j++) {
+          const task = group[j];
+          // Check if the task is incomplete
+          if (task.completionStatus !== 'COMPLETED') {
+            // If defaultTask is null or the task's group has a higher priority, update the defaultTask
+            if (!defaultTask || priorityGroups.indexOf(task.ImportanceGroup) < priorityGroups.indexOf(defaultTask.ImportanceGroup)) {
+              defaultTask = task;
+            }
+          }
+        }
+      }
+    }
+    return defaultTask;
+  };
+
+  const updateTaskInList = (updatedTask, taskGroup) => {
+    // Logic to update the task list with the updated task
+    // For example:
+    console.log('updateTaskList',tasks[taskGroup])
+    const updatedTasks = tasks[taskGroup].map((task) =>
+      task.id === updatedTask.id ? updatedTask : task
+    );
+    let temp = tasks
+    temp[taskGroup] = updatedTasks
+    console.log('updateTaskList', temp, tasks)
+    // console.log(''updatedTasks)
+    // setTasks(updatedTasks);
+  };
+
+
+
   return (
     <div className={`todo-container ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
       {formVisibility && (
@@ -261,9 +297,9 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility }
       )}
         <div className={`p-6 my-2 w-full max-w-[98%] rounded-lg shadow-sm ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100`} style={{ height: "72vh" }}>
         <DragDropContext onDragEnd={handleOnDragEnd}>
-          <TaskGroup groupTitle="Top Priority" tasks={tasks["TopPriority"]} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} />
-          <TaskGroup groupTitle="Important" tasks={tasks.Important} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} />
-          <TaskGroup groupTitle="Other" tasks={tasks.Other} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} />
+          <TaskGroup groupTitle="Top Priority" tasks={tasks["TopPriority"]} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList}/>
+          <TaskGroup groupTitle="Important" tasks={tasks.Important} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList}/>
+          <TaskGroup groupTitle="Other" tasks={tasks.Other} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList}/>
         </DragDropContext>
       </div>
     </div>
