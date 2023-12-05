@@ -74,7 +74,7 @@ export const updateTask = async ({ id, input }) => {
         ...input
       }
     })
-  
+
     return updatedTask
   }
 
@@ -85,6 +85,13 @@ export const deleteTask = ({ id }) => {
     where: { id },
   })
 }
+
+export const updateTaskDescription = async ({ id, newDescription }) => {
+  return db.task.update({
+    where: { id },
+    data: { description: newDescription },
+  });
+};
 
 //returns an array of tasks for a user on a specific date
 export const userTasksOnDate = async ({ userId, day, month, year }) => {

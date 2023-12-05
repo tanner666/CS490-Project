@@ -53,13 +53,14 @@ export const schema = gql`
     pomodorosCompleted: Int
     taskOrder: Int
     createdBy: String
+    taskDates: [TaskDateInput]
     pomodoro: [PomodoroTimerInput]
   }
 
   input TaskDateInput {
-    day: Int!
-    month: Int!
-    year: Int!
+    day: Int
+    month: Int
+    year: Int
   }
 
   input PomodoroTimerInput {

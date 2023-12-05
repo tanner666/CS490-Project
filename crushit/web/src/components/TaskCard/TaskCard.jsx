@@ -118,6 +118,27 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updat
     }
   }, [task.id]);
 
+  const DELETE_TASK_MUTATION = gql`
+  mutation deleteTask($taskId: Int!) {
+    deleteTask(id: $taskId) {
+      id
+    }
+  }
+  `;
+  const [deleteTask] = useMutation(DELETE_TASK_MUTATION);
+
+  const handleDelete = async () => {
+    try {
+      const response = await deleteTask({
+        variables: { taskId: task.id },
+      });
+
+      onDelete(task.id);
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
+  };
+
   const handleStatusChange = async () => {
     try {
       // Increment the status index in a circular manner
@@ -246,6 +267,13 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updat
               </div>
 
             )}
+          </div>
+          {/* Context menu for delete */}
+           <div className="flex items-center justify-end mx-1 mt-4">
+            {/* Delete button */}
+            <button onClick={handleDelete} className="focus:outline-none le ml-auto">
+              <img src="https://drive.google.com/uc?id=1ZA0CrEEbzgnx_TSsvLgy9wktqVkdYFf_" width={imageSize.width + 4}  height={imageSize.height + 4} alt="Delete Image" />
+            </button>
           </div>
         </>
       )}
