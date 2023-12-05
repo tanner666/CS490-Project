@@ -22,7 +22,7 @@ const Appointments = () => {
 
   const tasks = {
     // examples        
-    '7 AM': 'Focus Time • Assign Leader for Task 1',
+    //'7 AM': 'Focus Time • Assign Leader for Task 1',
     //'8 AM': 'Meeting with Counselor',
     //'9 AM': 'Focus Time • Assign Leader for Task 1',
     //...tasks object
