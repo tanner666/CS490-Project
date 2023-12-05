@@ -1,14 +1,59 @@
 import React, { useState, useEffect } from 'react';
+import { useMutation, useQuery } from '@redwoodjs/web';
 
-const FocusTime = ({ onClose, task }) => {
+
+const UPDATE_TASK_MUTATION = gql`
+  mutation updateTask($id: Int!, $input: UpdateTaskInput!) {
+    updateTask(id: $id, input: $input) {
+      taskName
+      ImportanceGroup
+      completionStatus
+      description
+      pomodoroTimers
+      pomodoroTimerType
+      taskOrder
+      pomodoro{
+        id
+      }
+    }
+  }
+`
+
+const GET_USER = gql`
+  query user($firebaseUid: String!){
+    user(firebaseUid: $firebaseUid){
+      pomodoroLength
+      pomodoroShort
+      pomodoroLong
+    }
+  }
+`
+
+
+const FocusTime = ({ userId, onClose, task }) => {
+  const { data, loading, error } = useQuery(GET_USER, { variables: { firebaseUid: userId} });
   const [selectedOption, setSelectedOption] = useState('pomodoro');
-  const [timerSeconds, setTimerSeconds] = useState(25 * 60); // Initial timer duration for Pomodoro in seconds
+  const [timerSeconds, setTimerSeconds] = useState(25*60); // Initial timer duration for Pomodoro in seconds
+  const [pomodoroTimer, setPomodoroTimer] = useState(25 * 60)
+  const [shortTimer, setShortTimer] = useState(5 * 60); // Initial timer duration for Pomodoro in seconds
+  const [longTimer, setLongTimer] = useState(15 * 60); // Initial timer duration for Pomodoro in seconds
+
+  console.log("TimerSeconds:", timerSeconds);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [isEditingNotes, setIsEditingNotes] = useState(false);
   const [notes, setNotes] = useState('');
   const [pomosCompleted, setPomosCompleted] = useState(0);
   const [pomoTimers, setPomoTimers] = useState(0);
   const [taskName, setTaskName] = useState('');
+  const [updateTasks] = useMutation(UPDATE_TASK_MUTATION);
+
+  useEffect(() => {
+    if (data && data.user){
+      setPomodoroTimer(data.user.pomodoroLength * 60);
+      setShortTimer(data.user.pomodoroShort * 60);
+      setLongTimer(data.user.pomodoroLong * 60);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (task != undefined){
@@ -110,6 +155,7 @@ const FocusTime = ({ onClose, task }) => {
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
+    console.log("Time: ", getInitialTimerDuration(option))
     setTimerSeconds(getInitialTimerDuration(option));
     setIsTimerRunning(false);
   };
@@ -117,11 +163,11 @@ const FocusTime = ({ onClose, task }) => {
   const getInitialTimerDuration = (option) => {
     switch (option) {
       case 'pomodoro':
-        return 25 * 60;
+        return pomodoroTimer;
       case 'shortBreak':
-        return 5 * 60;
+        return shortTimer;
       case 'longBreak':
-        return 15 * 60;
+        return longTimer;
       default:
         return 25 * 60;
     }
