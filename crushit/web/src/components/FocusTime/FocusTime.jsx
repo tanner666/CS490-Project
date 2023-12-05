@@ -312,12 +312,15 @@ const FocusTime = ({ userId, onClose, task }) => {
         setTimerSeconds((prevSeconds) => prevSeconds - 1);
       }, 1000);
     }else if(isTimerRunning && timerSeconds == 0){
-      setPomosCompleted(pomosCompleted+1);
-      console.log("Pomos completed: ", pomosCompleted);
-      updateUser({variables: {firebaseUid: userId, input: {pomodorosCompleted: data.user.pomodorosCompleted+1}}});
       setIsTimerRunning(false);
       setIsTimerStarted(false);
-      handleOptionClick("shortBreak");
+      if (selectedOption == "pomodoro"){
+        setPomosCompleted(pomosCompleted+1);
+        console.log("Pomos completed: ", pomosCompleted);
+        updateUser({variables: {firebaseUid: userId, input: {pomodorosCompleted: data.user.pomodorosCompleted+1}}});
+
+        handleOptionClick("shortBreak");
+      }
       //setIsTimerRunning(true);
     }
 
