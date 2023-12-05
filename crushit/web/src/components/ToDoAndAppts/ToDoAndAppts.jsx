@@ -162,7 +162,7 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, code}) => {
 
           {/* Appointments Section */}
           <div style={{ flex: 1, maxHeight: '70vh'}} className="custom-scrollbar"> {/* Adjusted to share space */}
-            <Appointments start={start} end={end} code={code}/>
+            <Appointments start={start} end={end} code={code} uid={userId}/>
           </div>
         </div>
       </div>

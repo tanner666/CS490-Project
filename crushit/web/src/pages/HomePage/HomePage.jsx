@@ -29,10 +29,10 @@ const HomePage = () => {
   const formattedDay = day.toString().padStart(2, '0');
 
   //once other issue is fixed, use these values below
-  const start = `${year}-${formattedMonth}-${formattedDay}T12:00:00Z`;
-  const end = `${year}-${formattedMonth}-${formattedDay}T12:00:00Z`;
-  //const start = '2023-05-01T12:00:00Z'
-  //const end = '2023-06-01T12:00:00Z'
+  //const start = `${year}-${formattedMonth}-${formattedDay}T12:00:00Z`;
+  //const end = `${year}-${formattedMonth}-${formattedDay}T12:00:00Z`;
+  const start = '2023-12-04T12:00:00Z'
+  const end = '2023-12-05T12:00:00Z'
 
   useEffect(() => {
     getUserUid()

@@ -106,7 +106,7 @@ export const getEvents = async ({ start, end, code, uid }) => {
   })
 
   let dist = tokens.expiry_date - Date.now() // distance in milliseconds from the expiry date
-  let timerOne = setInterval(async () => {
+  /*let timerOne = setInterval(async () => {
     const res = await calendar.events.list({
       calendarId: 'primary',
       timeMin: '2023-05-01T12:00:00Z',
@@ -116,7 +116,7 @@ export const getEvents = async ({ start, end, code, uid }) => {
       orderBy: 'startTime',
     })
   }, dist - 10000) // 10 seconds before expiry, make an API call to refresh the access token - it will automatically update within the oauth client
-
+  */
   console.log({ tokens })
   const res = await calendar.events.list({
     calendarId: 'primary',

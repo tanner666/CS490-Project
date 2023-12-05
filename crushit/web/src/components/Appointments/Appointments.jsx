@@ -1,6 +1,34 @@
 import React, { useState } from 'react';
+import AppointmentCell from 'src/components/AppointmentCell';
+import { gql, useQuery } from '@redwoodjs/web';
 
-const Appointments = () => {
+// Define the GraphQL query
+const GET_EVENTS_QUERY = gql`
+  query calendar_demo($start: String!, $end: String!, $code: String!, $uid: String!) {
+    getEvents(start: $start, end: $end, code: $code, uid: $uid) {
+      code
+      events {
+        summary
+        description
+        start
+        end
+      }
+    }
+  }
+`;
+
+const Appointments = ({start, end, code, uid}) => {
+
+   // Execute the query
+   //const { data, loading, error } = useQuery(GET_EVENTS_QUERY, {
+    //variables: { start, end, code, uid },
+  //});
+
+  //if (loading) return <div>Loading...</div>;
+  //if (error) return <div>Error: {error.message}</div>;
+
+  //const events = data?.getEvents?.events || [];
+
   // Example appointment times
   const times = [
     '8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM',
@@ -11,6 +39,7 @@ const Appointments = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
+
 
   const handleDescription = (time) => {
     setSelectedTime(time);
@@ -62,6 +91,21 @@ const Appointments = () => {
         ))}
       </div>
       {showPopup && <TaskDescriptionPopup />}
+      {/*
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-gray-200">
+            {events.map((item, index) => (
+              <tr key={index}>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.summary}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.start}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.end}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    */}
     </div>
   );
 };
