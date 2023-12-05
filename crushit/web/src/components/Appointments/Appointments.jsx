@@ -41,11 +41,15 @@ const Appointments = ({start, end, code, uid}) => {
 
   const [showPopup, setShowPopup] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [selectedEventSummary, setSelectedEventSummary] = useState(null);
 
 
-  const handleDescription = (time) => {
+  const handleDescription = (time, eventSummary, end) => {
     setSelectedTime(time);
+    setEndTime(formatEventTime(end));
+    setSelectedEventSummary(eventSummary);
     setShowPopup(true);
   };
 
@@ -59,9 +63,10 @@ const Appointments = ({start, end, code, uid}) => {
   const TaskDescriptionPopup = () => (
     <div className="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-4 rounded-lg">
-        <h3 className="font-bold text-lg mb-4">Task Details for {selectedTime}</h3>
+        <h3 className="font-bold text-lg mb-2">{selectedEventSummary}</h3>
         {/* Display the selected task detail */}
-        <p>{selectedTask}</p>
+        <p>Time: {selectedTime} - {endTime}</p>
+        <p>Description: {selectedTask}</p>
         <button
           className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
           onClick={() => setShowPopup(false)}
@@ -97,7 +102,7 @@ const Appointments = ({start, end, code, uid}) => {
             {eventMap[time] && eventMap[time].map((event, eventIndex) => (
               <div key={eventIndex} className="absolute top-6 right-0 w-[86%] h-[101%] border-2 border-bar-grey">
                 <button
-                  onClick={() => { setSelectedTask(event.description); handleDescription(time); }}
+                  onClick={() => { setSelectedTask(event.description); handleDescription(time, event.summary, event.end); }}
                   className="text-task-black font-semibold text-sm px-2 py-1 focus:outline-none focus:ring focus:border-blue-300 my-1"
                 >
                   {event.summary}
@@ -107,7 +112,7 @@ const Appointments = ({start, end, code, uid}) => {
           </div>
         ))}
       </div>
-      {showPopup && <TaskDescriptionPopup />}
+      {showPopup && <TaskDescriptionPopup/>}
     </div>
   );
 
