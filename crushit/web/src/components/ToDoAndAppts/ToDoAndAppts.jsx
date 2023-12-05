@@ -10,7 +10,7 @@ import PlanDay from '../PlanDay/PlanDay';
 import ToDo from '../ToDo/ToDo';
 import Appointments from '../Appointments/Appointments';
 
-const ToDoAndAppts = ({userId, day, month, year}) => {
+const ToDoAndAppts = ({userId, day, month, year, toggleFocusTime, setFocusTask}) => {
   const { theme } = useTheme();
 
   const today = new Date();
@@ -123,6 +123,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
     setFormVisibility(prevState => !prevState);
   };
 
+
   return (
     <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
       <PlanDay />
@@ -157,7 +158,7 @@ const ToDoAndAppts = ({userId, day, month, year}) => {
                 <img src="https://drive.google.com/uc?export=view&id=1psd6NBXctlxs7lN-5CJpXSCylzaWHVg1"/>
               </button>
             </div>
-            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility}/>
+            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask}/>
           </div>
 
           {/* Appointments Section */}

@@ -9,9 +9,9 @@ import { getUserUid, useAuth } from 'src/auth';
 
 const HomePage = () => {
   const [uid, setUID] = useState('');
-  const [showFocusTime, setShowFocusTime] = useState(true);
-
-  //change these to retrieve the current values in the navigation bar
+  const [showFocusTime, setShowFocusTime] = useState(true); // State to control visibility
+  const [FocusTask, setFocusTask] = useState(null);
+  //change these to retreive the current values in the navigation bar
   const currentDate = new Date();
   const day = currentDate.getDate();
   const month = currentDate.getMonth() + 1; // Month is 0-indexed
@@ -26,10 +26,21 @@ const HomePage = () => {
         console.error('Error:', error);
       });
   }, []);
+  useEffect(() => {
+    console.log('current focus,', FocusTask)
+  },[FocusTask]);
 
   const handleClose = () => {
     setShowFocusTime(false); // This function will close the FocusTime component
   };
+
+
+  const toggleFocusTime = (task) => {
+    setFocusTask(task);
+    setShowFocusTime(prevState => !prevState); // Toggle the state of showFocusTime
+  };
+
+  //passes the current date when initially loading page
 
   const overlayStyles = {
     position: 'fixed',
@@ -44,17 +55,18 @@ const HomePage = () => {
     justifyContent: 'center',
   };
 
+
   return (
     <>
       <MetaTags title="Home" description="Home page" />
       <div>
         {uid ? (
           <>
-            <ToDoAndAppts userId={uid} day={day} month={month} year={year} />
+            <ToDoAndAppts userId={uid} day={day} month={month} year={year} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} />
             {showFocusTime && (
             <>
                <div style={overlayStyles}>
-                 <FocusTime onClose={handleClose} />
+                 <FocusTime onClose={handleClose} task={FocusTask} />
                </div>
             </>
           )}

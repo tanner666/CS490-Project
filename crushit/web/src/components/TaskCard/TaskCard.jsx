@@ -5,7 +5,7 @@ import { Draggable } from "react-beautiful-dnd"
 
 import { useMutation } from '@redwoodjs/web';
 
-const TaskCard = ({ task, onStatusChange, saveTimerCount }) => {
+const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updateTaskInList, group}) => {
   const [statusIndex, setStatusIndex] = useState(0);
   const [openedDropdownIndex, setOpenedDropdownIndex] = useState(null);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -19,24 +19,28 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount }) => {
 
   const handleIncrement = () => {
     setPomodoroCount(prevCount => prevCount + 1);
+    updateTaskInList(task, group);
+
   };
 
   const handleDecrement = () => {
     if (pomodoroCount > 0) {
       setPomodoroCount(prevCount => prevCount - 1);
+      updateTaskInList(task, group);
+
     }
   };
 
   const toggleButtons = () => {
     const newImageSrc =
-    imageSrc === 'https://i.imgur.com/ALJOHMN.png'
-      ? 'https://i.imgur.com/aLhz1Kz.png'
-      : 'https://i.imgur.com/ALJOHMN.png';
+      imageSrc === 'https://i.imgur.com/ALJOHMN.png'
+        ? 'https://i.imgur.com/aLhz1Kz.png'
+        : 'https://i.imgur.com/ALJOHMN.png';
     setImageSrc(newImageSrc);
-    
+
     setShowButtons(prevShowButtons => !prevShowButtons);
-    if(showButtons){
-        saveTimerCount(task, pomodoroCount);
+    if (showButtons) {
+      saveTimerCount(task, pomodoroCount);
     }
   };
 
@@ -80,6 +84,9 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount }) => {
       console.error('Error updating task status:', error);
     }
   };
+  const handleToggleFocusTime = () => {
+    toggleFocusTime(task); // Call the toggleFocusTime function from props
+  };
   return (
     <div className="p-2 my-3 mx-auto w-[94%] rounded-lg shadow-sm bg-white font-dm font-bold">
       <div className="task-card flex items-center mt-1">
@@ -103,8 +110,9 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount }) => {
             <img src="https://drive.google.com/uc?id=1EAgXSX1V2YIPJnUTfEx16jMO-TeC1_oo" alt="Rolled Over" />
           )}
         </button>
-        <p className="ml-2 text-md text-task-blue">{task.taskName}</p>
-        <div className="ml-auto flex items-center">
+        <div onClick={handleToggleFocusTime} className="task-text-container">
+          <p className="ml-2 text-md text-task-blue">{task.taskName}</p>
+        </div>        <div className="ml-auto flex items-center">
           {/* Move button */}
           <img
             src="https://drive.google.com/uc?id=1Xiz9LatICGYP1TZo-kICAtJ2GCIf70Al"
@@ -120,36 +128,36 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount }) => {
       </div>{isTaskInfoVisible && (
         <>
           <div className="border mt-2 mx-auto h-0.4 w-[98%] bg-bar-grey"></div>
-      <div className="flex items-center justify-between mx-1 mt-3">
-      <p className="text-xs text-task-black">Number of Pomodoro Timers (30 mins each) </p>
-      <div className="flex items-center">
-        {showButtons && (
-          <>
-            <button onClick={handleDecrement} className="focus:outline-none">
-              <img src="https://i.imgur.com/psv7bFF.png"  width={imageSize.width} height={imageSize.height} />
-            </button>
-            </>
-        )}
-            <p className="text-xs text-timer-orange mx-2">{pomodoroCount}</p>
-            {showButtons && (
-          <>
-          <button onClick={handleIncrement} className="focus:outline-none">
-              <img src="https://i.imgur.com/Zm4t7vG.png"  width={imageSize.width} height={imageSize.height} />
-            </button>
-          </>
-        )}
-        <button onClick={toggleButtons} className="focus:outline-none le" style={{ marginLeft: '32px' }}>
-          <img src={imageSrc} width={imageSize.width} height={imageSize.height} alt="Toggle Image" />
-        </button>
-      </div>
-    </div>
+          <div className="flex items-center justify-between mx-1 mt-3">
+            <p className="text-xs text-task-black">Number of Pomodoro Timers (30 mins each) </p>
+            <div className="flex items-center">
+              {showButtons && (
+                <>
+                  <button onClick={handleDecrement} className="focus:outline-none">
+                    <img src="https://i.imgur.com/psv7bFF.png" width={imageSize.width} height={imageSize.height} />
+                  </button>
+                </>
+              )}
+              <p className="text-xs text-timer-orange mx-2">{pomodoroCount}</p>
+              {showButtons && (
+                <>
+                  <button onClick={handleIncrement} className="focus:outline-none">
+                    <img src="https://i.imgur.com/Zm4t7vG.png" width={imageSize.width} height={imageSize.height} />
+                  </button>
+                </>
+              )}
+              <button onClick={toggleButtons} className="focus:outline-none le" style={{ marginLeft: '32px' }}>
+                <img src={imageSrc} width={imageSize.width} height={imageSize.height} alt="Toggle Image" />
+              </button>
+            </div>
+          </div>
           <p className="text-xs font-medium text-notes-grey mt-4 mx-1">Notes</p>
           <p className="whitespace-normal break-words text-sm text-task-black w-full mx-1 rounded-md mt-1 pt-1 pb-1">
             {task.description}
           </p>
         </>
       )}
-      </div>
+    </div>
   );
 };
 
