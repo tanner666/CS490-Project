@@ -30,17 +30,6 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount }) => {
     }
   };
 
-  const UPDATE_TASK_STATUS_MUTATION = gql`
-  mutation updateTaskStatus($taskId: Int!, $taskStatus: String!) {
-    updateTask(id: $taskId, input: { taskStatus: $taskStatus }) {
-      id
-      taskStatus
-    }
-  }
-  `;
-
-  const [updateTaskStatus] = useMutation(UPDATE_TASK_STATUS_MUTATION);
-
   const UPDATE_TASK_DESCRIPTION_MUTATION = gql`
   mutation updateTaskDescription($taskId: Int!, $newDescription: String!) {
     updateTask(id: $taskId, input: { description: $newDescription }) {
@@ -52,40 +41,37 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount }) => {
 
   const [updateTaskDescription] = useMutation(UPDATE_TASK_DESCRIPTION_MUTATION);
 
-  const UPDATE_TASK_ROLLOVER_MUTATION = gql`
-    mutation updateTaskRollover(
-      $taskId: Int!
-      $newDay: Int!
-      $newMonth: Int!
-      $newYear: Int!
-      $newImportanceGroup: ImportanceGroupEnum!
-      $newStatus: String!
-    ) {
-      updateTask(
-        id: $taskId
-        input: {
-          taskStatus: $newStatus
-          ImportanceGroup: $newImportanceGroup
-          taskDates: [{
-            day: $newDay
-            month: $newMonth
-            year: $newYear
-          }]
-        }
-      ) {
-        id
-        taskStatus
-        ImportanceGroup
-        taskDates {
-          day
-          month
-          year
-        }
-      }
+  const UPDATE_TASK_STATUS_MUTATION = gql`
+  mutation updateTaskStatus($taskId: Int!, $taskStatus: String!) {
+    updateTask(id: $taskId, input: { taskStatus: $taskStatus }) {
+      id
+      taskStatus
     }
+  }
   `;
 
-  const [updateTaskRollover] = useMutation(UPDATE_TASK_ROLLOVER_MUTATION);
+  const [updateTaskStatus] = useMutation(UPDATE_TASK_STATUS_MUTATION);
+
+  const DELETE_TASK_MUTATION = gql`
+  mutation deleteTask($taskId: Int!) {
+    deleteTask(id: $taskId) {
+      id
+    }
+  }
+  `;
+  const [deleteTask] = useMutation(DELETE_TASK_MUTATION);
+
+  const handleDelete = async () => {
+    try {
+      const response = await deleteTask({
+        variables: { taskId: task.id },
+      });
+
+      onDelete(task.id);
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
+  };
 
   const toggleDescriptionEditing = async () => {
     try {
@@ -103,8 +89,6 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount }) => {
       console.error('Error updating task description:', error);
     }
   };
-
-
 
   useEffect(() => {
     const storedStatusIndex = localStorage.getItem(`selectedStatusIndex_${task.id}`);
@@ -164,35 +148,6 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount }) => {
     }
   };
 
-  const rollOverTask = async () => {
-    try {
-      const currentDate = new Date();
-      const newDay = currentDate.getDate();
-      const newMonth = currentDate.getMonth() + 1;
-      const newYear = currentDate.getFullYear();
-      const newImportanceGroup = 'Important';
-      const newStatus = 'Not Started';
-
-      if (!task.completionStatus && task.taskDates.some(date => date.day < newDay)) {
-        await updateTaskRollover({
-          variables: {
-            taskId: task.id,
-            newDay,
-            newMonth,
-            newYear,
-            newImportanceGroup,
-            newStatus,
-          },
-        });
-      }
-    } catch (error) {
-      console.error('Error updating task rollover:', error);
-    }
-  };
-
-  useEffect(() => {
-    rollOverTask();
-  }, [task.id]);
 
   return (
     <div className="p-2 my-3 mx-auto w-[94%] rounded-lg shadow-sm bg-white font-dm font-bold">
@@ -277,6 +232,13 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount }) => {
                 {editedDescription}
               </p>
             )}
+          </div>
+          {/* Context menu for delete */}
+          <div className="flex items-center justify-end mx-1 mt-4">
+            {/* Delete button */}
+            <button onClick={handleDelete} className="focus:outline-none le ml-auto">
+              <img src="https://drive.google.com/uc?id=1ZA0CrEEbzgnx_TSsvLgy9wktqVkdYFf_" width={imageSize.width + 4}  height={imageSize.height + 4} alt="Delete Image" />
+            </button>
           </div>
         </>
       )}
