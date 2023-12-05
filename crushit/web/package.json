@@ -11,10 +11,10 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/auth-firebase-web": "6.3.2",
-    "@redwoodjs/forms": "6.3.2",
-    "@redwoodjs/router": "6.3.2",
-    "@redwoodjs/web": "6.3.2",
+    "@redwoodjs/auth-firebase-web": "6.4.2",
+    "@redwoodjs/forms": "6.4.2",
+    "@redwoodjs/router": "6.4.2",
+    "@redwoodjs/web": "6.4.2",
     "autoprefixer": "^10.4.16",
     "firebase": "^10",
     "postcss": "^8.4.31",
@@ -25,7 +25,7 @@
     "tailwindcss": "^3.3.5"
   },
   "devDependencies": {
-    "@redwoodjs/vite": "6.3.2",
+    "@redwoodjs/vite": "6.4.2",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6"
   }
