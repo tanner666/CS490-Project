@@ -4,7 +4,7 @@ import { useTheme } from '../ThemeContext/ThemeContext'
 import { Droppable, Draggable } from "react-beautiful-dnd"
 
 const TaskGroup = ({groupTitle, tasks, onStatusChange, saveTimerCount, toggleFocusTime, updateTaskInList}) => {
-  const { theme } = useTheme();
+  const theme= useTheme();
 
   return (
     <Droppable droppableId={groupTitle.replace(/\s+/g, '')}>
