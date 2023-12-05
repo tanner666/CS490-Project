@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AppointmentCell from 'src/components/AppointmentCell';
 import { gql, useQuery } from '@redwoodjs/web';
+import { parseISO, format } from 'date-fns';
 
 // Define the GraphQL query
 const GET_EVENTS_QUERY = gql`
@@ -24,8 +25,10 @@ const Appointments = ({start, end, code, uid}) => {
     variables: { start, end, code, uid },
   });
 
-  //if (loading){ return <div>Loading...</div>;};
-  //if (error) return <div>Error: {error.message}</div>;
+  const formatEventTime = (dateTimeString) => {
+    const date = parseISO(dateTimeString);
+    return format(date, 'h a'); // Formats to 'X AM/PM'
+  };
 
   const events = data?.getEvents?.events || [];
 
@@ -69,45 +72,45 @@ const Appointments = ({start, end, code, uid}) => {
     </div>
   );
 
+  const mapEventsToTimes = (events) => {
+    const eventMap = {};
+    events.forEach(event => {
+      const startTime = formatEventTime(event.start);
+      if (!eventMap[startTime]) {
+        eventMap[startTime] = [];
+      }
+      eventMap[startTime].push(event);
+    });
+    return eventMap;
+  };
+
+  const eventMap = mapEventsToTimes(events);
+
   return (
     <div>
       <h2 className="text-[30px] font-bold font-dm text-gray-900 mb-3">Appointments</h2>
       <div className="bg-white rounded-lg shadow p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100" style={{ height: "72vh" }}>
-        {times.map((time) => (
-          <div key={time} className="flex items-center justify-between px-4 py-2">
-            <span className="text-lg text-gray-700 font-semibold">{time}</span>
-            {tasks[time] ? (
-              <button
-                onClick={() => handleDescription(time)}
-                className="ml-4 bg-blue-100 text-blue-800 text-sm px-2 py-1 rounded-md shadow focus:outline-none focus:ring focus:border-blue-300"
-              >
-                {tasks[time]}
-              </button>
-            ) : (
-              // Render an empty space if there's no task for the time slot
-              <span className="ml-4 text-sm px-2 py-1"></span>
-            )}
+        {times.map((time, index) => (
+          // Container for the time and task description
+          <div key={index} className="relative px-4 py-2">
+            <span className="text-sm text-task-black font-semibold">{time}</span>
+            {eventMap[time] && eventMap[time].map((event, eventIndex) => (
+              <div key={eventIndex} className="absolute top-6 right-0 w-[86%] h-[101%] border-2 border-bar-grey">
+                <button
+                  onClick={() => { setSelectedTask(event.description); handleDescription(time); }}
+                  className="text-task-black font-semibold text-sm px-2 py-1 focus:outline-none focus:ring focus:border-blue-300 my-1"
+                >
+                  {event.summary}
+                </button>
+              </div>
+            ))}
           </div>
         ))}
       </div>
       {showPopup && <TaskDescriptionPopup />}
-
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <tbody className="bg-white divide-y divide-gray-200">
-            {events.map((item, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.summary}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.start}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.end}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-
     </div>
   );
+
+
 };
 export default Appointments;
