@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@redwoodjs/testing/web'
+import { render, screen, waitFor, fireEvent } from '@redwoodjs/testing/web'
 import userEvent from '@testing-library/user-event'
 
 import FocusTime from './FocusTime'
@@ -7,6 +7,21 @@ import FocusTime from './FocusTime'
 //    https://redwoodjs.com/docs/testing#testing-components
 
 
+const mockedTask = {
+  id: 1,
+  description: 'Mocked Task Description',
+  taskName: 'Mocked Task',
+  pomodoro: [
+    {
+      id: 1,
+      currentPomo: 25,
+      currentShort: 5,
+      currentLong: 15,
+    },
+  ],
+  pomodorosCompleted: 0,
+  pomodoroTimers: 4,
+};
 
 describe('FocusTime', () => {
   it('renders successfully', () => {
@@ -48,12 +63,7 @@ describe('FocusTime', () => {
   })
 
   it('starts and stops the timer when start/stop button is clicked', async () => {
-    
-    await waitFor( () => {
-      render(<FocusTime />)
-
-    });
-
+    render(<FocusTime />)
     const startStopButton = screen.getByRole('startStop');
     expect(startStopButton).toBeInTheDocument();
 
@@ -61,7 +71,6 @@ describe('FocusTime', () => {
       userEvent.click(startStopButton);
       expect(startStopButton).toHaveTextContent('Stop');
     });
-
   })
 
   it('updates the notes when edited and saved', async () => {
@@ -71,7 +80,6 @@ describe('FocusTime', () => {
   
     userEvent.click(editButton);
     userEvent.type(notesTextArea, '');
-  
     userEvent.click(editButton);
   
     await waitFor(() => {
@@ -80,3 +88,16 @@ describe('FocusTime', () => {
   });
   
 })
+
+describe('FocusTime component', () => {
+
+  it('renders FocusTime component with correct timer values for pomodoro', () => {
+    render(<FocusTime userId="mockUserId" onClose={() => {}} task={mockedTask} />);
+
+    const pomodoroOption = screen.getByText('Pomodoro');
+
+    userEvent.click(pomodoroOption);
+    const pomodoroTimerElement = screen.getByText('25:00');
+    expect(pomodoroTimerElement).toBeInTheDocument();
+  });
+});
