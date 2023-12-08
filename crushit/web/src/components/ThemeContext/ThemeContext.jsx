@@ -39,7 +39,7 @@ export const ThemeProvider = ({ children }) => {
     }
   }, [data]);*/
 
-  console.log("Theme in Context: ", theme);
+  //console.log("Theme in Context: ", theme);
   const toggleTheme = () => {
     setTheme((curr) => (curr === 'light' ? 'dark' : 'light'));
   };

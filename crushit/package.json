@@ -8,7 +8,8 @@
   },
   "devDependencies": {
     "@redwoodjs/auth-firebase-setup": "6.3.2",
-    "@redwoodjs/core": "6.3.2"
+    "@redwoodjs/core": "6.3.2",
+    "tailwind-scrollbar": "^3.0.5"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
@@ -23,6 +24,7 @@
   },
   "packageManager": "yarn@3.6.3",
   "dependencies": {
+    "googleapis": "^129.0.0",
     "tailwind": "^4.0.0"
   }
 }

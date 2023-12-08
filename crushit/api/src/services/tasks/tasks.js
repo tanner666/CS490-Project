@@ -41,11 +41,43 @@ export const createTask = async ({ input }) => {
   });
 };
 
-export const updateTask = ({ id, input }) => {
-  return db.task.update({
-    data: input,
-    where: { id },
-  })
+
+export const updateTask = async ({ id, input }) => {
+  const {pomodoro} = input
+  let createdPomodoros = []
+  console.log("Updating Tasks", input)
+  if(pomodoro && input.pomodoroTimers > 0){
+      createdPomodoros = await Promise.all(
+          pomodoro.map(async pomo => {
+            const createdTimer = await db.pomodoroTimer.create({
+                data:{
+                  ...pomo
+                }
+            })
+            return createdTimer
+          })
+      )
+      // input.pomodoro = {connect: createdPomodoros.map(pomo => ({id: pomo.id}))}
+      return await db.task.update({
+        where: {id},
+        data:{
+          ...input,
+          pomodoro:{
+            connect: createdPomodoros.map(pomo => ({id: pomo.id}))
+          }
+        }
+      })
+  }else{
+    const updatedTask = await db.task.update({
+      where: {id},
+      data:{
+        ...input
+      }
+    })
+
+    return updatedTask
+  }
+
 }
 
 export const deleteTask = ({ id }) => {
@@ -53,6 +85,13 @@ export const deleteTask = ({ id }) => {
     where: { id },
   })
 }
+
+export const updateTaskDescription = async ({ id, newDescription }) => {
+  return db.task.update({
+    where: { id },
+    data: { description: newDescription },
+  });
+};
 
 //returns an array of tasks for a user on a specific date
 export const userTasksOnDate = async ({ userId, day, month, year }) => {

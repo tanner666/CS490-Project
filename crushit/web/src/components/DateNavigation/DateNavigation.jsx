@@ -36,9 +36,9 @@ const DateNavigation = ({selectedDay, selectedMonth, selectedYear, handleDayChan
     cursor: 'pointer',
   };
 
+  
 
-
-  const daysInMonth = (year, month) => new Date(year, month, 0).getDate();
+  const daysInMonth = (selectedYear, selectedMonth) => new Date(selectedYear, selectedMonth, 0).getDate();
 
   const roundedBoxStyle = {
     backgroundColor: 'transparent',
@@ -103,7 +103,7 @@ const DateNavigation = ({selectedDay, selectedMonth, selectedYear, handleDayChan
         onChange={onChange}
         data-testid="dayDropdown" // Assign the data-testid here
       >
-        {Array.from({ length: 31 }, (_, i) => (
+        {Array.from({ length: daysInMonth(selectedYear, selectedMonth) }, (_, i) => (
           <option key={i + 1} value={i + 1}>
             {i + 1}
           </option>

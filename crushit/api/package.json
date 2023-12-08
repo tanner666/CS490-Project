@@ -3,9 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "@googleapis/calendar": "^9.4.0",
     "@redwoodjs/api": "6.3.2",
     "@redwoodjs/auth-firebase-api": "6.3.2",
     "@redwoodjs/graphql-server": "6.3.2",
+    "cross-undici-fetch": "^0.4.14",
     "firebase-admin": "11.10.1"
   },
   "prisma": {

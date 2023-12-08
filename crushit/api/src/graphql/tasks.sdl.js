@@ -8,10 +8,12 @@ export const schema = gql`
     description: String
     pomodoroTimers: Int!
     pomodoroTimerType: String
+    pomodorosCompleted: Int!
     taskOrder: Int!
     createdBy: String!
     created_by: User!
     taskDates: [TaskDate]!
+    pomodoro: [PomodoroTimer]
   }
 
   enum ImportanceGroupEnum {
@@ -37,6 +39,7 @@ export const schema = gql`
     taskOrder: Int!
     createdBy: String!
     taskDates: [TaskDateInput!]
+    pomodoro: [PomodoroTimerInput]
   }
 
   input UpdateTaskInput {
@@ -47,14 +50,25 @@ export const schema = gql`
     description: String
     pomodoroTimers: Int
     pomodoroTimerType: String
+    pomodorosCompleted: Int
     taskOrder: Int
     createdBy: String
+    taskDates: [TaskDateInput]
+    pomodoro: [PomodoroTimerInput]
   }
 
   input TaskDateInput {
-    day: Int!
-    month: Int!
-    year: Int!
+    day: Int
+    month: Int
+    year: Int
+  }
+
+  input PomodoroTimerInput {
+    pomodoro: Int!
+    short: Int!
+    long: Int!
+    userId: String!
+    taskId: Int!
   }
 
   type Mutation {

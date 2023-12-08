@@ -7,6 +7,7 @@ export const schema = gql`
     firstName: String
     lastName: String
     pomodoros: [PomodoroTimer]!
+    refreshToken: String!
   }
 
   type Query {
