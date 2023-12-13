@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {useTheme} from '../ThemeContext/ThemeContext'
-import { useMutation } from '@redwoodjs/web'
+import { useQuery, useMutation } from '@redwoodjs/web'
 
 
 const UPDATE_THEME_MUTATION = gql`
@@ -11,17 +11,41 @@ const UPDATE_THEME_MUTATION = gql`
   }
 `
 
+const GET_USER_QUERY = gql`
+  query user($firebaseUid: String!) {
+    user(firebaseUid: $firebaseUid) {
+      darkMode
+    }
+  }
+`;
+
 const ThemeToggle = ({userId}) => {
     const { toggleTheme, isDark } = useTheme(); // Assuming `useTheme` provides `isDark`
     const [isEnabled, setIsEnabled] = useState(isDark || false);
     const [updateTheme] = useMutation(UPDATE_THEME_MUTATION)
+    const { loading, error, data } = useQuery(GET_USER_QUERY, {
+      variables: { firebaseUid: userId },
+    });
 
-  
+    //retrieve user's theme choice
+    /*const { loading, error, data } = useQuery(GET_USER_THEME, {
+      variables: { firebaseUid: uid },
+    });*/
+
+    useEffect(() => {
+      if (data && data.user) {
+        if (data.user.darkMode){
+          setIsEnabled(true);
+        }
+      }
+    }, [data]);
+
+
     useEffect(() => {
       setIsEnabled(isDark);
     }, [isDark]);
-  
-    
+
+
     //creates task in database
     const handleToggle = async () => {
       setIsEnabled(!isEnabled);
@@ -35,13 +59,13 @@ const ThemeToggle = ({userId}) => {
                   darkMode: !isEnabled,
               },
           });
-        } 
+        }
         catch (error) {
           console.error('Error updating Theme:', error);
           alert('Failed to update theme.');
-      }      
+      }
     };
-  
+
     return (
       <div
         className={`${
@@ -61,7 +85,7 @@ const ThemeToggle = ({userId}) => {
           checked={isEnabled}
           onChange={handleToggle}
         />
-        
+
       </div>
     );
   };
