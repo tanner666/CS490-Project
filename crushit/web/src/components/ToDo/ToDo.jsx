@@ -4,7 +4,6 @@ import TaskGroup from '../TaskGroup/TaskGroup';
 import { useMutation, useQuery } from '@redwoodjs/web';
 import AddTaskForm from '../AddTaskForm/AddTaskForm';
 import { DragDropContext } from 'react-beautiful-dnd';
-import { useTheme } from '../ThemeContext/ThemeContext';
 import { object } from 'prop-types';
 
 //import GetUserTasksOnDate from 'src/graphql/tasks.gql'
@@ -86,11 +85,10 @@ const UPDATE_TASK_MUTATION = gql`
 `
 
 //ToDo is the parent task component, responsible for organizing and managing task groups and task cards
-const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, toggleFocusTime, setFocusTask}) => {
+const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, toggleFocusTime, setFocusTask, theme}) => {
   //console.log("UserId in ToDo: ", userId);
   const { data, loading, error, refetch } = useQuery(GetUserTasksOnDate, { variables: { userId, day, month, year } });
   const [updateTasks] = useMutation(UPDATE_TASK_MUTATION);
-  const { theme } = useTheme();
 
   const [isFormVisibile, setIsFormVisible] = useState(false);
 

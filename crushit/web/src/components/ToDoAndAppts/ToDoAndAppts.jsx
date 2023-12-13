@@ -3,7 +3,6 @@
 import React from 'react';
 import {useQuery } from '@redwoodjs/web';
 import { useState } from 'react';
-import { useTheme } from '../ThemeContext/ThemeContext';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { navigate } from '@redwoodjs/router';
 import DateNavigation from '../DateNavigation/DateNavigation';
@@ -11,8 +10,7 @@ import PlanDay from '../PlanDay/PlanDay';
 import ToDo from '../ToDo/ToDo';
 import Appointments from '../Appointments/Appointments';
 
-const ToDoAndAppts = ({userId, day, month, year, start, end, code, toggleFocusTime, setFocusTask}) => {
-  const { theme } = useTheme();
+const ToDoAndAppts = ({userId, day, month, year, start, end, code, toggleFocusTime, setFocusTask, theme}) => {
 
   const today = new Date();
   let [selectedDay, setSelectedDay] = React.useState(today.getDate());

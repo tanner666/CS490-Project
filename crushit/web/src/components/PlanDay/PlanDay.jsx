@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTheme } from '../ThemeContext/ThemeContext';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { navigate } from '@redwoodjs/router';
 import { Link } from '@redwoodjs/router';

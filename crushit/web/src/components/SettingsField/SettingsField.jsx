@@ -1,8 +1,6 @@
-import { useTheme } from '../ThemeContext/ThemeContext';
 import React from 'react';
 
-const SettingsField = ({ label, value, onChange, type = 'text', id, placeholder }) => {
-  const { theme } = useTheme();
+const SettingsField = ({ label, value, onChange, type = 'text', id, placeholder, theme}) => {
 
   return (
     <div className="relative">

@@ -1,51 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import {useTheme} from '../ThemeContext/ThemeContext'
-import { useMutation } from '@redwoodjs/web'
+import { useMutation } from '@redwoodjs/web';
+import { useQuery } from '@redwoodjs/web';
 
-
-const UPDATE_THEME_MUTATION = gql`
-  mutation updateTheme($firebaseUid: String!, $darkMode: Boolean!) {
-    updateTheme(firebaseUid: $firebaseUid, darkMode: $darkMode) {
-      darkMode
-    }
+const GET_USER_THEME_QUERY = gql`
+  query GetUserTheme($firebaseUid: String!) {
+    userTheme(firebaseUid: $firebaseUid)
   }
-`
+`;
 
-const ThemeToggle = ({userId}) => {
-    const { toggleTheme, isDark } = useTheme(); // Assuming `useTheme` provides `isDark`
-    const [isEnabled, setIsEnabled] = useState(isDark || false);
-    const [updateTheme] = useMutation(UPDATE_THEME_MUTATION)
+const ThemeToggle = ({theme, handleToggle, isDark}) => {
 
-  
-    useEffect(() => {
-      setIsEnabled(isDark);
-    }, [isDark]);
-  
-    
-    //creates task in database
-    const handleToggle = async () => {
-      setIsEnabled(!isEnabled);
-      toggleTheme();
-      try {
-          // Here you call your updateUser mutation and password, and podomoro timer
-          // Replace `updateUserAPI` with the actual function you would use to call your API
-          await updateTheme({
-              variables: {
-                  firebaseUid: userId,
-                  darkMode: !isEnabled,
-              },
-          });
-        } 
-        catch (error) {
-          console.error('Error updating Theme:', error);
-          alert('Failed to update theme.');
-      }      
+    console.log("isDark: ", isDark);
+
+    const handleToggleAndUpdate = () => {
+      handleToggle();
+    // Replace with your second function
     };
-  
+
+    //creates task in database
     return (
       <div
         className={`${
-          isEnabled ? 'bg-blue-500' : 'bg-gray-300'
+          isDark ? 'bg-blue-500' : 'bg-gray-300'
         } relative inline-block w-12 h-6 rounded-full transition duration-200 ease-in`}
       >
         <input
@@ -54,14 +30,14 @@ const ThemeToggle = ({userId}) => {
           id="toggle"
           className="absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
           style={{
-            right: isEnabled ? '0' : 'auto',
-            left: isEnabled ? 'auto' : '0',
-            border: isEnabled ? 'border-blue-500' : ''
+            right: isDark ? '0' : 'auto',
+            left: isDark ? 'auto' : '0',
+            border: isDark ? 'border-blue-500' : ''
           }}
-          checked={isEnabled}
-          onChange={handleToggle}
+          checked={isDark}
+          onChange={handleToggleAndUpdate}
         />
-        
+
       </div>
     );
   };

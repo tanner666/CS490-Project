@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useTheme } from '../ThemeContext/ThemeContext'
 import ThemeToggle from '../ThemeToggle/ThemeToggle'
 import PasswordField from '../PasswordField/PasswordField'
 import NameField from '../NameField/NameField'
@@ -40,7 +39,9 @@ const UPDATE_USER_MUTATION = gql`
   }
 `
 
-export const SettingsForm = ({ userId }) => {
+export const SettingsForm = ({ userId, theme, handleToggle}) => {
+    console.log("SEetgindst hewerfasfd: ", theme);
+    console.log("uid: " ,userId);
     // const [uid, setUID] = useState('')
     const { loading, error, data, refetch } = useQuery(GET_USER_QUERY, {
         variables: { firebaseUid: userId },
@@ -54,10 +55,8 @@ export const SettingsForm = ({ userId }) => {
     const [podomoro, setPodomoro] = useState('');
     const [shortBreak, setShortBreak] = useState('');
     const [longBreak, setLongBreak] = useState('');
-    const { theme } = useTheme();
 
     useEffect(() => {
-        // console.log(data)
         if (data && data.user) {
             // Check if data is available and user object exists
             const { name, pomodoroLength, pomodoroShort, pomodoroLong, darkMode } = data.user;
@@ -136,7 +135,7 @@ export const SettingsForm = ({ userId }) => {
                     try {
                         await changeUserPassword(data.user.email, currentPassword, newPassword).then(() => {
                             alert('Password changed successfully!');
-                            
+
                         })
                     } catch (error) {
                         alert('Failed to change password');
@@ -197,6 +196,8 @@ export const SettingsForm = ({ userId }) => {
 
         return typesCount >= 2
     }
+    let darkMode = theme === 'dark';
+    console.log("Settings Form darkMode: ", darkMode);
     return (
         <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
             <PlanDay/>
@@ -209,7 +210,7 @@ export const SettingsForm = ({ userId }) => {
                 <div className="forms ml-[3%] mr-[3%]">
                     <div className="flex justify-between items-center">
                         <h2 className={`text-xl font-dm font-semibold mt-6 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>User Info</h2>
-                        <ThemeToggle userId={userId}/>
+                        <ThemeToggle theme={theme} handleToggle={handleToggle} darkMode={darkMode} isDark={darkMode}/>
                     </div>
                     <div className={`pb-5 px-8 w-full mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
                         <div className="grid grid-cols-2 gap-8">

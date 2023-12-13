@@ -1,10 +1,54 @@
 import React, { useState, useEffect, useContext, createContext } from 'react';
-import { useQuery } from '@redwoodjs/web';
+import { useQuery, useMutation } from '@redwoodjs/web';
 import { getUserUid, useAuth } from 'src/auth';
 
 const ThemeContext = createContext();
 
+const UPDATE_THEME_MUTATION = gql`
+  mutation updateTheme($firebaseUid: String!, $darkMode: Boolean!) {
+    updateTheme(firebaseUid: $firebaseUid, darkMode: $darkMode) {
+      darkMode
+    }
+  }
+`
+
+const GET_USER_QUERY = gql`
+  query user($firebaseUid: String!) {
+    user(firebaseUid: $firebaseUid) {
+      id
+      firebaseUid
+      name
+      username
+      email
+      pomodoroLength
+      pomodoroShort
+      pomodoroLong
+      darkMode
+    }
+  }
+`;
+
 export const ThemeProvider = ({ children }) => {
+  const userId = "sozLOGRVyWMBI0R2xEODmxEk2J23";
+  const [theme, setTheme] = useState('light'); // default
+  const { loading, error, data, refetch } = useQuery(GET_USER_QUERY, {
+    variables: { firebaseUid: userId },
+  });
+
+
+  useEffect(() => {
+    // console.log(data)
+    if (data && data.user) {
+        // Check if data is available and user object exists
+        const {darkMode } = data.user;
+        console.log("DarkMode: ", darkMode);
+        if(darkMode)
+          setTheme('dark');
+        //   console.log(data.user, podomoroLength)
+        //   console.log("names",firstName, lastName, podomoro, shortBreak, longBreak);
+        // Update other state variables if needed
+    }
+  }, [data]);
   //retireve uid
   /*
   const [uid, setUID] = useState('');
@@ -26,8 +70,6 @@ export const ThemeProvider = ({ children }) => {
     variables: { firebaseUid: uid },
   });*/
 
-  const [theme, setTheme] = useState('light'); // default
-
   //set theme accordingly
   /*
   useEffect(() => {
@@ -42,6 +84,7 @@ export const ThemeProvider = ({ children }) => {
   //console.log("Theme in Context: ", theme);
   const toggleTheme = () => {
     setTheme((curr) => (curr === 'light' ? 'dark' : 'light'));
+
   };
 
   return (

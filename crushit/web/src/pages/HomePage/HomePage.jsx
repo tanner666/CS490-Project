@@ -1,5 +1,5 @@
 import { Link, routes } from '@redwoodjs/router';
-import { MetaTags } from '@redwoodjs/web';
+import { MetaTags, useQuery } from '@redwoodjs/web';
 import ToDoAndAppts from 'src/components/ToDoAndAppts/ToDoAndAppts';
 import FocusTime from 'src/components/FocusTime/FocusTime';
 import AuthorizeCell from 'src/components/AuthorizeCell/AuthorizeCell'
@@ -7,12 +7,19 @@ import ThemeToggle from 'src/components/ThemeToggle/ThemeToggle';
 import { useEffect, useState } from 'react';
 import { getUserUid, useAuth } from 'src/auth';
 
+const GET_USER_THEME_QUERY = gql`
+  query GetUserTheme($firebaseUid: String!) {
+    userTheme(firebaseUid: $firebaseUid)
+  }
+`;
+
 const HomePage = () => {
   const [uid, setUID] = useState('');
   const [showFocusTime, setShowFocusTime] = useState(false); // State to control visibility
   const [FocusTask, setFocusTask] = useState(null);
   const queryParams = new URLSearchParams(window.location.search)
   const code = queryParams.get('code')
+
   console.log("code: ", code);
 
   if (code === null) {
@@ -45,6 +52,15 @@ const HomePage = () => {
   useEffect(() => {
     console.log('current focus,', FocusTask)
   },[FocusTask]);
+
+  const { loading, error, data } = useQuery(GET_USER_THEME_QUERY, {
+    variables: { firebaseUid: uid },
+  });
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
+  const darkMode = data?.userTheme ? 'dark' : 'light';
 
   const handleClose = () => {
     setShowFocusTime(false); // This function will close the FocusTime component
@@ -99,7 +115,7 @@ const HomePage = () => {
       <div>
         {uid ? (
           <>
-            <ToDoAndAppts userId={uid} day={day} month={month} year={year} start={start} end={end} code={code} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} />
+            <ToDoAndAppts userId={uid} day={day} month={month} year={year} start={start} end={end} code={code} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} theme={darkMode}/>
             {showFocusTime && (
             <>
                <div style={overlayStyles}>

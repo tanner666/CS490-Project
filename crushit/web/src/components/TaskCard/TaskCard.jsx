@@ -1,5 +1,4 @@
 import TaskGroup from "../TaskGroup/TaskGroup"
-import { useTheme } from '../ThemeContext/ThemeContext'
 import React, { useState, useEffect } from 'react';
 import { Draggable } from "react-beautiful-dnd"
 

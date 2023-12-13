@@ -42,7 +42,7 @@ const ResetPasswordForm = () => {
 
   const handleResetPassword = async () => {
     try {
-      
+
       // Check if passwords match
       if (password !== confirmPassword) {
         setResetError('Passwords do not match');
@@ -50,7 +50,7 @@ const ResetPasswordForm = () => {
       }
       if (password.length < 12 || !containsTwoCharacterTypes(password)) {
         setResetError('Password does not meet requirements');
-        return; 
+        return;
       }
       // Call the resetPassword function passing the new password
       await resetUserPassword(password, oobCode);

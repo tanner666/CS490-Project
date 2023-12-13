@@ -1,13 +1,9 @@
 // DateNavigation.jsx
 
 import React from 'react';
-import { useTheme } from '../ThemeContext/ThemeContext';
-import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { navigate } from '@redwoodjs/router';
 
-const DateNavigation = ({selectedDay, selectedMonth, selectedYear, handleDayChange, handleMonthChange, handleYearChange, handlePrevMonth, handleNextMonth, handlePrevDay, handleNextDay, handlePrevYear, handleNextYear}) => {
-  const { theme } = useTheme();
-
+const DateNavigation = ({selectedDay, selectedMonth, selectedYear, handleDayChange, handleMonthChange, handleYearChange, handlePrevMonth, handleNextMonth, handlePrevDay, handleNextDay, handlePrevYear, handleNextYear, theme}) => {
   // Get today's date
   const today = new Date();
 
@@ -36,7 +32,7 @@ const DateNavigation = ({selectedDay, selectedMonth, selectedYear, handleDayChan
     cursor: 'pointer',
   };
 
-  
+
 
   const daysInMonth = (selectedYear, selectedMonth) => new Date(selectedYear, selectedMonth, 0).getDate();
 

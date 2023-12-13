@@ -17,7 +17,7 @@ export const user = async ({ firebaseUid }) => {
   }catch(e){
     throw new Error(`User with Firebase UID ${firebaseUid} does not exist: ${e}`)
   }
-  
+
 }
 
 /**
@@ -40,7 +40,7 @@ export const createUser = async ({ input }) => {
     console.log(email)
     const userDB = await db.user.create({
       data: {
-        email, firebaseUid, username: email, name: "", 
+        email, firebaseUid, username: email, name: "",
         // pomodoroLength: 25, pomodoroShort: 5, pomodoroLong: 10,
       },
     })
@@ -66,7 +66,6 @@ export const updateTheme = async ({ firebaseUid, darkMode }) => {
 }
 
 export const userTheme = async ({ firebaseUid }) => {
-  console.log("user stuff1: ", user);
   // Assuming you have a db object that allows you to interact with your database
   const user = await db.user.findUnique({
     where: { firebaseUid },
