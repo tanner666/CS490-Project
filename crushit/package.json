@@ -24,6 +24,7 @@
   },
   "packageManager": "yarn@3.6.3",
   "dependencies": {
+    "@redwoodjs/cli": "^6.5.0",
     "googleapis": "^129.0.0",
     "tailwind": "^4.0.0"
   }
