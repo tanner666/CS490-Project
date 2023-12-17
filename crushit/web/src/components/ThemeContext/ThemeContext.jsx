@@ -2,11 +2,19 @@ import React, { useState, useEffect, useContext, createContext } from 'react';
 import { useQuery } from '@redwoodjs/web';
 import { getUserUid, useAuth } from 'src/auth';
 
+const GET_USER_QUERY = gql`
+  query user($firebaseUid: String!) {
+    user(firebaseUid: $firebaseUid) {
+      darkMode
+    }
+  }
+`;
+
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
+
   //retireve uid
-  /*
   const [uid, setUID] = useState('');
   useEffect(() => {
     getUserUid()
@@ -19,7 +27,10 @@ export const ThemeProvider = ({ children }) => {
       });
 
   }, []);
-  */
+
+  const { loading, error, data } = useQuery(GET_USER_QUERY, {
+    variables: { firebaseUid: uid },
+  });
 
   //retrieve user's theme choice
   /*const { loading, error, data } = useQuery(GET_USER_THEME, {
@@ -27,6 +38,15 @@ export const ThemeProvider = ({ children }) => {
   });*/
 
   const [theme, setTheme] = useState('light'); // default
+  useEffect(() => {
+    console.log("ThemProvider useEffect");
+    if (data && data.user) {
+      console.log("ThemeProvider theme: ", data.user.darkMode);
+      if (data.user.darkMode){
+        setTheme('dark');
+      }
+    }
+  }, [data]);
 
   //set theme accordingly
   /*

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {useMutation} from '@redwoodjs/web';
+import { useTheme } from '../ThemeContext/ThemeContext';
+
 
 
 const CREATE_TASK_MUTATION = gql`
@@ -31,6 +33,7 @@ export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) =>
   const [description, setDescription] = useState('');
   const [ImportanceGroup, setImportanceGroup] = useState('Other'); // default value
   const [createTask] = useMutation(CREATE_TASK_MUTATION);
+  const {theme} = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,7 +71,7 @@ export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) =>
 
   return (
 <div>
-  <h2 className="text-2xl font-semibold mb-4 ">Add Task</h2>
+  <h2 className="text-2xl font-semibold mb-4 text-black">Add Task</h2>
   <form onSubmit={handleSubmit}>
     <input
       type="text"
@@ -76,10 +79,10 @@ export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) =>
       onChange={(e) => setTaskName(e.target.value)}
       placeholder="Task Name"
       required
-      className="w-full p-2 mb-4 border rounded"
+      className="w-full p-2 mb-4 border rounded text-black"
     />
     <textarea
-      className="w-full h-32 p-2 mb-4 border rounded"
+      className="w-full h-32 p-2 mb-4 border rounded text-black"
       value={description}
       onChange={(e) => setDescription(e.target.value)}
       placeholder="Description"
@@ -87,17 +90,17 @@ export const AddTaskForm = ({ userId, day, month, year, onSubmit, onCancel }) =>
     <select
       value={ImportanceGroup}
       onChange={(e) => setImportanceGroup(e.target.value)}
-      className="w-full p-2 mb-4 border rounded"
+      className="w-full p-2 mb-4 border rounded text-black"
     >
       <option value="TopPriority">Top Priority</option>
       <option value="Important">Important</option>
       <option value="Other">Other</option>
     </select>
     <div className="flex space-x-4">
-      <button className="bg-white p-2 rounded" type="submit">
+      <button className="bg-white p-2 rounded text-black" type="submit">
         Add Task
       </button>
-      <button className="bg-white p-2 rounded" type="button" onClick={onCancel}>
+      <button className="bg-white p-2 rounded text-black" type="button" onClick={onCancel}>
         Cancel
       </button>
     </div>

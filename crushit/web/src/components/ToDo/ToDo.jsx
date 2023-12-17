@@ -4,8 +4,8 @@ import TaskGroup from '../TaskGroup/TaskGroup';
 import { useMutation, useQuery } from '@redwoodjs/web';
 import AddTaskForm from '../AddTaskForm/AddTaskForm';
 import { DragDropContext } from 'react-beautiful-dnd';
-import { useTheme } from '../ThemeContext/ThemeContext';
 import { object } from 'prop-types';
+import { useTheme } from '../ThemeContext/ThemeContext';
 
 //import GetUserTasksOnDate from 'src/graphql/tasks.gql'
 //import {QUERY} from 'src/graphql/tasks';
@@ -87,10 +87,10 @@ const UPDATE_TASK_MUTATION = gql`
 
 //ToDo is the parent task component, responsible for organizing and managing task groups and task cards
 const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, toggleFocusTime, setFocusTask}) => {
+  const {theme} = useTheme();
   //console.log("UserId in ToDo: ", userId);
   const { data, loading, error, refetch } = useQuery(GetUserTasksOnDate, { variables: { userId, day, month, year } });
   const [updateTasks] = useMutation(UPDATE_TASK_MUTATION);
-  const { theme } = useTheme();
 
   const [isFormVisibile, setIsFormVisible] = useState(false);
 
@@ -295,7 +295,7 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
           <AddTaskForm userId={userId} day={day} month={month} year={year} onSubmit={handleFormSubmit} onCancel={toggleFormVisibility} />
         </div>
       )}
-        <div className={`p-6 my-2 w-full max-w-[98%] rounded-lg shadow-sm ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100`} style={{ height: "72vh" }}>
+        <div className={`p-6 my-2 w-full max-w-[98%] rounded-lg shadow-sm ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'} overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100`} style={{ height: "72vh" }}>
         <DragDropContext onDragEnd={handleOnDragEnd}>
           <TaskGroup groupTitle="Top Priority" tasks={tasks["TopPriority"]} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList}/>
           <TaskGroup groupTitle="Important" tasks={tasks.Important} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList}/>

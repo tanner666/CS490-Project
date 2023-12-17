@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { gql, useQuery } from '@redwoodjs/web';
 import { parseISO, format } from 'date-fns';
+import { useTheme } from '../ThemeContext/ThemeContext';
 
 // Define the GraphQL query
 const GET_EVENTS_QUERY = gql`
@@ -18,7 +19,7 @@ const GET_EVENTS_QUERY = gql`
 `;
 
 const Appointments = ({start, end, code, uid}) => {
-
+  const {theme} = useTheme();
    // Execute the query
    const { data, loading, error } = useQuery(GET_EVENTS_QUERY, {
     variables: { start, end, code, uid },
@@ -97,14 +98,14 @@ const Appointments = ({start, end, code, uid}) => {
 
   return (
     <div>
-      <h2 className="text-[30px] font-bold font-dm text-gray-900 mb-3">Appointments</h2>
-      <div className="bg-white rounded-lg shadow p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100" style={{ height: "72vh" }}>
+      <h2 className={`text-[30px] font-bold font-dm mb-3 ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>Appointments</h2>
+      <div className={` ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'} rounded-lg shadow p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100`} style={{ height: "72vh" }}>
         {times.map((time, index) => (
           // Container for the time and task description
           <div key={index} className="relative px-2 py-2">
-            <span className="text-sm text-task-black font-semibold">{time}</span>
+            <span className={`${theme === 'dark' ? 'text-white' : 'text-task-black'} text-sm font-semibold`}>{time}</span>
             {eventMap[time] && eventMap[time].map((event, eventIndex) => (
-              <div key={eventIndex} className="absolute top-6 right-2 w-[88%] h-[101%] border-2 border-bar-grey">
+              <div key={eventIndex} className="bg-white absolute top-6 right-2 w-[88%] h-[101%] border-2 border-bar-grey">
                 <button
                   onClick={() => { setSelectedTask(event.description); handleDescription(event.start, event.summary, event.end); }}
                   className="text-task-black font-semibold text-sm px-2 py-1 focus:outline-none focus:ring focus:border-blue-300 my-1"
