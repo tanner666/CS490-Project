@@ -1,14 +1,12 @@
 // DateNavigation.jsx
 
 import React from 'react';
-import { useTheme } from '../ThemeContext/ThemeContext';
-import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { navigate } from '@redwoodjs/router';
+import { useTheme } from '../ThemeContext/ThemeContext';
 
 const DateNavigation = ({selectedDay, selectedMonth, selectedYear, handleDayChange, handleMonthChange, handleYearChange, handlePrevMonth, handleNextMonth, handlePrevDay, handleNextDay, handlePrevYear, handleNextYear}) => {
-  const { theme } = useTheme();
-
   // Get today's date
+  const {theme} = useTheme();
   const today = new Date();
 
 
@@ -36,7 +34,7 @@ const DateNavigation = ({selectedDay, selectedMonth, selectedYear, handleDayChan
     cursor: 'pointer',
   };
 
-  
+
 
   const daysInMonth = (selectedYear, selectedMonth) => new Date(selectedYear, selectedMonth, 0).getDate();
 
@@ -67,13 +65,13 @@ const DateNavigation = ({selectedDay, selectedMonth, selectedYear, handleDayChan
     <div style={roundedBoxStyle}>
       <select
         className="ml-2"
-        style={{ background: 'transparent', border: 'none', outline: 'none' }}
+        style={{ background:'transparent', border: 'none', outline: 'none' }}
         value={selectedValue}
         onChange={onChange}
         data-testid="monthDropdown" // Assign the data-testid here
       >
         {Array.from({ length: 12 }, (_, i) => (
-          <option key={i + 1} value={i + 1}>
+          <option key={i + 1} value={i + 1} className="text-[#333333]">
             {[
               'January',
               'February',
@@ -104,7 +102,7 @@ const DateNavigation = ({selectedDay, selectedMonth, selectedYear, handleDayChan
         data-testid="dayDropdown" // Assign the data-testid here
       >
         {Array.from({ length: daysInMonth(selectedYear, selectedMonth) }, (_, i) => (
-          <option key={i + 1} value={i + 1}>
+          <option key={i + 1} value={i + 1} className="text-[#333333]">
             {i + 1}
           </option>
         ))}
@@ -115,14 +113,14 @@ const DateNavigation = ({selectedDay, selectedMonth, selectedYear, handleDayChan
   const YearDropdownBox = ({ selectedValue, onChange }) => (
     <div style={roundedBoxStyle}>
       <select
-        className="ml-2"
-        style={{ background: 'transparent', border: 'none', outline: 'none' }}
+        className="bg-transparent ml-2"
+        style={{ border: 'none', outline: 'none' }}
         value={selectedValue}
         onChange={onChange}
         data-testid="yearDropdown" // Assign the data-testid here
       >
         {Array.from({ length: 100 }, (_, i) => today.getFullYear() - 50 + i).map((year, index) => (
-          <option key={index + 1} value={year}>
+          <option key={index + 1} value={year} className="text-[#333333] ml-2">
             {year}
           </option>
         ))}

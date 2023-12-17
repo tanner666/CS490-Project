@@ -39,7 +39,7 @@ const HomePage = () => {
         setUID(uid);
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error('Errorm:', error);
       });
   }, []);
   useEffect(() => {

@@ -11,17 +11,17 @@ import './index.css'
 
 const App = () => (
   <RedwoodApolloProvider>
-    <ThemeProvider>
       <FatalErrorBoundary page={FatalErrorPage}>
         <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
           <AuthProvider>
             <RedwoodApolloProvider useAuth={useAuth}>
+            <ThemeProvider>
               <Routes />
+              </ThemeProvider>
             </RedwoodApolloProvider>
           </AuthProvider>
         </RedwoodProvider>
       </FatalErrorBoundary>
-    </ThemeProvider>
   </RedwoodApolloProvider>
 )
 
