@@ -48,7 +48,18 @@ export const getRefreshTokenByFirebaseUid = async (firebaseUid) => {
   }
 }
 
-export const getEvents = async ({ start, end, code, uid }) => {
+export const getAuthCode = async () =>{
+  const queryParams = new URLSearchParams(window.location.search);
+  const code = queryParams.get('code');
+  console.log("Code in services file: ", code);
+  return code;
+}
+
+export const getAccessToken = async () =>{
+
+}
+
+export const getEvents = async ({ start, end, uid }) => {
   const { google } = require('googleapis')
   const oauth2Client = new google.auth.OAuth2(
     process.env.CLIENT_ID,
@@ -72,6 +83,7 @@ export const getEvents = async ({ start, end, code, uid }) => {
   //}
   //if refresh token in db already:
   let tokens = ''
+  let access_tok = ''
   if (storedRefreshToken){
     oauth2Client.setCredentials({ refresh_token: storedRefreshToken });
     oauth2Client.refreshAccessToken()
@@ -79,6 +91,7 @@ export const getEvents = async ({ start, end, code, uid }) => {
           // The tokens are now updated in the OAuth2 client
           tokens = response.credentials;
           console.log("Access Token:", tokens.access_token);
+          access_tok = tokens.access_token;
           // If a new refresh token is provided, save it
           if (tokens.refresh_token) {
               console.log("New Refresh Token:", tokens.refresh_token);
@@ -93,9 +106,12 @@ export const getEvents = async ({ start, end, code, uid }) => {
   }
   //if no token in db yet:
   else{
+    const code = getAuthCode();
+    console.log("Code in Else: ", code);
     let { tokens } = await oauth2Client.getToken(code)
     oauth2Client.setCredentials(tokens)
     updateRefreshToken(uid, tokens.refresh_token)
+    access_tok = tokens.access_token;
   }
 
   const calendar = google.calendar({ version: 'v3', auth: oauth2Client })
@@ -148,5 +164,5 @@ export const getEvents = async ({ start, end, code, uid }) => {
     return event
   })
 
-  return { code, events }
+  return { access_tok, events }
 }

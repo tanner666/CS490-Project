@@ -4,6 +4,7 @@ import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { navigate } from '@redwoodjs/router';
 import { Link } from '@redwoodjs/router';
 import { useMutation } from '@redwoodjs/web';
+import { signOutUser } from 'src/auth';
 
 const ROLLOVER_TASKS_MUTATION = gql`
   mutation RolloverTasksMutation($createdBy: String!, $day: Int!, $month: Int!, $year: Int!) {
@@ -13,8 +14,20 @@ const ROLLOVER_TASKS_MUTATION = gql`
   }
 `;
 
+const googleLogout = () => {
+  const auth2 = window.gapi && window.gapi.auth2.getAuthInstance();
+  if (auth2 != null) {
+    auth2.signOut().then(
+      auth2.disconnect().then(() => console.log('Logged out from Google'))
+    );
+  }
+};
+
 const handleLogout = async () => {
   // Your logout logic here
+  googleLogout();
+  signOutUser();
+  localStorage.removeItem('isAuthenticated');
   navigate('/');
 };
 

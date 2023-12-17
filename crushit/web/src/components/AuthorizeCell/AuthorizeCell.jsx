@@ -18,7 +18,9 @@ export const Failure = ({ error }) => (
 export const Success = ({ getAuthorizationURL }) => {
   useEffect(() => {
     window.location.href = getAuthorizationURL.url
-  }, [getAuthorizationURL.url])
+  }, [getAuthorizationURL.url]);
+  localStorage.setItem('isAuthenticated', 'true');
+
 
   return <div></div>
 }
