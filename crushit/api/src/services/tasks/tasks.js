@@ -119,3 +119,20 @@ export const Task = {
     return db.task.findUnique({ where: { id: root?.id } }).taskDates()
   },
 }
+
+
+export const archiveTasksForDay = async ({ date }) => {
+  const archivedTasks = await db.task.updateMany({
+    where: {
+      scheduledDate: date,
+      NOT: {
+        status: 'ARCHIVED',
+      },
+    },
+    data: {
+      status: 'ARCHIVED',
+    },
+  });
+
+  return archivedTasks.count;
+};

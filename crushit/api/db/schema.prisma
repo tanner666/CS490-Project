@@ -57,6 +57,7 @@ model Task {
   pomodoro           PomodoroTimer[]  @relation("TaskTimer")
   taskDates          TaskDate[]       @relation("TaskDate")
   appointments       Appointment[]    @relation("TaskAppointment")
+  archived           Boolean          @default(false)
 }
 
 model Appointment {
