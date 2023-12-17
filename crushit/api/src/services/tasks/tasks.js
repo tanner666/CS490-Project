@@ -120,7 +120,7 @@ export const rolloverTasks = async ({ createdBy }) => {
     where: {
       createdBy: createdBy,
       completionStatus: false,
-      taskStatus: { not: 'Rolled Over' },
+      taskStatus: { not: ['Rolled Over', 'Complete'] },
       taskDates: {
         some: {
           OR: [
