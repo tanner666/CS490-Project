@@ -6,6 +6,7 @@ const GET_USER_QUERY = gql`
   query user($firebaseUid: String!) {
     user(firebaseUid: $firebaseUid) {
       darkMode
+      name
     }
   }
 `;
@@ -13,6 +14,7 @@ const GET_USER_QUERY = gql`
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
+  const [winterTheme, setWinterTheme] = useState(false);
 
   //retireve uid
   const [uid, setUID] = useState('');
@@ -42,8 +44,27 @@ export const ThemeProvider = ({ children }) => {
     console.log("ThemProvider useEffect");
     if (data && data.user) {
       console.log("ThemeProvider theme: ", data.user.darkMode);
+      let firstName = data.user.name.split('|')[0];
+      let lastName = data.user.name.split('|')[1];
+
+      //if * is last char for both first name and last name
+      console.log("First Name last char: ", firstName[firstName.length - 1]);
+      console.log("Last Name last char: ", lastName[lastName.length - 1]);
+
+      if (firstName[firstName.length - 1] === '*' && lastName[lastName.length - 1] === '*') {
+        console.log("Winter Theme");
+        setWinterTheme(true);
+      }
+
+      //darkMode is either normal or winter themed (easter egg)
       if (data.user.darkMode){
-        setTheme('dark');
+        console.log("Dark Mode winter theme???: ", winterTheme);
+        if (firstName[firstName.length - 1] === '*' && lastName[lastName.length - 1] === '*') {
+          console.log("Set Theme Winter???");
+          setTheme('winter');
+        }else{
+          setTheme('dark');
+        }
       }
     }
   }, [data]);
@@ -61,7 +82,17 @@ export const ThemeProvider = ({ children }) => {
 
   //console.log("Theme in Context: ", theme);
   const toggleTheme = () => {
-    setTheme((curr) => (curr === 'light' ? 'dark' : 'light'));
+    if(theme === 'light'){
+      if (winterTheme){
+        setTheme('winter');
+      }
+      else{
+        setTheme('dark');
+      }
+    }
+    else{
+      setTheme('light');
+    }
   };
 
   return (

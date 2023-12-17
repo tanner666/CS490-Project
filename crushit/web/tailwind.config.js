@@ -9,6 +9,7 @@ module.exports = {
         'dark-gray': '#3E3F42',
         'almost-black': '#1F1F1F',
         'date-nav-bar': '#293654',
+        'transparent-blue': 'rgba(98, 132, 255, 0.15)',
 
       },
       fontFamily: {
@@ -21,6 +22,9 @@ module.exports = {
         'task-black': '#1F1F1F',
         'timer-orange': '#FE754D',
         'notes-grey': '#545454',
+      },
+      backgroundImage: {
+        'winter': "[url('/snow_background.jpeg')]",
       }
     },
     scrollbar: (theme) => ({
