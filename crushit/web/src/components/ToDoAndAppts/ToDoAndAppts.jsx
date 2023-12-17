@@ -148,7 +148,7 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, code, toggleFocusTi
 
   return (
     <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
-      <PlanDay />
+      <PlanDay userId={userId} />
       <div className="w-full">
         {/* Home Bar Top page */}
         <div className={`flex pt-1 pb-1 w-full mx-auto shadow-sm ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>

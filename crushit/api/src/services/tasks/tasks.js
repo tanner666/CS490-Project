@@ -106,9 +106,89 @@ export const userTasksOnDate = async ({ userId, day, month, year }) => {
     },
     },
     include: {
-      taskDates: true, // to include the TaskDate data in the response
+      taskDates: true,
     },
   });
+};
+
+export const rolloverTasks = async ({ createdBy }) => {
+  const currentDate = new Date();
+  const currentDay = currentDate.getDate();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentYear = currentDate.getFullYear();
+  const lastTaskDate = await db.taskDate.findFirst({
+    where: {
+      task: {
+        createdBy: createdBy,
+        completionStatus: false
+      }
+    },
+    orderBy: [
+      { year: 'desc' },
+      { month: 'desc' },
+      { day: 'desc' }
+    ],
+    take: 1
+  });
+
+  if (!lastTaskDate || (lastTaskDate.day === currentDay && lastTaskDate.month === currentMonth && lastTaskDate.year === currentYear)) {
+    return [];
+  }
+  const lastDayTasks = await db.task.findMany({
+    where: {
+      createdBy: createdBy,
+      taskDates: {
+        some: {
+          day: lastTaskDate.day,
+          month: lastTaskDate.month,
+          year: lastTaskDate.year
+        }
+      },
+      completionStatus: false
+    },
+    include: {
+      taskDates: true
+    }
+  });
+  await Promise.all(
+    lastDayTasks.map(task =>
+      db.task.update({
+        where: { id: task.id },
+        data: { taskStatus: 'Rolled Over' }
+      })
+    )
+  );
+  const topPriorityCount = lastDayTasks.filter(task => task.ImportanceGroup === 'TopPriority').length;
+  const newTasks = await Promise.all(
+    lastDayTasks.map((task, index) => {
+      let newImportanceGroup = task.ImportanceGroup;
+      if (topPriorityCount >= 3 && task.ImportanceGroup === 'TopPriority') {
+        newImportanceGroup = 'Important';
+      }
+
+      return db.task.create({
+        data: {
+          taskName: task.taskName,
+          ImportanceGroup: newImportanceGroup,
+          completionStatus: false,
+          taskStatus: 'Not Started',
+          description: task.description,
+          pomodoroTimers: task.pomodoroTimers,
+          pomodoroTimerType: task.pomodoroTimerType,
+          taskOrder: index,
+          createdBy: task.createdBy,
+          taskDates: {
+            create: [{
+              day: currentDate.getDate(),
+              month: currentDate.getMonth() + 1,
+              year: currentDate.getFullYear()
+            }]
+          },
+        },
+      });
+    })
+  );
+  return newTasks;
 };
 
 export const Task = {
@@ -119,3 +199,4 @@ export const Task = {
     return db.task.findUnique({ where: { id: root?.id } }).taskDates()
   },
 }
+

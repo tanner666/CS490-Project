@@ -75,5 +75,6 @@ export const schema = gql`
     createTask(input: CreateTaskInput!): Task! @requireAuth
     updateTask(id: Int!, input: UpdateTaskInput!): Task! @requireAuth
     deleteTask(id: Int!): Task! @requireAuth
+    rolloverTasks(createdBy: String!, day: Int!, month: Int!, year: Int!): [Task!]! @requireAuth
   }
 `
