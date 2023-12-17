@@ -40,7 +40,7 @@ const DateNavigation = ({selectedDay, selectedMonth, selectedYear, handleDayChan
 
   const roundedBoxStyle = {
     backgroundColor: 'transparent',
-    color: theme === 'dark' ? '#FFFFFF' : '#333333',
+    color: (theme === 'dark' || theme === 'winter')? '#FFFFFF' : '#333333',
     padding: '8px',
     margin: '0 5px',
     borderRadius: '10px',

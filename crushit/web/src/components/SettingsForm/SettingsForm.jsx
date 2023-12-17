@@ -136,7 +136,7 @@ export const SettingsForm = ({ userId }) => {
                     try {
                         await changeUserPassword(data.user.email, currentPassword, newPassword).then(() => {
                             alert('Password changed successfully!');
-                            
+
                         })
                     } catch (error) {
                         alert('Failed to change password');
@@ -198,17 +198,17 @@ export const SettingsForm = ({ userId }) => {
         return typesCount >= 2
     }
     return (
-        <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
+        <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : (theme === 'winter' ? "bg-[url('/snow_background.jpeg')] bg-cover text-white" :'bg-light-gray text-gray-900')}`}>
             <PlanDay/>
             {/*Rest of page */}
             <div className="w-full">
                 {/*Profile Header */}
-                <div className={`pt-1 pb-1 w-full mx-auto shadow-sm ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
-                    <h2 className={`text-2xl font-dm font-bold mt-2 mb-2 ml-[3%] ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Profile</h2>
+                <div className={`pt-1 pb-1 w-full mx-auto shadow-sm ${(theme === 'dark' || theme === 'winter')? 'bg-gray-700' : 'bg-white'}`}>
+                    <h2 className={`text-2xl font-dm font-bold mt-2 mb-2 ml-[3%] ${(theme === 'dark' || theme === 'winter') ? 'text-white' : 'text-gray-900'}`}>Profile</h2>
                 </div>
                 <div className="forms ml-[3%] mr-[3%]">
                     <div className="flex justify-between items-center">
-                        <h2 className={`text-xl font-dm font-semibold mt-6 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>User Info</h2>
+                        <h2 className={`text-xl font-dm font-semibold mt-6 mb-2 ${(theme === 'dark' || theme === 'winter') ? 'text-white' : 'text-gray-900'}`}>User Info</h2>
                         <ThemeToggle userId={userId}/>
                     </div>
                     <div className={`pb-5 px-8 w-full mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
@@ -222,7 +222,7 @@ export const SettingsForm = ({ userId }) => {
                             />
                         </div>
                     </div>
-                    <h2 className={`text-xl font-dm font-semibold mt-6 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Change Password</h2>
+                    <h2 className={`text-xl font-dm font-semibold mt-6 mb-2 ${(theme === 'dark' || theme === 'winter' )? 'text-white' : 'text-gray-900'}`}>Change Password</h2>
                     <div className={`pb-5 px-8 w-full mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
                         <div className="grid grid-cols-3 gap-8">
                             <PasswordField
@@ -237,7 +237,7 @@ export const SettingsForm = ({ userId }) => {
                             />
                         </div>
                     </div>
-                    <h2 className={`text-xl font-dm font-semibold mt-6 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Podomoro Timer (Minutes)</h2>
+                    <h2 className={`text-xl font-dm font-semibold mt-6 mb-2 ${(theme === 'dark' || theme === 'winter') ? 'text-white' : 'text-gray-900'}`}>Podomoro Timer (Minutes)</h2>
                     <div className={`pb-5 px-8 w-full mx-auto rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
                         <div className="grid grid-cols-3 gap-8">
                             <TimerField

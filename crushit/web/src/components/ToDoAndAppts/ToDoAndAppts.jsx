@@ -147,12 +147,12 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, code, toggleFocusTi
 
 
   return (
-    <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
+    <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : (theme === 'winter' ? "bg-[url('/snow_background.jpeg')] bg-cover text-white": 'bg-light-gray text-gray-900')}`}>
       <PlanDay userId={userId} />
       <div className="w-full">
         {/* Home Bar Top page */}
-        <div className={`flex pt-1 pb-1 w-full mx-auto shadow-sm ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
-          <h2 className={`text-2xl font-dm font-bold mt-2 mb-2 ml-[3%] ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Home</h2>
+        <div className={`flex pt-1 pb-1 w-full mx-auto shadow-sm ${(theme === 'dark' || theme === 'winter')? 'bg-gray-700' : 'bg-white'}`}>
+          <h2 className={`text-2xl font-dm font-bold mt-2 mb-2 ml-[3%] ${(theme === 'dark' || theme === 'winter')? 'text-white' : 'text-gray-900'}`}>Home</h2>
           <p className="ml-[84%]">
             <a href="/settings" className="text-blue-500 hover:underline">Settings</a>
           </p>
@@ -179,7 +179,7 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, code, toggleFocusTi
           {/* Tasks Section */}
           <div style={{ flex: 1, maxHeight: '79vh'}} className="custom-scrollbar"> {/* Adjusted to share space */}
             <div className="flex items-center justify-start">
-              <h2 className={`text-[30px] font-dm font-bold mt-1 ${theme === 'dark' ? 'bg-gray-800 text-white' : 'text-gray-900'}`}>Tasks</h2>
+              <h2 className={`text-[30px] font-dm font-bold mt-1 ${theme === 'dark' ? 'bg-gray-800 text-white' : (theme === 'winter' ? 'bg-transparent text-white': 'text-gray-900')}`}>Tasks</h2>
               <button className="pl-4" onClick={toggleFormVisibility}>
                 <img src="https://drive.google.com/uc?export=view&id=1psd6NBXctlxs7lN-5CJpXSCylzaWHVg1"/>
               </button>

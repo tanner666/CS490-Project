@@ -289,13 +289,13 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
 
 
   return (
-    <div className={`todo-container ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
+    <div className={`todo-container ${theme === 'dark' ? 'bg-gray-800 text-white' : (theme === 'winter' ? 'bg-transparent text-white': 'bg-light-gray text-gray-900')}`}>
       {formVisibility && (
         <div className="w-1/3 h-1/3 top-20 mx-auto my-auto left-20 fixed inset-0 bg-blue-500 shadow-lg rounded-xl bg-opacity-50 z-50 flex justify-center items-center">
           <AddTaskForm userId={userId} day={day} month={month} year={year} onSubmit={handleFormSubmit} onCancel={toggleFormVisibility} />
         </div>
       )}
-        <div className={`p-6 my-2 w-full max-w-[98%] rounded-lg shadow-sm ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'} overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100`} style={{ height: "72vh" }}>
+        <div className={`p-6 my-2 w-full max-w-[98%] rounded-lg shadow-sm ${theme === 'dark' ? 'bg-gray-700' : (theme === 'winter' ? 'bg-transparent-blue': 'bg-white')} overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100`} style={{ height: "72vh" }}>
         <DragDropContext onDragEnd={handleOnDragEnd}>
           <TaskGroup groupTitle="Top Priority" tasks={tasks["TopPriority"]} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList}/>
           <TaskGroup groupTitle="Important" tasks={tasks.Important} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList}/>

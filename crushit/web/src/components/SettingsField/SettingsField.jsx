@@ -12,7 +12,7 @@ const SettingsField = ({ label, value, onChange, type = 'text', id, placeholder 
       <input
         id={id}
         type={type}
-        className={`border-2 p-2 rounded-lg w-full focus:border-blue-500 ${theme === 'dark' ? 'text-black' : 'text-almost-black'}`}
+        className={`border-2 p-2 rounded-lg w-full focus:border-blue-500 ${(theme === 'dark' || theme === 'winter') ? 'text-black' : 'text-almost-black'}`}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
