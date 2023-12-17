@@ -48,10 +48,10 @@ model Task {
   completionStatus   Boolean          @default(false)
   taskStatus         String           @default("Not Started")
   description        String?
-  pomodoroTimers     Int              // Number of times it runs a given day. May be unneeded.
+  pomodoroTimers     Int // Number of times it runs a given day. May be unneeded.
   pomodorosCompleted Int?             @default(0)
   pomodoroTimerType  String?
-  taskOrder          Int              // Must be filled in at the backend. Represents the order of tasks within their respective groupStatus. The value must be calculated based on the tasks within the same groupStatus.
+  taskOrder          Int // Must be filled in at the backend. Represents the order of tasks within their respective groupStatus. The value must be calculated based on the tasks within the same groupStatus.
   createdBy          String
   created_by         User             @relation("UserTasks", fields: [createdBy], references: [firebaseUid], onDelete: Cascade)
   pomodoro           PomodoroTimer[]  @relation("TaskTimer")
@@ -60,15 +60,15 @@ model Task {
 }
 
 model Appointment {
-  id           Int        @id @default(autoincrement())
-  name         String?
-  startTime    DateTime
-  endTime      DateTime
-  category     String
-  userId       String
-  user         User       @relation("UserAppointments", fields: [userId], references: [firebaseUid], onDelete: Cascade)
-  taskID       Int
-  task         Task       @relation("TaskAppointment", fields: [taskID], references: [id], onDelete: Cascade)
+  id        Int      @id @default(autoincrement())
+  name      String?
+  startTime DateTime
+  endTime   DateTime
+  category  String
+  userId    String
+  user      User     @relation("UserAppointments", fields: [userId], references: [firebaseUid], onDelete: Cascade)
+  taskID    Int
+  task      Task     @relation("TaskAppointment", fields: [taskID], references: [id], onDelete: Cascade)
 }
 
 model TaskDate {
@@ -81,12 +81,12 @@ model TaskDate {
 }
 
 model PomodoroTimer {
-  id       Int  @id @default(autoincrement())
-  pomodoro Int  // Time in minutes for regular pomodoros
-  short    Int  // Time in minutes for short breaks
-  long     Int  // Time in minutes for long breaks
+  id       Int    @id @default(autoincrement())
+  pomodoro Int // Time in minutes for regular pomodoros
+  short    Int // Time in minutes for short breaks
+  long     Int // Time in minutes for long breaks
   userId   String
   taskId   Int
-  user     User @relation("UserTimer", fields: [userId], references: [firebaseUid], onDelete: Cascade)
-  task    Task  @relation("TaskTimer", fields: [taskId], references: [id], onDelete: Cascade)
+  user     User   @relation("UserTimer", fields: [userId], references: [firebaseUid], onDelete: Cascade)
+  task     Task   @relation("TaskTimer", fields: [taskId], references: [id], onDelete: Cascade)
 }
