@@ -116,56 +116,40 @@ export const rolloverTasks = async ({ createdBy }) => {
   const currentDay = currentDate.getDate();
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
-  const lastTaskDate = await db.taskDate.findFirst({
-    where: {
-      task: {
-        createdBy: createdBy,
-        completionStatus: false
-      }
-    },
-    orderBy: [
-      { year: 'desc' },
-      { month: 'desc' },
-      { day: 'desc' }
-    ],
-    take: 1
-  });
-
-  if (!lastTaskDate || (lastTaskDate.day === currentDay && lastTaskDate.month === currentMonth && lastTaskDate.year === currentYear)) {
-    return [];
-  }
-  const lastDayTasks = await db.task.findMany({
+  const tasksToRollover = await db.task.findMany({
     where: {
       createdBy: createdBy,
+      completionStatus: false,
+      taskStatus: { not: 'Rolled Over' },
       taskDates: {
         some: {
-          day: lastTaskDate.day,
-          month: lastTaskDate.month,
-          year: lastTaskDate.year
+          OR: [
+            { year: { lt: currentYear } },
+            { AND: [{ year: currentYear }, { month: { lt: currentMonth } }] },
+            { AND: [{ year: currentYear }, { month: currentMonth }, { day: { lt: currentDay } }] }
+          ]
         }
-      },
-      completionStatus: false
+      }
     },
     include: {
       taskDates: true
     }
   });
   await Promise.all(
-    lastDayTasks.map(task =>
+    tasksToRollover.map(task =>
       db.task.update({
         where: { id: task.id },
         data: { taskStatus: 'Rolled Over' }
       })
     )
   );
-  const topPriorityCount = lastDayTasks.filter(task => task.ImportanceGroup === 'TopPriority').length;
+  const topPriorityCount = tasksToRollover.filter(task => task.ImportanceGroup === 'TopPriority').length;
   const newTasks = await Promise.all(
-    lastDayTasks.map((task, index) => {
+    tasksToRollover.map((task, index) => {
       let newImportanceGroup = task.ImportanceGroup;
       if (topPriorityCount >= 3 && task.ImportanceGroup === 'TopPriority') {
         newImportanceGroup = 'Important';
       }
-
       return db.task.create({
         data: {
           taskName: task.taskName,
