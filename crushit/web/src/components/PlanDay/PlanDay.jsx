@@ -6,6 +6,34 @@ import { Link } from '@redwoodjs/router';
 import { useMutation } from '@redwoodjs/web';
 import { signOutUser } from 'src/auth';
 
+
+const GetUserTasksOnDate = gql`
+  query userTasksOnDate($userId: String!, $day: Int!, $month: Int!, $year: Int!) {
+    userTasksOnDate(userId: $userId, day: $day, month: $month, year: $year) {
+      id
+      taskName
+      ImportanceGroup
+      completionStatus
+      taskStatus
+      description
+      pomodoroTimers
+      pomodoroTimerType
+      pomodorosCompleted
+      taskOrder
+      createdBy
+      taskDates {
+        id
+        day
+        month
+        year
+      }
+      pomodoro{
+        id
+      }
+    }
+  }
+`
+
 const ROLLOVER_TASKS_MUTATION = gql`
   mutation RolloverTasksMutation($createdBy: String!, $day: Int!, $month: Int!, $year: Int!) {
     rolloverTasks(createdBy: $createdBy, day: $day, month: $month, year: $year) {
@@ -40,7 +68,10 @@ const PlanDay = ({userId}) => {
     const year = new Date().getFullYear();
     console.log(`Rollover for user: ${userId}, Date: ${year}-${month}-${day}`);
     try {
-      await rolloverTasks({ variables: { createdBy: userId, day, month, year } });
+      await rolloverTasks({
+        variables: { createdBy: userId, day, month, year },
+        refetchQueries: [{ query: GetUserTasksOnDate, variables: {userId: userId, day: day, month: month, year: year} }]
+      });
     } catch (error) {
       console.error("Error in rolling over tasks:", error);
     }
