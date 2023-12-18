@@ -142,7 +142,7 @@ const LoginForm = () => {
                Password
                </span>
              </label>
-	     
+
 	     <div className="relative">
                <input
           	className="shadow appearance-none border rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"

@@ -11,7 +11,7 @@ import ToDo from '../ToDo/ToDo';
 import Appointments from '../Appointments/Appointments';
 import { useTheme } from '../ThemeContext/ThemeContext';
 
-const ToDoAndAppts = ({userId, day, month, year, start, end, code, toggleFocusTime, setFocusTask}) => {
+const ToDoAndAppts = ({userId, day, month, year, start, end, toggleFocusTime, setFocusTask}) => {
   const {theme} = useTheme();
 
   const today = new Date();
@@ -189,7 +189,7 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, code, toggleFocusTi
 
           {/* Appointments Section */}
           <div style={{ flex: 1, maxHeight: '70vh'}} className="custom-scrollbar"> {/* Adjusted to share space */}
-            <Appointments start={selectedStart} end={selectedEnd} code={code} uid={userId} theme={theme}/>
+            <Appointments start={selectedStart} end={selectedEnd} uid={userId} theme={theme}/>
           </div>
         </div>
       </div>

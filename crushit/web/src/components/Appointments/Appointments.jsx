@@ -5,9 +5,8 @@ import { useTheme } from '../ThemeContext/ThemeContext';
 
 // Define the GraphQL query
 const GET_EVENTS_QUERY = gql`
-  query calendar_demo($start: String!, $end: String!, $code: String!, $uid: String!) {
-    getEvents(start: $start, end: $end, code: $code, uid: $uid) {
-      code
+  query calendar_demo($start: String!, $end: String!, $uid: String!) {
+    getEvents(start: $start, end: $end, uid: $uid) {
       events {
         summary
         description
@@ -18,11 +17,12 @@ const GET_EVENTS_QUERY = gql`
   }
 `;
 
-const Appointments = ({start, end, code, uid}) => {
+const Appointments = ({start, end, uid}) => {
   const {theme} = useTheme();
+
    // Execute the query
    const { data, loading, error } = useQuery(GET_EVENTS_QUERY, {
-    variables: { start, end, code, uid },
+    variables: { start, end, uid },
   });
 
   const formatEventTime = (dateTimeString) => {
@@ -36,6 +36,8 @@ const Appointments = ({start, end, code, uid}) => {
   };
 
   const events = data?.getEvents?.events || [];
+  const access_tok = data?.getEvents?.access_tok || '';
+  console.log("Appointments access token", access_tok);
 
   // Example appointment times
   const times = [
