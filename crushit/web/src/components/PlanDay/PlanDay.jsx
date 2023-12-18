@@ -3,13 +3,80 @@ import { useTheme } from '../ThemeContext/ThemeContext';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { navigate } from '@redwoodjs/router';
 import { Link } from '@redwoodjs/router';
+import { useMutation } from '@redwoodjs/web';
+import { signOutUser } from 'src/auth';
+
+
+const GetUserTasksOnDate = gql`
+  query userTasksOnDate($userId: String!, $day: Int!, $month: Int!, $year: Int!) {
+    userTasksOnDate(userId: $userId, day: $day, month: $month, year: $year) {
+      id
+      taskName
+      ImportanceGroup
+      completionStatus
+      taskStatus
+      description
+      pomodoroTimers
+      pomodoroTimerType
+      pomodorosCompleted
+      taskOrder
+      createdBy
+      taskDates {
+        id
+        day
+        month
+        year
+      }
+      pomodoro{
+        id
+      }
+    }
+  }
+`
+
+const ROLLOVER_TASKS_MUTATION = gql`
+  mutation RolloverTasksMutation($createdBy: String!, $day: Int!, $month: Int!, $year: Int!) {
+    rolloverTasks(createdBy: $createdBy, day: $day, month: $month, year: $year) {
+      id
+    }
+  }
+`;
+
+const googleLogout = () => {
+  const auth2 = window.gapi && window.gapi.auth2.getAuthInstance();
+  if (auth2 != null) {
+    auth2.signOut().then(
+      auth2.disconnect().then(() => console.log('Logged out from Google'))
+    );
+  }
+};
 
 const handleLogout = async () => {
   // Your logout logic here
+  googleLogout();
+  signOutUser();
+  localStorage.removeItem('isAuthenticated');
   navigate('/');
 };
 
-const PlanDay = () => {
+const PlanDay = ({userId}) => {
+  const [rolloverTasks, { loading, error }] = useMutation(ROLLOVER_TASKS_MUTATION);
+
+  const handlePlanDay = async () => {
+    const day = new Date().getDate();
+    const month = new Date().getMonth() + 1;
+    const year = new Date().getFullYear();
+    console.log(`Rollover for user: ${userId}, Date: ${year}-${month}-${day}`);
+    try {
+      await rolloverTasks({
+        variables: { createdBy: userId, day, month, year },
+        refetchQueries: [{ query: GetUserTasksOnDate, variables: {userId: userId, day: day, month: month, year: year} }]
+      });
+    } catch (error) {
+      console.error("Error in rolling over tasks:", error);
+    }
+  };
+
   return (
     <div className="bg-custom-gray flex-grow h-screen flex flex-col items-center relative" style={{ flex: '1', maxWidth: '14vw', minWidth: '14vw' }}>
         <div className="text-white mt-10">
@@ -27,7 +94,11 @@ const PlanDay = () => {
           <p className="font-normal leading-none font-fredoka text-center" style={{ fontSize: '1vw' }}>It's time to<br />plan your day!</p>
         </div>
         <div className="mb-12">
-          <button className="bg-custom-gray text-white py-3 px-10 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 border border-white">
+          <button
+            onClick={handlePlanDay}
+            className="bg-custom-gray text-white py-3 px-10 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 border border-white"
+            disabled={loading}
+          >
             Plan Day
           </button>
         </div>

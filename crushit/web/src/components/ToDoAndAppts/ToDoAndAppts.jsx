@@ -3,16 +3,16 @@
 import React from 'react';
 import {useQuery } from '@redwoodjs/web';
 import { useState } from 'react';
-import { useTheme } from '../ThemeContext/ThemeContext';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { navigate } from '@redwoodjs/router';
 import DateNavigation from '../DateNavigation/DateNavigation';
 import PlanDay from '../PlanDay/PlanDay';
 import ToDo from '../ToDo/ToDo';
 import Appointments from '../Appointments/Appointments';
+import { useTheme } from '../ThemeContext/ThemeContext';
 
-const ToDoAndAppts = ({userId, day, month, year, start, end, code, toggleFocusTime, setFocusTask}) => {
-  const { theme } = useTheme();
+const ToDoAndAppts = ({userId, day, month, year, start, end, toggleFocusTime, setFocusTask}) => {
+  const {theme} = useTheme();
 
   const today = new Date();
   let [selectedDay, setSelectedDay] = React.useState(today.getDate());
@@ -145,14 +145,21 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, code, toggleFocusTi
     setFormVisibility(prevState => !prevState);
   };
 
+  //define three array groups
+  const [tasks, setTasks] = useState({
+    TopPriority: [],
+    Important: [],
+    Other: [],
+  });
+
 
   return (
-    <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-light-gray text-gray-900'}`}>
-      <PlanDay />
+    <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : (theme === 'winter' ? "bg-[url('/snow_background.jpeg')] bg-cover text-white": 'bg-light-gray text-gray-900')}`}>
+      <PlanDay userId={userId} />
       <div className="w-full">
         {/* Home Bar Top page */}
-        <div className={`flex pt-1 pb-1 w-full mx-auto shadow-sm ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'}`}>
-          <h2 className={`text-2xl font-dm font-bold mt-2 mb-2 ml-[3%] ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Home</h2>
+        <div className={`flex pt-1 pb-1 w-full mx-auto shadow-sm ${(theme === 'dark' || theme === 'winter')? 'bg-gray-700' : 'bg-white'}`}>
+          <h2 className={`text-2xl font-dm font-bold mt-2 mb-2 ml-[3%] ${(theme === 'dark' || theme === 'winter')? 'text-white' : 'text-gray-900'}`}>Home</h2>
           <p className="ml-[84%]">
             <a href="/settings" className="text-blue-500 hover:underline">Settings</a>
           </p>
@@ -172,23 +179,24 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, code, toggleFocusTi
             handleNextDay={handleNextDay}
             handlePrevYear={handlePrevYear}
             handleNextYear={handleNextYear}
+            theme={theme}
           />
         </div>
-        <div className="pt-12 pl-6 flex"> {/* Add flex here to create a flex container */}
+        <div className="pt-12 pl-6 pr-2 flex"> {/* Add flex here to create a flex container */}
           {/* Tasks Section */}
-          <div style={{ flex: 1, maxHeight: '79vh'}} className="custom-scrollbar"> {/* Adjusted to share space */}
+          <div style={{ flex: 1, maxHeight: '79vh'}} className="custom-scrollbar min-w-[54%]"> {/* Adjusted to share space */}
             <div className="flex items-center justify-start">
-              <h2 className={`text-[30px] font-dm font-bold mt-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Tasks</h2>
+              <h2 className={`text-[30px] font-dm font-bold mt-1 ${theme === 'dark' ? 'bg-gray-800 text-white' : (theme === 'winter' ? 'bg-transparent text-white': 'text-gray-900')}`}>Tasks</h2>
               <button className="pl-4" onClick={toggleFormVisibility}>
                 <img src="https://drive.google.com/uc?export=view&id=1psd6NBXctlxs7lN-5CJpXSCylzaWHVg1"/>
               </button>
             </div>
-            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask}/>
+            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} theme={theme} tasks={tasks} setTasks={setTasks}/>
           </div>
 
           {/* Appointments Section */}
           <div style={{ flex: 1, maxHeight: '70vh'}} className="custom-scrollbar"> {/* Adjusted to share space */}
-            <Appointments start={selectedStart} end={selectedEnd} code={code} uid={userId}/>
+            <Appointments start={selectedStart} end={selectedEnd} uid={userId} theme={theme} tasks={tasks}/>
           </div>
         </div>
       </div>

@@ -10,10 +10,11 @@
 import { Router, Route } from '@redwoodjs/router'
 
 import { useAuth } from './auth'
+import { useTheme } from './components/ThemeContext/ThemeContext';
 
 const Routes = () => {
   return (
-    <Router useAuth={useAuth}>
+    <Router useAuth={useAuth} useTheme={useTheme}>
       <Route path="/resetpassword" page={ResetpasswordPage} name="resetpassword" />
       <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
       <Route path="/settings" page={SettingsPage} name="settings" />

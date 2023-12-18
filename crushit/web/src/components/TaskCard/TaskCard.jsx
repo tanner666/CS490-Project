@@ -184,7 +184,7 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updat
             <img src="https://drive.google.com/uc?id=1EAgXSX1V2YIPJnUTfEx16jMO-TeC1_oo" alt="In Progress" />
           )}
           {task.taskStatus === 'Rolled Over' && (
-            <img src="https://drive.google.com/uc?id=1EAgXSX1V2YIPJnUTfEx16jMO-TeC1_oo" alt="Rolled Over" />
+            <img src="https://drive.google.com/uc?id=15MpHv4HVjiysSd5_bahlb5jBG90GGg5Q" alt="Rolled Over" />
           )}
         </button>
         <div onClick={handleToggleFocusTime} className="task-text-container">

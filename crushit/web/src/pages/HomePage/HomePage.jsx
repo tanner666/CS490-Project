@@ -11,12 +11,13 @@ const HomePage = () => {
   const [uid, setUID] = useState('');
   const [showFocusTime, setShowFocusTime] = useState(false); // State to control visibility
   const [FocusTask, setFocusTask] = useState(null);
-  const queryParams = new URLSearchParams(window.location.search)
-  const code = queryParams.get('code')
-  console.log("code: ", code);
 
-  if (code === null) {
-    return <AuthorizeCell></AuthorizeCell>
+  const isAuthenticated = localStorage.getItem('isAuthenticated');
+console.log("Is Authenticated: ", isAuthenticated);
+
+if (!isAuthenticated) {
+        //console.log("Google sign in, code: ", code);
+   return <AuthorizeCell></AuthorizeCell>
   }
 
   //change these to retreive the current values in the navigation bar
@@ -29,17 +30,19 @@ const HomePage = () => {
 
   //once other issue is fixed, use these values below
   const start = `${year}-${formattedMonth}-${formattedDay}T00:00:00Z`;
-  const end = `${year}-${formattedMonth}-${formattedDay}T23:59:59Z`;
+  const end = `${year}-${formattedMonth}-${formattedDay+1}T23:59:59Z`;
   //const start = '2023-12-04T12:00:00Z'
   //const end = '2023-12-05T12:00:00Z'
 
+
   useEffect(() => {
+
     getUserUid()
       .then((uid) => {
         setUID(uid);
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error('Errorm:', error);
       });
   }, []);
   useEffect(() => {
@@ -99,7 +102,7 @@ const HomePage = () => {
       <div>
         {uid ? (
           <>
-            <ToDoAndAppts userId={uid} day={day} month={month} year={year} start={start} end={end} code={code} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} />
+            <ToDoAndAppts userId={uid} day={day} month={month} year={year} start={start} end={end} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} />
             {showFocusTime && (
             <>
                <div style={overlayStyles}>

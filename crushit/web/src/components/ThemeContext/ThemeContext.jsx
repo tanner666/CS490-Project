@@ -2,11 +2,21 @@ import React, { useState, useEffect, useContext, createContext } from 'react';
 import { useQuery } from '@redwoodjs/web';
 import { getUserUid, useAuth } from 'src/auth';
 
+const GET_USER_QUERY = gql`
+  query user($firebaseUid: String!) {
+    user(firebaseUid: $firebaseUid) {
+      darkMode
+      name
+    }
+  }
+`;
+
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
+  const [winterTheme, setWinterTheme] = useState(false);
+
   //retireve uid
-  /*
   const [uid, setUID] = useState('');
   useEffect(() => {
     getUserUid()
@@ -19,7 +29,10 @@ export const ThemeProvider = ({ children }) => {
       });
 
   }, []);
-  */
+
+  const { loading, error, data } = useQuery(GET_USER_QUERY, {
+    variables: { firebaseUid: uid },
+  });
 
   //retrieve user's theme choice
   /*const { loading, error, data } = useQuery(GET_USER_THEME, {
@@ -27,6 +40,44 @@ export const ThemeProvider = ({ children }) => {
   });*/
 
   const [theme, setTheme] = useState('light'); // default
+  useEffect(() => {
+    console.log("ThemProvider useEffect");
+    if (data && data.user) {
+      console.log("ThemeProvider theme: ", data.user.darkMode);
+      const nameParts = data.user.name.split('|');
+      console.log("Name Parts: ", nameParts);
+      let firstName = ''
+      let lastName = ''
+      if (nameParts.length === 2) {
+        firstName = data.user.name.split('|')[0];
+        lastName = data.user.name.split('|')[1];
+
+        //if * is last char for both first name and last name
+        console.log("First Name last char: ", firstName[firstName.length - 1]);
+        console.log("Last Name last char: ", lastName[lastName.length - 1]);
+
+        if (firstName[firstName.length - 1] === '*' && lastName[lastName.length - 1] === '*') {
+          console.log("Winter Theme");
+          setWinterTheme(true);
+        }else{
+          setWinterTheme(false);
+        }
+      } else {
+          setWinterTheme(false);
+      }
+
+      //darkMode is either normal or winter themed (easter egg)
+      if (data.user.darkMode){
+          if (firstName[firstName.length - 1] === '*' && lastName[lastName.length - 1] === '*') {
+            console.log("Set Theme Winter???");
+            setTheme('winter');
+          }
+          else{
+            setTheme('dark');
+          }
+        }
+    }
+  }, [data]);
 
   //set theme accordingly
   /*
@@ -41,7 +92,17 @@ export const ThemeProvider = ({ children }) => {
 
   //console.log("Theme in Context: ", theme);
   const toggleTheme = () => {
-    setTheme((curr) => (curr === 'light' ? 'dark' : 'light'));
+    if(theme === 'light'){
+      if (winterTheme){
+        setTheme('winter');
+      }
+      else{
+        setTheme('dark');
+      }
+    }
+    else{
+      setTheme('light');
+    }
   };
 
   return (
