@@ -175,9 +175,9 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, toggleFocusTime, se
             theme={theme}
           />
         </div>
-        <div className="pt-12 pl-6 flex"> {/* Add flex here to create a flex container */}
+        <div className="pt-12 pl-6 pr-2 flex"> {/* Add flex here to create a flex container */}
           {/* Tasks Section */}
-          <div style={{ flex: 1, maxHeight: '79vh'}} className="custom-scrollbar"> {/* Adjusted to share space */}
+          <div style={{ flex: 1, maxHeight: '79vh'}} className="custom-scrollbar min-w-[54%]"> {/* Adjusted to share space */}
             <div className="flex items-center justify-start">
               <h2 className={`text-[30px] font-dm font-bold mt-1 ${theme === 'dark' ? 'bg-gray-800 text-white' : (theme === 'winter' ? 'bg-transparent text-white': 'text-gray-900')}`}>Tasks</h2>
               <button className="pl-4" onClick={toggleFormVisibility}>

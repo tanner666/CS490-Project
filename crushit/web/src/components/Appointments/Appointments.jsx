@@ -113,7 +113,7 @@ const Appointments = ({start, end, uid}) => {
   const eventMap = mapEventsToTimes(events);
 
   return (
-    <div>
+    <div className="ml-1">
       <h2 className={`text-[30px] font-bold font-dm mb-3 ${theme === 'dark' ? 'bg-gray-800 text-white' : (theme === 'winter' ? 'bg-transparent' : 'bg-light-gray text-gray-900')}`}>Appointments</h2>
       <div className={` ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'} rounded-lg shadow p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100`} style={{ height: "72vh" }}>
         {times.map((time, index) => (
