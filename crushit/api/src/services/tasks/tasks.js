@@ -116,11 +116,12 @@ export const rolloverTasks = async ({ createdBy }) => {
   const currentDay = currentDate.getDate();
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
+  console.log("Rollover Tasks parameter: ", createdBy);
   const tasksToRollover = await db.task.findMany({
     where: {
       createdBy: createdBy,
       completionStatus: false,
-      taskStatus: { not: ['Rolled Over', 'Complete'] },
+      taskStatus: { notIn: ['Rolled Over', 'Complete'] },
       taskDates: {
         some: {
           OR: [

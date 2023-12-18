@@ -48,18 +48,7 @@ export const getRefreshTokenByFirebaseUid = async (firebaseUid) => {
   }
 }
 
-export const getAuthCode = async () =>{
-  const queryParams = new URLSearchParams(window.location.search);
-  const code = queryParams.get('code');
-  console.log("Code in services file: ", code);
-  return code;
-}
-
-export const getAccessToken = async () =>{
-
-}
-
-export const getEvents = async ({ start, end, uid }) => {
+export const getEvents = async ({ start, end, code, uid }) => {
   const { google } = require('googleapis')
   const oauth2Client = new google.auth.OAuth2(
     process.env.CLIENT_ID,
@@ -106,7 +95,6 @@ export const getEvents = async ({ start, end, uid }) => {
   }
   //if no token in db yet:
   else{
-    const code = getAuthCode();
     console.log("Code in Else: ", code);
     let { tokens } = await oauth2Client.getToken(code)
     oauth2Client.setCredentials(tokens)
@@ -143,6 +131,7 @@ export const getEvents = async ({ start, end, uid }) => {
     maxResults: 100,
     singleEvents: true,
     orderBy: 'startTime',
+    timeZone: 'America/New_York',
   })
 
   const calendarEvents = res.data.items

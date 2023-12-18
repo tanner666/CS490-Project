@@ -5,8 +5,8 @@ import { useTheme } from '../ThemeContext/ThemeContext';
 
 // Define the GraphQL query
 const GET_EVENTS_QUERY = gql`
-  query calendar_demo($start: String!, $end: String!, $uid: String!) {
-    getEvents(start: $start, end: $end, uid: $uid) {
+  query calendar_demo($start: String!, $end: String!, $code: String, $uid: String!) {
+    getEvents(start: $start, end: $end, code: $code, uid: $uid) {
       events {
         summary
         description
@@ -20,9 +20,22 @@ const GET_EVENTS_QUERY = gql`
 const Appointments = ({start, end, uid}) => {
   const {theme} = useTheme();
 
+
+    if (typeof window === "undefined") {
+      // If window is undefined, return null or handle appropriately
+      console.log("window is not defined, this code is running server-side");
+      return null;
+    }
+
+    const queryParams = new URLSearchParams(window.location.search);
+    const code = queryParams.get('code');
+    console.log("Code in services file: ", code);
+
+
    // Execute the query
+   console.log("REal code: ", code);
    const { data, loading, error } = useQuery(GET_EVENTS_QUERY, {
-    variables: { start, end, uid },
+    variables: { start, end, code, uid },
   });
 
   const formatEventTime = (dateTimeString) => {
@@ -92,6 +105,7 @@ const Appointments = ({start, end, uid}) => {
         eventMap[startTime] = [];
       }
       eventMap[startTime].push(event);
+      console.log("Map: StartTimes: ", startTime);
     });
     return eventMap;
   };

@@ -89,7 +89,7 @@ const UPDATE_TASK_MUTATION = gql`
 const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, toggleFocusTime, setFocusTask}) => {
   const {theme} = useTheme();
   //console.log("UserId in ToDo: ", userId);
-  const { data, loading, error, refetch } = useQuery(GetUserTasksOnDate, { variables: { userId, day, month, year } });
+  const { data, loading, error, refetch } = useQuery(GetUserTasksOnDate, { variables: { userId, day, month, year }});
   const [updateTasks] = useMutation(UPDATE_TASK_MUTATION);
 
   const [isFormVisibile, setIsFormVisible] = useState(false);

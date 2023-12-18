@@ -44,16 +44,25 @@ export const ThemeProvider = ({ children }) => {
     console.log("ThemProvider useEffect");
     if (data && data.user) {
       console.log("ThemeProvider theme: ", data.user.darkMode);
-      let firstName = data.user.name.split('|')[0];
-      let lastName = data.user.name.split('|')[1];
+      const nameParts = data.user.name.split('|');
 
-      //if * is last char for both first name and last name
-      console.log("First Name last char: ", firstName[firstName.length - 1]);
-      console.log("Last Name last char: ", lastName[lastName.length - 1]);
+      if (nameParts.length === 2) {
+        let firstName = data.user.name.split('|')[0];
+        let lastName = data.user.name.split('|')[1];
 
-      if (firstName[firstName.length - 1] === '*' && lastName[lastName.length - 1] === '*') {
-        console.log("Winter Theme");
-        setWinterTheme(true);
+        //if * is last char for both first name and last name
+        console.log("First Name last char: ", firstName[firstName.length - 1]);
+        console.log("Last Name last char: ", lastName[lastName.length - 1]);
+
+        if (firstName[firstName.length - 1] === '*' && lastName[lastName.length - 1] === '*') {
+          console.log("Winter Theme");
+          setWinterTheme(true);
+        }else{
+          setWinterTheme(false);
+        }
+      } else {
+        // Handle case where name doesn't have two parts
+        console.log("Name format not as expected");
       }
 
       //darkMode is either normal or winter themed (easter egg)

@@ -12,6 +12,6 @@ export const schema = gql`
   }
 
   type Query {
-    getEvents(start: String!, end: String!, uid: String!): Events @skipAuth
+    getEvents(start: String!, end: String!, code: String, uid: String!): Events @skipAuth
   }
 `
