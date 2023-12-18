@@ -138,11 +138,12 @@ export const getEvents = async ({ start, end, uid }) => {
   console.log({ tokens })
   const res = await calendar.events.list({
     calendarId: 'primary',
-    timeMin: start,
-    timeMax: end,
+    timeMin: '2023-17-01T12:00:00Z',
+    timeMax: '2023-18-01T12:00:01Z',
     maxResults: 100,
     singleEvents: true,
     orderBy: 'startTime',
+    timeZone: 'America/New_York',
   })
 
   const calendarEvents = res.data.items

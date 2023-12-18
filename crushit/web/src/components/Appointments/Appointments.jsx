@@ -92,6 +92,7 @@ const Appointments = ({start, end, uid}) => {
         eventMap[startTime] = [];
       }
       eventMap[startTime].push(event);
+      console.log("Map: StartTimes: ", startTime);
     });
     return eventMap;
   };

@@ -54,6 +54,8 @@ export const ThemeProvider = ({ children }) => {
       if (firstName[firstName.length - 1] === '*' && lastName[lastName.length - 1] === '*') {
         console.log("Winter Theme");
         setWinterTheme(true);
+      }else{
+        setWinterTheme(false);
       }
 
       //darkMode is either normal or winter themed (easter egg)

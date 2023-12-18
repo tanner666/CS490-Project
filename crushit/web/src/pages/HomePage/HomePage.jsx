@@ -30,7 +30,7 @@ if (!isAuthenticated) {
 
   //once other issue is fixed, use these values below
   const start = `${year}-${formattedMonth}-${formattedDay}T00:00:00Z`;
-  const end = `${year}-${formattedMonth}-${formattedDay}T23:59:59Z`;
+  const end = `${year}-${formattedMonth}-${formattedDay+1}T23:59:59Z`;
   //const start = '2023-12-04T12:00:00Z'
   //const end = '2023-12-05T12:00:00Z'
 
