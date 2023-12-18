@@ -55,6 +55,7 @@ const handleLogout = async () => {
   // Your logout logic here
   googleLogout();
   signOutUser();
+  localStorage.setItem('isAuthenticated', 'false');
   localStorage.removeItem('isAuthenticated');
   navigate('/');
 };
