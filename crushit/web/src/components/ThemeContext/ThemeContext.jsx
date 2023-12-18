@@ -45,10 +45,12 @@ export const ThemeProvider = ({ children }) => {
     if (data && data.user) {
       console.log("ThemeProvider theme: ", data.user.darkMode);
       const nameParts = data.user.name.split('|');
-
+      console.log("Name Parts: ", nameParts);
+      let firstName = ''
+      let lastName = ''
       if (nameParts.length === 2) {
-        let firstName = data.user.name.split('|')[0];
-        let lastName = data.user.name.split('|')[1];
+        firstName = data.user.name.split('|')[0];
+        lastName = data.user.name.split('|')[1];
 
         //if * is last char for both first name and last name
         console.log("First Name last char: ", firstName[firstName.length - 1]);
@@ -61,20 +63,19 @@ export const ThemeProvider = ({ children }) => {
           setWinterTheme(false);
         }
       } else {
-        // Handle case where name doesn't have two parts
-        console.log("Name format not as expected");
+          setWinterTheme(false);
       }
 
       //darkMode is either normal or winter themed (easter egg)
       if (data.user.darkMode){
-        console.log("Dark Mode winter theme???: ", winterTheme);
-        if (firstName[firstName.length - 1] === '*' && lastName[lastName.length - 1] === '*') {
-          console.log("Set Theme Winter???");
-          setTheme('winter');
-        }else{
-          setTheme('dark');
+          if (firstName[firstName.length - 1] === '*' && lastName[lastName.length - 1] === '*') {
+            console.log("Set Theme Winter???");
+            setTheme('winter');
+          }
+          else{
+            setTheme('dark');
+          }
         }
-      }
     }
   }, [data]);
 
