@@ -24,8 +24,12 @@
   },
   "packageManager": "yarn@3.6.3",
   "dependencies": {
+    "@prisma/client": "^5.3.1",
     "googleapis": "^129.0.0",
     "heroku": "^8.7.1",
     "tailwind": "^4.0.0"
+  },
+  "scripts": {
+    "postinstall": "prisma generate"
   }
 }

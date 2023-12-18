@@ -5244,6 +5244,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/client@npm:^5.3.1":
+  version: 5.7.1
+  resolution: "@prisma/client@npm:5.7.1"
+  peerDependencies:
+    prisma: "*"
+  peerDependenciesMeta:
+    prisma:
+      optional: true
+  checksum: 5eafbe3955de13620c7b661282c79e85211bb0cba950559f87e7a679ff06f5242864b0cbe6e76316eb35366ac3df9b2b02ced7cbedc238bcbc4e412d7acf3b72
+  languageName: node
+  linkType: hard
+
 "@prisma/debug@npm:5.3.1":
   version: 5.3.1
   resolution: "@prisma/debug@npm:5.3.1"
@@ -21756,6 +21768,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
+    "@prisma/client": ^5.3.1
     "@redwoodjs/auth-firebase-setup": 6.3.2
     "@redwoodjs/core": 6.3.2
     googleapis: ^129.0.0
