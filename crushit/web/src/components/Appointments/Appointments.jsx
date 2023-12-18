@@ -172,7 +172,7 @@ const Appointments = ({start, end, uid, tasks}) => {
           // Container for the time and task description
           <div key={index} className="flex flex-col sm:flex-row items-start px-1 py-2">
             {/**Time label */}
-            <div className={`${compareTime(parseTimeString(time, false), parseTimeString(time, true)) ? 'text-task-blue border-2 p-1 ml-[-6px] mt-[-7px] mb-[-9px] mr-[11px] border-task-blue rounded-md' : (theme === 'dark' ? 'text-white' : 'text-task-black') && 'mr-4'}  text-sm font-semibold`}>{time}</div>
+            <div className={`min-w-[39px] ${compareTime(parseTimeString(time, false), parseTimeString(time, true)) ? 'text-task-blue border-2 p-1 ml-[-6px] mt-[-7px] mb-[-9px] mr-[16px] border-task-blue rounded-md' : (theme === 'dark' ? 'text-white' : 'text-task-black') && 'mr-4'}  text-sm font-semibold`}>{time}</div>
 
             {/**Event Container */}
             <div className="flex-grow">
@@ -193,7 +193,7 @@ const Appointments = ({start, end, uid, tasks}) => {
                   console.log(task);
                   if (task) {
                     return (
-                      <div className="bg-white border-2 border-bar-grey mt-2">
+                      <div className={`${compareTime(parseTimeString(time, false), parseTimeString(time, true)) ? 'bg-transparent-blue' : 'bg-white'} border-2 border-bar-grey mt-2 mb-[-25px]}`}>
                         <button
                           onClick={() => { setSelectedTask(task.taskName); }}
                           className="text-task-black font-semibold text-sm px-2 py-1 focus:outline-none focus:ring focus:border-blue-300 my-1"
