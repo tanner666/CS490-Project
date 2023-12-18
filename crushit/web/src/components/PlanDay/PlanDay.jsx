@@ -38,7 +38,7 @@ const PlanDay = ({userId}) => {
     const day = new Date().getDate();
     const month = new Date().getMonth() + 1;
     const year = new Date().getFullYear();
-    //console.log(`Rollover for user: ${userId}, Date: ${year}-${month}-${day}`);
+    console.log(`Rollover for user: ${userId}, Date: ${year}-${month}-${day}`);
     try {
       await rolloverTasks({ variables: { createdBy: userId, day, month, year } });
     } catch (error) {
