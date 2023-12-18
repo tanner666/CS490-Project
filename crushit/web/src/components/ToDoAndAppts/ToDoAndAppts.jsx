@@ -20,12 +20,18 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, toggleFocusTime, se
   let [selectedYear, setSelectedYear] = React.useState(today.getFullYear());
   const formattedMonth = selectedMonth.toString().padStart(2,'0');
   const formattedDay = selectedDay.toString().padStart(2, '0');
-  let selectedStart = `${selectedYear}-${formattedMonth}-${formattedDay}T00:00:00Z`;
+  today.setDate(today.getDate() - 1);
+  let [selectedDay2, setSelectedDay2] = React.useState(today.getDate());
+  let [selectedMonth2, setSelectedMonth2] = React.useState(today.getMonth() + 1); // Using the month index
+  let [selectedYear2, setSelectedYear2] = React.useState(today.getFullYear());
+  const formattedMonth2 = selectedMonth2.toString().padStart(2,'0');
+  const formattedDay2 = selectedDay2.toString().padStart(2, '0');
+  let selectedStart = `${selectedYear}-${formattedMonth}-${formattedDay}T05:00:00Z`;
   let selectedEnd = `${selectedYear}-${formattedMonth}-${formattedDay}T23:59:59Z`;
 
   const handleTimeChange = () => {
-    selectedStart = `${selectedYear}-${formattedMonth}-${formattedDay}T00:00:00Z`;
-    let selectedEnd = `${selectedYear}-${formattedMonth}-${formattedDay}T23:59:59Z`;
+    selectedStart = `${selectedYear}-${formattedMonth}-${formattedDay}T05:00:00Z`;
+    selectedEnd = `${selectedYear}-${formattedMonth}-${formattedDay}T23:59:59Z`;
   }
   const handleDayChange = (event) => {
     const newDay = parseInt(event.target.value, 10);

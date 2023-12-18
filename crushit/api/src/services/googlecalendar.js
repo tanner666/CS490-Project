@@ -123,7 +123,7 @@ export const getEvents = async ({ start, end, code, uid }) => {
     })
   }, dist - 10000) // 10 seconds before expiry, make an API call to refresh the access token - it will automatically update within the oauth client
   */
-  console.log({ tokens })
+  console.log("Start: ",start, end);
   const res = await calendar.events.list({
     calendarId: 'primary',
     timeMin: start,

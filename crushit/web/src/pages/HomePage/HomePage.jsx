@@ -27,10 +27,17 @@ if (!isAuthenticated) {
   const year = currentDate.getFullYear();
   const formattedMonth = month.toString().padStart(2,'0');
   const formattedDay = day.toString().padStart(2, '0');
+  currentDate.setDate(currentDate.getDate() - 1);
+  const month2 = currentDate.getMonth() + 1; // Month is 0-indexed
+  const year2 = currentDate.getFullYear();
+  const formattedMonth2 = month.toString().padStart(2,'0');
+  const day2 = currentDate.getDate();
+  const formattedDay2 = day2.toString().padStart(2, '0');
+
 
   //once other issue is fixed, use these values below
-  const start = `${year}-${formattedMonth}-${formattedDay}T00:00:00Z`;
-  const end = `${year}-${formattedMonth}-${formattedDay+1}T23:59:59Z`;
+  const start = `${year}-${formattedMonth}-${formattedDay}T19:00:00Z`;
+  const end = `${year}-${formattedMonth}-${formattedDay}T18:59:59Z`;
   //const start = '2023-12-04T12:00:00Z'
   //const end = '2023-12-05T12:00:00Z'
 

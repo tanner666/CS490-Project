@@ -23,6 +23,7 @@ const Appointments = ({start, end, uid, tasks}) => {
   const {theme} = useTheme();
 
   const date = new Date(start);
+  console.log("DAte: ", date);
   const day = date.getDay();
   const month = date.getMonth();
   const year = date.getFullYear();
