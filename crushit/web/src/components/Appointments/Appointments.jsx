@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { gql, useQuery } from '@redwoodjs/web';
 import { parseISO, format } from 'date-fns';
 import { useTheme } from '../ThemeContext/ThemeContext';
@@ -19,9 +19,18 @@ const GET_EVENTS_QUERY = gql`
 
 
 
-const Appointments = ({start, end, uid}) => {
-
+const Appointments = ({start, end, uid, tasks}) => {
   const {theme} = useTheme();
+
+  const date = new Date(start);
+  const day = date.getDay();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+  let taskIndices = {
+    TopPriority: 0,
+    Important: 0,
+    Other: 0
+  };
 
     if (typeof window === "undefined") {
       // If window is undefined, return null or handle appropriately
@@ -49,7 +58,6 @@ const Appointments = ({start, end, uid}) => {
     const date = parseISO(dateTimeString);
     return format(date, 'h:mm a'); // Formats to 'X AM/PM'
   };
-
   const events = data?.getEvents?.events || [];
   const access_tok = data?.getEvents?.access_tok || '';
   console.log("Appointments access token", access_tok);
@@ -74,13 +82,6 @@ const Appointments = ({start, end, uid}) => {
     setShowPopup(true);
   };
 
-  const tasks = {
-    // examples
-    // '7 AM': 'Focus Time • Assign Leader for Task 1',
-    // '8 AM': 'Meeting with Counselor',
-    // '9 AM': 'Focus Time • Assign Leader for Task 1',
-    // ... add additional tasks as needed
-  };
   const TaskDescriptionPopup = () => (
     <div className="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-4 rounded-lg">
@@ -140,15 +141,28 @@ const Appointments = ({start, end, uid}) => {
     const currentTime = new Date();
     const start = new Date(s);
     const end = new Date(e);
-    console.log("Start: ", start);
     if (currentTime >= start && currentTime <= end){
-      console.log("Compare time is true: ", start);
-      console.log("Compare time is true: ", end);
-
       return true;
     }
     return false;
   }
+
+  const getNextTask = () => {
+    let nextTask = null;
+    console.log("STuff: " + taskIndices.TopPriority + ":" + tasks.TopPriority.length);
+    if (taskIndices.TopPriority < tasks.TopPriority.length) {
+      nextTask = tasks.TopPriority[taskIndices.TopPriority];
+      taskIndices.TopPriority = taskIndices.TopPriority + 1;
+    } else if (taskIndices.Important < tasks.Important.length) {
+      nextTask = tasks.Important[taskIndices.Important];
+      taskIndices.Important = taskIndices.Important + 1;
+    } else if (taskIndices.Other < tasks.Other.length) {
+      nextTask = tasks.Other[taskIndices.Other];
+      taskIndices.Other = taskIndices.Other + 1;
+    }
+
+    return nextTask;
+  };
 
   return (
     <div className="ml-1">
@@ -159,9 +173,11 @@ const Appointments = ({start, end, uid}) => {
           <div key={index} className="flex flex-col sm:flex-row items-start px-1 py-2">
             {/**Time label */}
             <div className={`${compareTime(parseTimeString(time, false), parseTimeString(time, true)) ? 'text-task-blue border-2 p-1 ml-[-6px] mt-[-7px] mb-[-9px] mr-[11px] border-task-blue rounded-md' : (theme === 'dark' ? 'text-white' : 'text-task-black') && 'mr-4'}  text-sm font-semibold`}>{time}</div>
+
             {/**Event Container */}
             <div className="flex-grow">
-              {eventMap[time] && eventMap[time].map((event, eventIndex) => (
+              {eventMap[time] ?
+               eventMap[time].map((event, eventIndex) => (
                 <div key={eventIndex} className={`${compareTime(event.start, event.end) ? 'bg-transparent-blue' : 'bg-white'} border-2 border-bar-grey ${eventIndex > 0 ? 'mt-0' : 'mt-2'} ${eventIndex == eventMap[time].length-1 ? 'mb-[-25px]' :'mb-0'}`}>
                   <button
                     onClick={() => { setSelectedTask(event.description); handleDescription(event.start, event.summary, event.end); }}
@@ -170,7 +186,25 @@ const Appointments = ({start, end, uid}) => {
                     {event.summary}
                   </button>
                 </div>
-              ))}
+              )) :
+              (
+                (() => {
+                  const task = getNextTask();
+                  console.log(task);
+                  if (task) {
+                    return (
+                      <div className="bg-white border-2 border-bar-grey mt-2">
+                        <button
+                          onClick={() => { setSelectedTask(task.taskName); }}
+                          className="text-task-black font-semibold text-sm px-2 py-1 focus:outline-none focus:ring focus:border-blue-300 my-1"
+                        >
+                          {task.taskName}
+                        </button>
+                      </div>
+                    );
+                  }
+                })()
+              )}
             </div>
           </div>
         ))}

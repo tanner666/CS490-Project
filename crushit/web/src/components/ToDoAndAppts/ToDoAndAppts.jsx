@@ -145,6 +145,13 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, toggleFocusTime, se
     setFormVisibility(prevState => !prevState);
   };
 
+  //define three array groups
+  const [tasks, setTasks] = useState({
+    TopPriority: [],
+    Important: [],
+    Other: [],
+  });
+
 
   return (
     <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : (theme === 'winter' ? "bg-[url('/snow_background.jpeg')] bg-cover text-white": 'bg-light-gray text-gray-900')}`}>
@@ -184,12 +191,12 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, toggleFocusTime, se
                 <img src="https://drive.google.com/uc?export=view&id=1psd6NBXctlxs7lN-5CJpXSCylzaWHVg1"/>
               </button>
             </div>
-            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} theme={theme}/>
+            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} theme={theme} tasks={tasks} setTasks={setTasks}/>
           </div>
 
           {/* Appointments Section */}
           <div style={{ flex: 1, maxHeight: '70vh'}} className="custom-scrollbar"> {/* Adjusted to share space */}
-            <Appointments start={selectedStart} end={selectedEnd} uid={userId} theme={theme}/>
+            <Appointments start={selectedStart} end={selectedEnd} uid={userId} theme={theme} tasks={tasks}/>
           </div>
         </div>
       </div>
