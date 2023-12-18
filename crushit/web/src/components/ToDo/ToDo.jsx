@@ -86,20 +86,13 @@ const UPDATE_TASK_MUTATION = gql`
 `
 
 //ToDo is the parent task component, responsible for organizing and managing task groups and task cards
-const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, toggleFocusTime, setFocusTask}) => {
+const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, toggleFocusTime, setFocusTask, tasks, setTasks}) => {
   const {theme} = useTheme();
   //console.log("UserId in ToDo: ", userId);
   const { data, loading, error, refetch } = useQuery(GetUserTasksOnDate, { variables: { userId, day, month, year }});
   const [updateTasks] = useMutation(UPDATE_TASK_MUTATION);
 
   const [isFormVisibile, setIsFormVisible] = useState(false);
-
-  //define three array groups
-  const [tasks, setTasks] = useState({
-    'TopPriority': [],
-    Important: [],
-    Other: [],
-  });
 
   const [createTaskMutation] = useMutation(CREATE_TASK_MUTATION);
   const [updateTaskMutation] = useMutation(UPDATE_TASK_MUTATION);

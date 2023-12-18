@@ -145,6 +145,13 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, toggleFocusTime, se
     setFormVisibility(prevState => !prevState);
   };
 
+  //define three array groups
+  const [tasks, setTasks] = useState({
+    TopPriority: [],
+    Important: [],
+    Other: [],
+  });
+
 
   return (
     <div className={`flex ${theme === 'dark' ? 'bg-gray-800 text-white' : (theme === 'winter' ? "bg-[url('/snow_background.jpeg')] bg-cover text-white": 'bg-light-gray text-gray-900')}`}>
@@ -175,21 +182,21 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, toggleFocusTime, se
             theme={theme}
           />
         </div>
-        <div className="pt-12 pl-6 flex"> {/* Add flex here to create a flex container */}
+        <div className="pt-12 pl-6 pr-2 flex"> {/* Add flex here to create a flex container */}
           {/* Tasks Section */}
-          <div style={{ flex: 1, maxHeight: '79vh'}} className="custom-scrollbar"> {/* Adjusted to share space */}
+          <div style={{ flex: 1, maxHeight: '79vh'}} className="custom-scrollbar min-w-[54%]"> {/* Adjusted to share space */}
             <div className="flex items-center justify-start">
               <h2 className={`text-[30px] font-dm font-bold mt-1 ${theme === 'dark' ? 'bg-gray-800 text-white' : (theme === 'winter' ? 'bg-transparent text-white': 'text-gray-900')}`}>Tasks</h2>
               <button className="pl-4" onClick={toggleFormVisibility}>
                 <img src="https://drive.google.com/uc?export=view&id=1psd6NBXctlxs7lN-5CJpXSCylzaWHVg1"/>
               </button>
             </div>
-            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} theme={theme}/>
+            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} theme={theme} tasks={tasks} setTasks={setTasks}/>
           </div>
 
           {/* Appointments Section */}
           <div style={{ flex: 1, maxHeight: '70vh'}} className="custom-scrollbar"> {/* Adjusted to share space */}
-            <Appointments start={selectedStart} end={selectedEnd} uid={userId} theme={theme}/>
+            <Appointments start={selectedStart} end={selectedEnd} uid={userId} theme={theme} tasks={tasks}/>
           </div>
         </div>
       </div>

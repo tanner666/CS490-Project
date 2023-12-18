@@ -25,7 +25,10 @@ module.exports = {
       },
       backgroundImage: {
         'winter': "[url('/snow_background.jpeg')]",
-      }
+      },
+      margin: {
+        '-25px': '-25px',
+      },
     },
     scrollbar: (theme) => ({
       thumb: {
