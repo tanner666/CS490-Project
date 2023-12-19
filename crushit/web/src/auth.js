@@ -48,8 +48,10 @@ export const signIn = async (email, password) => {
 const auth = getAuth(firebaseApp);
 try {
   const userCredential = await signInWithEmailAndPassword(auth, email, password);
+  console.log('User signed in successfully', userCredential.user);
   return userCredential.user
 } catch (error) {
+  console.log("ERROR SIGNING IN: ", error);ß
   throw new Error(error.message);
 }
 };

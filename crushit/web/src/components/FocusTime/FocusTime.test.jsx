@@ -23,15 +23,61 @@ const mockedTask = {
   pomodoroTimers: 4,
 };
 
+const mockedTask2 = {
+  id: 2,
+  description: 'Mocked Task Description',
+  taskName: 'Mocked Task',
+  pomodoro: [
+    {
+      id: 1,
+      currentPomo: 25,
+      currentShort: 5,
+      currentLong: 15,
+    },
+  ],
+  pomodorosCompleted: 0,
+  pomodoroTimers: 4,
+};
+
+
 describe('FocusTime', () => {
+  const onClose = jest.fn(); // Mock function for onClose
+  const isPomoRunning = false;
+  const timerSeconds = 1500;
+  const setIsPomoRunning = jest.fn(); // Mock function for setIsPomoRunning
+  const setPomoTask = jest.fn(); // Mock function for setPomoTask
+  const setIsTimerPomo = jest.fn(); // Mock function for setIsTimerPomo
   it('renders successfully', () => {
     expect(() => {
-      render(<FocusTime />)
-    }).not.toThrow()
-  })
+      render(
+        <FocusTime
+          userId="mockUserId"
+          onClose={onClose}
+          task={mockedTask}
+          isPomoRunning={isPomoRunning}
+          timerSeconds={timerSeconds}
+          setIsPomoRunning={setIsPomoRunning}
+          setPomoTask={setPomoTask}
+          setIsTimerPomo={setIsTimerPomo}
+          setTimerSeconds={()=>{}}
+        />
+      );
+    }).not.toThrow();
+  });
+
 
   it('renders the options correctly', () => {
-    render(<FocusTime />)
+    render(        <FocusTime
+      userId="mockUserId"
+      onClose={onClose}
+      task={mockedTask}
+      isPomoRunning={isPomoRunning}
+      timerSeconds={timerSeconds}
+      setIsPomoRunning={setIsPomoRunning}
+      setPomoTask={setPomoTask}
+      setIsTimerPomo={setIsTimerPomo}
+      setTimerSeconds={()=>{}}
+    />)
     const pomodoroOption = screen.getByText('Pomodoro')
     const shortBreakOption = screen.getByText('Short Break')
     const longBreakOption = screen.getByText('Long Break')
@@ -42,7 +88,17 @@ describe('FocusTime', () => {
   })
 
   it('changes the selected option when clicked', async() => {
-    render(<FocusTime />)
+    render(<FocusTime
+      userId="mockUserId"
+      onClose={onClose}
+      task={mockedTask}
+      isPomoRunning={isPomoRunning}
+      timerSeconds={timerSeconds}
+      setIsPomoRunning={setIsPomoRunning}
+      setPomoTask={setPomoTask}
+      setIsTimerPomo={setIsTimerPomo}
+      setTimerSeconds={()=>{}}
+    />)
     const pomodoroOption = screen.getByText('Pomodoro')
     const shortBreakOption = screen.getByText('Short Break')
     const longBreakOption = screen.getByText('Long Break')
@@ -63,7 +119,18 @@ describe('FocusTime', () => {
   })
 
   it('starts and stops the timer when start/stop button is clicked', async () => {
-    render(<FocusTime isTimerRunning={false}/>)
+    render(<FocusTime
+      userId="mockUserId"
+      onClose={onClose}
+      task={mockedTask}
+      isPomoRunning={false}
+      timerSeconds={timerSeconds}
+      setIsPomoRunning={setIsPomoRunning}
+      setPomoTask={setPomoTask}
+      setIsTimerPomo={setIsTimerPomo}
+      setTimerSeconds={()=>{}}
+      pomoTask={mockedTask}
+    />)
     // Check if the button text is 'Start'
     const startStopButton = screen.getByTestId('stopStart')
     expect(startStopButton).toHaveTextContent('Start');
@@ -74,26 +141,41 @@ describe('FocusTime', () => {
     });
   })
 
-  /*it('updates the notes when edited and saved', async () => {
-    render(<FocusTime />);
-    const editButton = screen.getByRole('editNotes');
-    const notesTextArea = screen.getByRole('notesEdit');
-
-    userEvent.click(editButton);
-    userEvent.type(notesTextArea, '');
-    userEvent.click(editButton);
+  it('timer does not start if pomoTask is not current task', async () => {
+    render(<FocusTime
+      userId="mockUserId"
+      onClose={onClose}
+      task={mockedTask}
+      isPomoRunning={false}
+      timerSeconds={timerSeconds}
+      setIsPomoRunning={setIsPomoRunning}
+      setPomoTask={setPomoTask}
+      setIsTimerPomo={setIsTimerPomo}
+      setTimerSeconds={()=>{}}
+      pomoTask={mockedTask2}
+    />)
+    // Check if the button text is 'Start'
+    const startStopButton = screen.getByTestId('stopStart')
+    expect(startStopButton).toHaveTextContent('Start');
 
     await waitFor(() => {
-      expect(notesTextArea).toHaveTextContent('');
-    }, { timeout: 4000 }); // Adjust the timeout as needed
-  });*/
+      userEvent.click(startStopButton);
+      expect(startStopButton).toHaveTextContent('Start');
+    });
+  })
 
-})
-
-describe('FocusTime component', () => {
-
-  it('renders FocusTime component with correct timer values for pomodoro', () => {
-    render(<FocusTime userId="mockUserId" onClose={() => {}} task={mockedTask} />);
+    it('renders FocusTime component with correct timer values for pomodoro', () => {
+    render(<FocusTime       userId="mockUserId"
+    onClose={onClose}
+    task={mockedTask}
+    isPomoRunning={false}
+    timerSeconds={timerSeconds}
+    setIsPomoRunning={setIsPomoRunning}
+    setPomoTask={setPomoTask}
+    setIsTimerPomo={setIsTimerPomo}
+    setTimerSeconds={()=>{}}
+    pomoTask={mockedTask}
+  />);
 
     const pomodoroOption = screen.getByText('Pomodoro');
 
@@ -101,16 +183,60 @@ describe('FocusTime component', () => {
     const pomodoroTimerElement = screen.getByText('25:00');
     expect(pomodoroTimerElement).toBeInTheDocument();
   });
-});
 
-
-describe('FocusTime format time', () => {
-  it('renders the formatted time correctly', () => {
-    render(<FocusTime />);
+    it('renders the formatted time correctly', () => {
+      render(<FocusTime       userId="mockUserId"
+      onClose={onClose}
+      task={mockedTask}
+      isPomoRunning={false}
+      timerSeconds={timerSeconds}
+      setIsPomoRunning={setIsPomoRunning}
+      setPomoTask={setPomoTask}
+      setIsTimerPomo={setIsTimerPomo}
+      setTimerSeconds={()=>{}}
+      pomoTask={mockedTask}
+    />);
     const time = 1500; // 25 minutes in seconds
     const formattedTime = '25:00';
 
     const formattedTimeElement = screen.getByText(formattedTime);
     expect(formattedTimeElement).toBeInTheDocument();
   });
-});
+
+  it('renders correct time if pomotask and time is diff', () => {
+    render(<FocusTime       userId="mockUserId"
+    onClose={onClose}
+    task={mockedTask}
+    isPomoRunning={true}
+    timerSeconds={1320}
+    setIsPomoRunning={setIsPomoRunning}
+    setPomoTask={setPomoTask}
+    setIsTimerPomo={setIsTimerPomo}
+    setTimerSeconds={()=>{}}
+    pomoTask={mockedTask}
+  />);
+  const time = 1320; // 25 minutes in seconds
+  const formattedTime = '22:00';
+
+  const formattedTimeElement = screen.getByText(formattedTime);
+  expect(formattedTimeElement).toBeInTheDocument();
+}); 
+it('renders correct time if not pomotask, and time is diff', () => {
+  render(<FocusTime       userId="mockUserId"
+  onClose={onClose}
+  task={mockedTask}
+  isPomoRunning={true}
+  timerSeconds={1320}
+  setIsPomoRunning={setIsPomoRunning}
+  setPomoTask={setPomoTask}
+  setIsTimerPomo={setIsTimerPomo}
+  setTimerSeconds={()=>{}}
+  pomoTask={mockedTask2}
+/>);
+const time = 1320; // 25 minutes in seconds
+const formattedTime = '25:00';
+
+const formattedTimeElement = screen.getByText(formattedTime);
+expect(formattedTimeElement).toBeInTheDocument();
+}); 
+})

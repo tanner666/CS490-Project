@@ -40,13 +40,14 @@ const LoginForm = () => {
 
     try {
       const uid = await (await signIn( email, password)).uid
+      console.log('User created successfully')
       // Redirect the user to another page after a successful sign-up.
       setLoginSuccess(true);
       // setUserUid(uid);
       navigate('/home');
     } catch (error) {
       console.error('Sign-in error:', error);
-      setLoginError('Login failed. Please check your credentials.');
+      setLoginError('Login failed. Please check your credentials');
     }
   };
 

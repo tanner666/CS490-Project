@@ -22,7 +22,7 @@ const UPDATE_TASK_MUTATION = gql`
   }
 `
 
-const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updateTaskInList, group}) => {
+const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updateTaskInList, group, isRunning, pomoTask, setRunning, updateTaskListOnChange}) => {
 
   const taskNotesTextStyle = {
     fontFamily: 'DM Sans',
@@ -53,7 +53,8 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updat
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isTaskInfoVisible, setTaskInfoVisible] = useState(true);
   const statuses = ['Not Started', 'In Progress', 'Complete', 'Rolled Over'];
-  const [pomodoroCount, setPomodoroCount] = useState(task.pomodoroTimers);
+  const [pomodoroCount, setPomodoroCount] = useState(task.pomodoroTimers - task.pomodorosCompleted);
+  // console.log("POMO COUNT AND TIMETRs",task, task.pomodoroTimers, task.pomodorosCompleted,task.pomodoroTimers - task.pomodorosCompleted );
   const [showButtons, setShowButtons] = useState(false);
   const [imageSrc, setImageSrc] = useState('https://i.imgur.com/ALJOHMN.png');
   const [imageSize, setImageSize] = useState({ width: 16, height: 16 });
@@ -132,8 +133,14 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updat
       const response = await deleteTask({
         variables: { taskId: task.id },
       });
-
-      onDelete(task.id);
+      if(isRunning){
+        if(pomoTask.id === task.id){
+          setRunning(false);
+        }
+      }
+      updateTaskListOnChange(task, group)
+      // onDelete(task.id);
+      
     } catch (error) {
       console.error('Error deleting task:', error);
     }
@@ -162,7 +169,10 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updat
     }
   };
   const handleToggleFocusTime = () => {
-    toggleFocusTime(task); // Call the toggleFocusTime function from props
+    console.log("Focus time count",pomodoroCount);
+    // if(pomodoroCount != 0){
+      toggleFocusTime(task, pomodoroCount); // Call the toggleFocusTime function from props
+    // }
   };
   return (
     <div className="p-2 my-3 mx-auto w-[94%] rounded-lg shadow-sm bg-white font-dm font-bold">
@@ -210,7 +220,7 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updat
             <div className="flex items-center">
               {showButtons && (
                 <>
-                  <button onClick={handleDecrement} className="focus:outline-none">
+                  <button onClick={handleDecrement} className="focus:outline-none" data-testid="decrement-button">
                     <img src="https://i.imgur.com/psv7bFF.png" width={imageSize.width} height={imageSize.height} />
                   </button>
                 </>
@@ -218,12 +228,12 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updat
               <p className="text-xs text-timer-orange mx-2">{pomodoroCount}</p>
               {showButtons && (
                 <>
-                  <button onClick={handleIncrement} className="focus:outline-none">
+                  <button onClick={handleIncrement} className="focus:outline-none" data-testid="increment-button">
                     <img src="https://i.imgur.com/Zm4t7vG.png" width={imageSize.width} height={imageSize.height} />
                   </button>
                 </>
               )}
-              <button onClick={toggleButtons} className="focus:outline-none le" style={{ marginLeft: '32px' }}>
+              <button data-testid="toggleincrementdecrement" onClick={toggleButtons} className="focus:outline-none le" style={{ marginLeft: '32px' }}>
                 <svg className="mr-3.5 mt-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M8.83994 2.39997L3.36661 8.1933C3.15994 8.4133 2.95994 8.84664 2.91994 9.14664L2.67328 11.3066C2.58661 12.0866 3.14661 12.62 3.91994 12.4866L6.06661 12.12C6.36661 12.0666 6.78661 11.8466 6.99327 11.62L12.4666 5.82664C13.4133 4.82664 13.8399 3.68664 12.3666 2.2933C10.8999 0.913305 9.78661 1.39997 8.83994 2.39997Z" stroke="#6284FF" stroke-width="1.2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                   <path d="M7.92664 3.36667C8.2133 5.20667 9.70664 6.61334 11.56 6.8" stroke="#6284FF" stroke-width="1.2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
