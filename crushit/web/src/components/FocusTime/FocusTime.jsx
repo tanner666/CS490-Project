@@ -60,7 +60,7 @@ const FocusTime = ({ userId, onClose, task, isPomoRunning, timerSeconds, setTime
       setIsTimerRunning(isPomoRunning);
       if(isTimerRunning){
         console.log("Timer Task", pomoTask == task)
-        if(pomoTask==task)
+        if(pomoTask.id==task.id)
           setTimerSeconds(timerSeconds);
           setDisplaySeconds(timerSeconds);
       }
@@ -86,7 +86,7 @@ const FocusTime = ({ userId, onClose, task, isPomoRunning, timerSeconds, setTime
   }, [task]);
 
   useEffect(() => {
-    if(pomoTask != task){
+    if(pomoTask!= null && pomoTask.id != task.id){
       switch(selectedOption){
         case 'pomodoro':  return setDisplaySeconds(pomodoroTimer)
         case 'short':     return setDisplaySeconds(shortTimer)
@@ -226,8 +226,7 @@ const FocusTime = ({ userId, onClose, task, isPomoRunning, timerSeconds, setTime
       setPomoTask(task);
       startstoptimer();
     }else{
-      console.log("Pomo task set", pomoTask == task)
-      if(pomoTask == task){
+      if(pomoTask.id == task.id){
         startstoptimer();
       }else{
         alert("Other task running: "+pomoTask.taskName)

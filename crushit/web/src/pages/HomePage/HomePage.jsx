@@ -18,7 +18,7 @@ const HomePage = () => {
   const [timerTask, setTimerTask] = useState(null);
   const [isTimerPomo, setIsTimerPomo] = useState(false)
 
-  const [timerSeconds, setTimerSeconds] = useState(25*60); // Initial timer duration for Pomodoro in seconds
+  const [timerSeconds, setTimerSeconds] = useState(0); // Initial timer duration for Pomodoro in seconds
 
 
 
@@ -50,6 +50,11 @@ if (!isAuthenticated) {
   const end = `${year}-${formattedMonth}-${formattedDay}T18:59:59Z`;
   //const start = '2023-12-04T12:00:00Z'
   //const end = '2023-12-05T12:00:00Z'
+
+  const handleTimerOnDelete = ()=>{
+    setTimerTask(null);
+    setIsTimerRunning(false)   
+  }
 
   // For timer
   useEffect(() => {
@@ -160,7 +165,7 @@ if (!isAuthenticated) {
       <div>
         {uid ? (
           <>
-            <ToDoAndAppts userId={uid} day={day} month={month} year={year} start={start} end={end} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} />
+            <ToDoAndAppts userId={uid} day={day} month={month} year={year} start={start} end={end} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} isRunning={isTimerRunning} pomoTask={timerTask} setRunning={handleTimerOnDelete} />
             {showFocusTime && (
             <>
                <div style={overlayStyles}>

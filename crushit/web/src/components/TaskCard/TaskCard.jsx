@@ -22,7 +22,7 @@ const UPDATE_TASK_MUTATION = gql`
   }
 `
 
-const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updateTaskInList, group}) => {
+const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updateTaskInList, group, isRunning, pomoTask, setRunning, updateTaskListOnChange}) => {
 
   const taskNotesTextStyle = {
     fontFamily: 'DM Sans',
@@ -132,8 +132,14 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updat
       const response = await deleteTask({
         variables: { taskId: task.id },
       });
-
-      onDelete(task.id);
+      if(isRunning){
+        if(pomoTask.id === task.id){
+          setRunning(false);
+        }
+      }
+      updateTaskListOnChange(task, group)
+      // onDelete(task.id);
+      
     } catch (error) {
       console.error('Error deleting task:', error);
     }

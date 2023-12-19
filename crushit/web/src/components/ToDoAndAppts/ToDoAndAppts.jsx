@@ -11,7 +11,7 @@ import ToDo from '../ToDo/ToDo';
 import Appointments from '../Appointments/Appointments';
 import { useTheme } from '../ThemeContext/ThemeContext';
 
-const ToDoAndAppts = ({userId, day, month, year, start, end, toggleFocusTime, setFocusTask}) => {
+const ToDoAndAppts = ({userId, day, month, year, start, end, toggleFocusTime, setFocusTask, isRunning, pomoTask, setRunning}) => {
   const {theme} = useTheme();
 
   const today = new Date();
@@ -196,7 +196,7 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, toggleFocusTime, se
                 <img src="https://drive.google.com/uc?export=view&id=1psd6NBXctlxs7lN-5CJpXSCylzaWHVg1"/>
               </button>
             </div>
-            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} theme={theme} tasks={tasks} setTasks={setTasks}/>
+            <ToDo userId={userId} day={selectedDay} month={selectedMonth} year={selectedYear} formVisibility={formVisibility} toggleFormVisibility={toggleFormVisibility} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} theme={theme} tasks={tasks} setTasks={setTasks} isRunning={isRunning} pomoTask={pomoTask} setRunning={setRunning} />
           </div>
 
           {/* Appointments Section */}

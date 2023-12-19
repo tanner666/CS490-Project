@@ -86,7 +86,7 @@ const UPDATE_TASK_MUTATION = gql`
 `
 
 //ToDo is the parent task component, responsible for organizing and managing task groups and task cards
-const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, toggleFocusTime, setFocusTask, tasks, setTasks}) => {
+const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, toggleFocusTime, setFocusTask, tasks, setTasks, isRunning, pomoTask, setRunning}) => {
   const {theme} = useTheme();
   //console.log("UserId in ToDo: ", userId);
   const { data, loading, error, refetch } = useQuery(GetUserTasksOnDate, { variables: { userId, day, month, year }});
@@ -142,6 +142,7 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
   }, [data]);
 
   useEffect(() => {
+    console.log("Tasks updated")
     Object.keys(tasks).forEach((group) => {
       tasks[group].forEach((task) => {
 
@@ -280,6 +281,12 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
   };
 
 
+  const setTasksGroup = (taskList, group)=>{
+    setTasks((prevTasks) => ({
+     ...prevTasks,
+      [group]: taskList,
+    }));
+  }
 
   return (
     <div className={`todo-container ${theme === 'dark' ? 'bg-gray-800 text-white' : (theme === 'winter' ? 'bg-transparent text-white': 'bg-light-gray text-gray-900')}`}>
@@ -290,9 +297,9 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
       )}
         <div className={`p-6 my-2 w-full max-w-[98%] rounded-lg shadow-sm ${theme === 'dark' ? 'bg-gray-700' : (theme === 'winter' ? 'bg-transparent-blue': 'bg-white')} overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100`} style={{ height: "72vh" }}>
         <DragDropContext onDragEnd={handleOnDragEnd}>
-          <TaskGroup groupTitle="Top Priority" tasks={tasks["TopPriority"]} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList}/>
-          <TaskGroup groupTitle="Important" tasks={tasks.Important} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList}/>
-          <TaskGroup groupTitle="Other" tasks={tasks.Other} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList}/>
+          <TaskGroup groupTitle="Top Priority" tasks={tasks["TopPriority"]} setTasksGroup={setTasksGroup} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList} isRunning={isRunning} pomoTask={pomoTask} setRunning={setRunning} />
+          <TaskGroup groupTitle="Important" tasks={tasks.Important} setTasksGroup={setTasksGroup} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList} isRunning={isRunning} pomoTask={pomoTask} setRunning={setRunning}/>
+          <TaskGroup groupTitle="Other" tasks={tasks.Other} setTasksGroup={setTasksGroup} onStatusChange={handleStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList} isRunning={isRunning} pomoTask={pomoTask} setRunning={setRunning}/>
         </DragDropContext>
       </div>
     </div>
