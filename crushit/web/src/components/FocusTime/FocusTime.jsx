@@ -239,7 +239,9 @@ const FocusTime = ({ userId, onClose, task, isPomoRunning, timerSeconds, setTime
 
     setIsPomoRunning(!isPomoRunning)
     setIsTimerRunning(!isTimerRunning);
-    setIsTimerStarted(true);  }
+    setIsTimerStarted(true);
+    
+   }
 
   const taskNameTextStyle = {
     fontFamily: 'DM Sans',

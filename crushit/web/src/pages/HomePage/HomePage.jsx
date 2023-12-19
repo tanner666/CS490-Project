@@ -64,7 +64,8 @@ if (!isAuthenticated) {
       setIsTimerRunning(false);
         console.log("Pomos completed");
         // toggle focus timer for selected task
-        toggleFocusTime(timerTask, timerTask.pomodoroTimers)
+        if(!showFocusTime)
+          toggleFocusTime(timerTask, timerTask.pomodoroTimers)
         // setPomosCompleted(pomosCompleted+1);
         // console.log("Pomos completed: ", pomosCompleted);
         // updateTask({variables: {id: task.id, input: {pomodorosCompleted: task.pomodorosCompleted+1}}});
