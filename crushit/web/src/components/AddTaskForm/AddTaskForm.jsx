@@ -3,7 +3,6 @@ import {useMutation} from '@redwoodjs/web';
 import { useTheme } from '../ThemeContext/ThemeContext';
 
 
-
 const CREATE_TASK_MUTATION = gql`
    mutation createTask($input: CreateTaskInput!) {
     createTask(input: $input) {

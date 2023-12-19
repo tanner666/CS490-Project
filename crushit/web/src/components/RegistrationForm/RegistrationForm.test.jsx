@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import { render, fireEvent, waitFor, screen } from '@redwoodjs/testing/web';
 import RegistrationForm from './RegistrationForm';
 import { signUp } from 'src/auth';
 import { navigate } from '@redwoodjs/router';
@@ -39,7 +39,7 @@ describe('RegistrationForm', () => {
 
     fireEvent.change(getByLabelText(/email\/username/i), { target: { value: 'test79798@example.com' } });
     const passwordInput = container.querySelector('#password');
-    fireEvent.change(passwordInput, { target: { value: 'passwordpassword1' } });    
+    fireEvent.change(passwordInput, { target: { value: 'passwordpassword1' } });
     fireEvent.change(getByLabelText(/confirm password/i), { target: { value: 'passwordpassword2' } });
     fireEvent.click(getByRole('button', { name: /sign up/i }));
 
@@ -53,7 +53,7 @@ describe('RegistrationForm', () => {
 
     fireEvent.change(getByLabelText(/email\/username/i), { target: { value: 'hammy59@gmail.com' } });
     const passwordInput = container.querySelector('#password');
-    fireEvent.change(passwordInput, { target: { value: 'passwordpassword1' } });    
+    fireEvent.change(passwordInput, { target: { value: 'passwordpassword1' } });
     fireEvent.change(getByLabelText(/confirm password/i), { target: { value: 'passwordpassword1' } });
     fireEvent.click(getByRole('button', { name: /sign up/i }));
 
@@ -64,19 +64,19 @@ describe('RegistrationForm', () => {
 
   it('displays an error on registration failure', async () => {
     signUp.mockRejectedValue(new Error('Registration failed'));
-  
+
     const { container, getByLabelText, getByRole, getByTestId } = render(<ThemeProvider><RegistrationForm /></ThemeProvider>);
-  
+
     fireEvent.change(getByLabelText(/email\/username/i), { target: { value: 'jester' } });
     const passwordInput = container.querySelector('#password');
     fireEvent.change(passwordInput, { target: { value: 'passwordpassword1' } });
     fireEvent.change(getByLabelText(/confirm password/i), { target: { value: 'passwordpassword1' } });
     fireEvent.click(getByRole('button', { name: /sign up/i }));
-  
+
     await waitFor(() => {
       const errorMessage = screen.getByText(/Registration failed\. Please check your credentials\./i);
       expect(errorMessage).toBeInTheDocument();
     });
   });
-  
+
 });

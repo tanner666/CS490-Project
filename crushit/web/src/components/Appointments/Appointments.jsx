@@ -147,7 +147,6 @@ const Appointments = ({start, end, uid, tasks}) => {
 
   const getNextTask = () => {
     let nextTask = null;
-    console.log("STuff: " + taskIndices.TopPriority + ":" + tasks.TopPriority.length);
     if (taskIndices.TopPriority < tasks.TopPriority.length) {
       nextTask = tasks.TopPriority[taskIndices.TopPriority];
       taskIndices.TopPriority = taskIndices.TopPriority + 1;

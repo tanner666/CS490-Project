@@ -1,12 +1,11 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@redwoodjs/testing/web';
 import '@testing-library/jest-dom';
 import PasswordField from './PasswordField';
 import { ThemeProvider } from '../ThemeContext/ThemeContext';
 
-//tests for updating fields in the settingsForm test
 describe('PasswordField Component', () => {
-  const mockHandleCurrentPasswordChange = jest.fn((e) => e.target.value);
+  const mockHandleCurrentPasswordChange = jest.fn();
   const mockHandleNewPasswordChange = jest.fn();
   const mockHandleConfirmNewPasswordChange = jest.fn();
 
@@ -25,10 +24,25 @@ describe('PasswordField Component', () => {
       </ThemeProvider>
     );
 
-    expect(screen.getByLabelText(/Current Password/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/New Password/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Confirm Password/i)).toBeInTheDocument();
+    // Check if password fields are rendered
+    const currentPasswordField = screen.getByLabelText(/Current Password/i);
+    const newPasswordField = screen.getByLabelText(/New Password/i);
+    const confirmNewPasswordField = screen.getByLabelText(/Confirm Password/i);
+
+    expect(currentPasswordField).toBeInTheDocument();
+    expect(newPasswordField).toBeInTheDocument();
+    expect(confirmNewPasswordField).toBeInTheDocument();
+
+    // Simulate user input
+    fireEvent.change(currentPasswordField, { target: { value: 'newcurrentpassword' } });
+    fireEvent.change(newPasswordField, { target: { value: 'newpassword' } });
+    fireEvent.change(confirmNewPasswordField, { target: { value: 'newpassword' } });
+
+    // Check if handlers are called
+    expect(mockHandleCurrentPasswordChange).toHaveBeenCalledTimes(1);
+    expect(mockHandleNewPasswordChange).toHaveBeenCalledTimes(1);
+    expect(mockHandleConfirmNewPasswordChange).toHaveBeenCalledTimes(1);
   });
 
+  // Additional tests can be added here to cover other scenarios and interactions
 });
-
