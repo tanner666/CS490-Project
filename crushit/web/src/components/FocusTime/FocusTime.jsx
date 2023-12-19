@@ -23,34 +23,56 @@ const GET_USER = gql`
 `
 
 
-const FocusTime = ({ userId, onClose, task }) => {
+const FocusTime = ({ userId, onClose, task, isPomoRunning, timerSeconds, setTimerSeconds, setIsPomoRunning, setPomoTask, pomoTask, isTimerPomo, setIsTimerPomo}) => {
   const { data, loading, error } = useQuery(GET_USER, { variables: { firebaseUid: userId} });
   const [selectedOption, setSelectedOption] = useState('pomodoro');
-  const [timerSeconds, setTimerSeconds] = useState(25*60); // Initial timer duration for Pomodoro in seconds
+
   const [pomodoroTimer, setPomodoroTimer] = useState(25 * 60)
   const [shortTimer, setShortTimer] = useState(5 * 60); // Initial timer duration for Pomodoro in seconds
   const [longTimer, setLongTimer] = useState(15 * 60); // Initial timer duration for Pomodoro in seconds
 
-  console.log("TimerSeconds:", timerSeconds);
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  // console.log("TimerSeconds:", timerSeconds);
+  const [isTimerRunning, setIsTimerRunning] = useState(isPomoRunning);
+
   const [isEditingNotes, setIsEditingNotes] = useState(false);
   const [notes, setNotes] = useState('');
+
   const [pomosCompleted, setPomosCompleted] = useState(0);
   const [pomoTimers, setPomoTimers] = useState(0);
   const [taskName, setTaskName] = useState('');
   const [updateTask] = useMutation(UPDATE_TASK_MUTATION);
+
   const [isTimerStarted, setIsTimerStarted] = useState(false);
+
+  const [displaySeconds, setDisplaySeconds] = useState(timerSeconds);
 
   useEffect(() => {
     if (data && data.user){
-      setTimerSeconds(data.user.pomodoroLength * 60);
+
       setPomodoroTimer(data.user.pomodoroLength * 60);
       setShortTimer(data.user.pomodoroShort * 60);
       setLongTimer(data.user.pomodoroLong * 60);
-      console.log("POmos compo:", task.id);
+      setDisplaySeconds(getInitialTimerDuration(selectedOption));
+      // setTimerSeconds(getInitialTimerDuration(selectedOption));
+      // console.log("POmos compo:", task.id);
       setPomosCompleted(task.pomodorosCompleted);
+
+      setIsTimerRunning(isPomoRunning);
+      if(isTimerRunning){
+        console.log("Timer Task", pomoTask == task)
+        if(pomoTask==task)
+          setTimerSeconds(timerSeconds);
+          setDisplaySeconds(timerSeconds);
+      }
     }
   }, [data]);
+
+  useEffect(()=>{
+    if(!isTimerRunning){
+      setDisplaySeconds(getInitialTimerDuration(selectedOption));
+      setTimerSeconds(getInitialTimerDuration(selectedOption)); 
+    }
+  })
 
   useEffect(() => {
     if (task != undefined){
@@ -58,9 +80,34 @@ const FocusTime = ({ userId, onClose, task }) => {
       setNotes(task.description);
       setPomoTimers(task.pomodoroTimers);
       setTaskName(task.taskName);
+
       console.log('task 2', task)
     }
   }, [task]);
+
+  useEffect(() => {
+    if(pomoTask != task){
+      switch(selectedOption){
+        case 'pomodoro':  return setDisplaySeconds(pomodoroTimer)
+        case 'short':     return setDisplaySeconds(shortTimer)
+        case 'long':      return setDisplaySeconds(longTimer)
+      }
+    }else{
+      setDisplaySeconds(timerSeconds)
+      if(timerSeconds == 0){
+        setIsTimerRunning(false);
+        setIsTimerStarted(false);
+        if (isTimerPomo){
+          setIsTimerPomo(false)
+          setPomosCompleted(pomosCompleted+1);
+          updateTask({variables: {id: task.id, input: {pomodorosCompleted: task.pomodorosCompleted+1, pomodoroTimers: task.pomodoroTimers-1}}});
+          handleOptionClick("shortBreak");
+          setPomoTask(null);
+        }
+      }
+    }
+
+  },[timerSeconds])
 
   const containerStyle = {
     position: 'absolute',
@@ -153,6 +200,7 @@ const FocusTime = ({ userId, onClose, task }) => {
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     console.log("Time: ", getInitialTimerDuration(option))
+    setDisplaySeconds(getInitialTimerDuration(option));
     setTimerSeconds(getInitialTimerDuration(option));
     setIsTimerRunning(false);
     setIsTimerStarted(false);
@@ -172,9 +220,26 @@ const FocusTime = ({ userId, onClose, task }) => {
   };
 
   const handleStartStopClick = () => {
-    setIsTimerRunning(!isTimerRunning);
-    setIsTimerStarted(true);
+    if(!pomoTask){
+      setIsTimerPomo(selectedOption == "pomodoro");
+      console.log("Can set Pomo Task")
+      setPomoTask(task);
+      startstoptimer();
+    }else{
+      console.log("Pomo task set", pomoTask == task)
+      if(pomoTask == task){
+        startstoptimer();
+      }else{
+        alert("Other task running: "+pomoTask.taskName)
+      }
+    }
   };
+
+  const startstoptimer = () => {
+
+    setIsPomoRunning(!isPomoRunning)
+    setIsTimerRunning(!isTimerRunning);
+    setIsTimerStarted(true);  }
 
   const taskNameTextStyle = {
     fontFamily: 'DM Sans',
@@ -308,30 +373,30 @@ const FocusTime = ({ userId, onClose, task }) => {
 
   const finishTime = getFinishTime(timerSeconds);
 
-  useEffect(() => {
-    let timer;
+  // useEffect(() => {
+  //   let timer;
 
-    if (isTimerRunning && timerSeconds > 0) {
-      timer = setInterval(() => {
-        setTimerSeconds((prevSeconds) => prevSeconds - 1);
-      }, 1000);
-    }else if(isTimerRunning && timerSeconds == 0){
-      setIsTimerRunning(false);
-      setIsTimerStarted(false);
-      if (selectedOption == "pomodoro"){
-        setPomosCompleted(pomosCompleted+1);
-        console.log("Pomos completed: ", pomosCompleted);
-        updateTask({variables: {id: task.id, input: {pomodorosCompleted: task.pomodorosCompleted+1}}});
+  //   if (isTimerRunning && timerSeconds > 0) {
+  //     timer = setInterval(() => {
+  //       setTimerSeconds((prevSeconds) => prevSeconds - 1);
+  //     }, 1000);
+  //   }else if(isTimerRunning && timerSeconds == 0){
+  //     setIsTimerRunning(false);
+  //     setIsTimerStarted(false);
+  //     if (selectedOption == "pomodoro"){
+  //       setPomosCompleted(pomosCompleted+1);
+  //       console.log("Pomos completed: ", pomosCompleted);
+  //       updateTask({variables: {id: task.id, input: {pomodorosCompleted: task.pomodorosCompleted+1}}});
 
-        handleOptionClick("shortBreak");
-      }
-      //setIsTimerRunning(true);
-    }
+  //       handleOptionClick("shortBreak");
+  //     }
+  //     //setIsTimerRunning(true);
+  //   }
 
-    return () => {
-      clearInterval(timer);
-    };
-  }, [isTimerRunning, timerSeconds]);
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, [isTimerRunning, timerSeconds]);
 
   // if (!task) {
   //   return (
@@ -373,9 +438,9 @@ const FocusTime = ({ userId, onClose, task }) => {
       </div>
       <div style={{ textAlign: 'center' }}>
         <div style={optionBoxStyle}>
-          <div style={timerStyle}>{formatTime(timerSeconds)}</div>
+          <div style={timerStyle}>{formatTime(displaySeconds)}</div>
           <button data-testid="stopStart" id="stopStart" style={startStopButtonStyle} onClick={handleStartStopClick}>
-            {isTimerRunning ? 'Stop' : 'Start'}
+            {isTimerRunning ? pomoTask == task ? 'Stop':'Start': 'Start'}
           </button>
         </div>
       </div>

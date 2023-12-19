@@ -162,7 +162,10 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updat
     }
   };
   const handleToggleFocusTime = () => {
-    toggleFocusTime(task); // Call the toggleFocusTime function from props
+    console.log("Focus time count",pomodoroCount);
+    // if(pomodoroCount != 0){
+      toggleFocusTime(task, pomodoroCount); // Call the toggleFocusTime function from props
+    // }
   };
   return (
     <div className="p-2 my-3 mx-auto w-[94%] rounded-lg shadow-sm bg-white font-dm font-bold">

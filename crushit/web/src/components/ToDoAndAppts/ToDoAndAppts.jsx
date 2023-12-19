@@ -147,7 +147,6 @@ const ToDoAndAppts = ({userId, day, month, year, start, end, toggleFocusTime, se
 
   const [formVisibility, setFormVisibility] = useState(false);
   const toggleFormVisibility = () => {
-    console.log('toggleFormVisibility', formVisibility);
     setFormVisibility(prevState => !prevState);
   };
 
