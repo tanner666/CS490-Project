@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent } from '@redwoodjs/testing/web'
 
 import '@testing-library/jest-dom'
 import { ThemeProvider } from '../ThemeContext/ThemeContext'

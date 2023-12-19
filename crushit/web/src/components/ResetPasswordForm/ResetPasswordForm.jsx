@@ -96,50 +96,50 @@ const ResetPasswordForm = () => {
             </div>
           )}
 
-          <div className="mb-6">
-        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="newPassword">
-          New Password
-        </label>
-        <div className="relative">
-          <input
-            className="shadow appearance-none border rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
-            id="newPassword"
-            type={showPassword ? 'text' : 'password'}
-            placeholder="New Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-              <img
-          	src="https://drive.google.com/uc?id=1Js4L7DAzkvl-TCPZ2GQi7R7z8TAI26_L"
-          	alt={showPassword ? "Hide Password" : "Show Password"}
-          	className="absolute top-2 right-2 cursor-pointer"
-          	style={{ width: '18px', height: '18px' }}
-          	onClick={setShowPassword}
-              />
-        </div>
-      </div>
-      <div className="mb-6">
-        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="confirmNewPassword">
-          Confirm New Password
-        </label>
-        <div className="relative">
-          <input
-            className="shadow appearance-none border rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
-            id="confirmNewPassword"
-            type={showConfirmPassword ? 'text' : 'password'}
-            placeholder="Confirm New Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-              <img
-          	src="https://drive.google.com/uc?id=1Js4L7DAzkvl-TCPZ2GQi7R7z8TAI26_L"
-          	alt={showConfirmPassword ? "Hide Password" : "Show Password"}
-          	className="absolute top-2 right-2 cursor-pointer"
-          	style={{ width: '18px', height: '18px' }}
-          	onClick={setConfirmPassword}
-              />
-        </div>
-      </div>
+<div className="mb-6">
+  <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="newPassword">
+    New Password
+  </label>
+  <div className="relative">
+    <input
+      className="shadow appearance-none border rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
+      id="newPassword"
+      type={showPassword ? 'text' : 'password'}
+      placeholder="New Password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+    />
+    <img
+      src="https://drive.google.com/uc?id=1Js4L7DAzkvl-TCPZ2GQi7R7z8TAI26_L"
+      alt={showPassword ? "Hide Password" : "Show Password"}
+      className="absolute top-2 right-2 cursor-pointer"
+      style={{ width: '18px', height: '18px' }}
+      onClick={toggleShowPassword}
+    />
+  </div>
+</div>
+<div className="mb-6">
+  <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="confirmNewPassword">
+    Confirm New Password
+  </label>
+  <div className="relative">
+    <input
+      className="shadow appearance-none border rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
+      id="confirmNewPassword"
+      type={showConfirmPassword ? 'text' : 'password'}
+      placeholder="Confirm New Password"
+      value={confirmPassword}
+      onChange={(e) => setConfirmPassword(e.target.value)}
+    />
+    <img
+      src="https://drive.google.com/uc?id=1Js4L7DAzkvl-TCPZ2GQi7R7z8TAI26_L"
+      alt={showConfirmPassword ? "Hide Password" : "Show Password"}
+      className="absolute top-2 right-2 cursor-pointer"
+      style={{ width: '18px', height: '18px' }}
+      onClick={toggleShowConfirmPassword}
+    />
+  </div>
+</div>
 
           <div className="flex items-center justify-center">
             <button

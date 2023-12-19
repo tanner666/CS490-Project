@@ -1,9 +1,8 @@
 import React from 'react'
-//import { render, screen, waitFor, fireEvent } from '@redwoodjs/testing/web'
+import { render, screen, waitFor, fireEvent } from '@redwoodjs/testing/web'
 import LoginForm from './LoginForm'
 import {useAuth} from 'src/auth'
 import { ThemeProvider } from '../ThemeContext/ThemeContext';
-import { render, fireEvent, waitFor } from '@testing-library/react';
 import { signIn } from 'src/auth';
 import { navigate } from '@redwoodjs/router';
 
@@ -69,7 +68,7 @@ describe('LoginForm', () => {
   });
 
   it('navigates to forgot-password page on clicking Forgot Password', () => {
-    const { getByText } = render(<LoginForm />);
+    const { getByText } = render(<ThemeProvider><LoginForm /></ThemeProvider>);
     fireEvent.click(getByText(/forgot password/i));
     expect(navigate).toHaveBeenCalledWith('/forgot-password');
   });
