@@ -164,20 +164,27 @@ const ToDo = ({ userId, day, month, year, formVisibility, toggleFormVisibility, 
   }, [tasks]);
 
   const saveTimerCount = async (task, pomodoroCount) => {
-    if(pomodoroCount > 0){
-      const pomodoros = task.pomodoro ? [...task.pomodoro] : []
-      if (pomodoroCount-task.pomodoroTimers > 0) {
-        for (let i = 0; i < pomodoroCount-task.pomodoroTimers; i++) {
-          pomodoros.push({ pomodoro: 30, short: 5, long: 15, userId: task.createdBy, taskId: task.id })
+    
+    const diff = task.pomodoroTimers - task.pomodorosCompleted;
+  
+    if (pomodoroCount !== diff) {
+      if (pomodoroCount > diff) {
+        const pomodoros = task.pomodoro ? [...task.pomodoro] : [];
+        for (let i = 0; i < pomodoroCount - diff; i++) {
+          pomodoros.push({ pomodoro: 30, short: 5, long: 15, userId: task.createdBy, taskId: task.id });
         }
+  
+        const newTimers = task.pomodoroTimers + (pomodoroCount - diff);
+        console.log("NEW TIMERS", newTimers, diff, pomodoroCount)
+        await updateTasks({ variables: { id: task.id, input: { pomodoroTimers: newTimers, pomodoro: pomodoros } } });
+      } else {
+        const newTimers = task.pomodoroTimers - (diff - pomodoroCount);
+        console.log("NEW TIMERS2", newTimers, diff, pomodoroCount)
 
+        await updateTasks({ variables: { id: task.id, input: { pomodoroTimers: newTimers } } });
       }
-      console.log(pomodoros)
-      await updateTasks({ variables: { id: task.id, input: { pomodoroTimers: pomodoroCount, pomodoro: pomodoros } } })
-    }else{
-      await updateTasks({ variables: { id: task.id, input: { pomodoroTimers: pomodoroCount} } })
     }
-  }
+  };
 
   //need to retrieve info from useState and/or database for this
   const addTask = (group, newTask) => {

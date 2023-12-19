@@ -100,7 +100,7 @@ const FocusTime = ({ userId, onClose, task, isPomoRunning, timerSeconds, setTime
         if (isTimerPomo){
           setIsTimerPomo(false)
           setPomosCompleted(pomosCompleted+1);
-          updateTask({variables: {id: task.id, input: {pomodorosCompleted: task.pomodorosCompleted+1, pomodoroTimers: task.pomodoroTimers-1}}});
+          updateTask({variables: {id: task.id, input: {pomodorosCompleted: task.pomodorosCompleted+1}}});
           handleOptionClick("shortBreak");
           setPomoTask(null);
         }

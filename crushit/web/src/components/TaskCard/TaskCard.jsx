@@ -53,7 +53,8 @@ const TaskCard = ({ task, onStatusChange, saveTimerCount, toggleFocusTime, updat
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isTaskInfoVisible, setTaskInfoVisible] = useState(true);
   const statuses = ['Not Started', 'In Progress', 'Complete', 'Rolled Over'];
-  const [pomodoroCount, setPomodoroCount] = useState(task.pomodoroTimers);
+  const [pomodoroCount, setPomodoroCount] = useState(task.pomodoroTimers - task.pomodorosCompleted);
+  // console.log("POMO COUNT AND TIMETRs",task, task.pomodoroTimers, task.pomodorosCompleted,task.pomodoroTimers - task.pomodorosCompleted );
   const [showButtons, setShowButtons] = useState(false);
   const [imageSrc, setImageSrc] = useState('https://i.imgur.com/ALJOHMN.png');
   const [imageSize, setImageSize] = useState({ width: 16, height: 16 });
