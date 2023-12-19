@@ -3,8 +3,22 @@ import ThemeToggle from '../ThemeToggle/ThemeToggle'
 import { useTheme } from '../ThemeContext/ThemeContext'
 import { Droppable, Draggable } from "react-beautiful-dnd"
 
-const TaskGroup = ({groupTitle, tasks, onStatusChange, saveTimerCount, toggleFocusTime, updateTaskInList}) => {
+const TaskGroup = ({groupTitle, tasks, onStatusChange, saveTimerCount, toggleFocusTime, updateTaskInList, isRunning, pomoTask, setRunning, setTasksGroup}) => {
   const theme= useTheme();
+
+  const updateTaskListOnChange = (task, group) => {
+    const updatedTasks = [];
+    // const taskIndex = updatedTasks[group].findIndex((t) => t.id === task.id);
+    console.log("DELETING TASK", updatedTasks, tasks, task)
+      console.log("DELETING TASK")
+      for (const key in tasks) {
+        if(tasks[key].id != task.id) {
+          updatedTasks.push(tasks[key])
+        }
+      }
+      // Update the 'tasks' state with the modified tasks object
+      setTasksGroup(updatedTasks, group);
+  }
 
   return (
     <Droppable droppableId={groupTitle.replace(/\s+/g, '')}>
@@ -16,7 +30,7 @@ const TaskGroup = ({groupTitle, tasks, onStatusChange, saveTimerCount, toggleFoc
         <Draggable key={task.id.toString()} draggableId={task.id.toString()} index={task.taskOrder}>
         {(dragProvided) => (
           <div {...dragProvided.draggableProps} {...dragProvided.dragHandleProps} ref={dragProvided.innerRef}  >
-          <TaskCard task={task} onStatusChange={onStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList} group={groupTitle.replace(/\s+/g, '')} />
+          <TaskCard task={task} onStatusChange={onStatusChange} saveTimerCount={saveTimerCount} toggleFocusTime={toggleFocusTime} updateTaskInList={updateTaskInList} group={groupTitle.replace(/\s+/g, '')} isRunning={isRunning} pomoTask={pomoTask} setRunning={setRunning} updateTaskListOnChange={updateTaskListOnChange} />
           </div>
         )}
       </Draggable>

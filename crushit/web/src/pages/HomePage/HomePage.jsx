@@ -11,12 +11,22 @@ const HomePage = () => {
   const [uid, setUID] = useState('');
   const [showFocusTime, setShowFocusTime] = useState(false); // State to control visibility
   const [FocusTask, setFocusTask] = useState(null);
+  const [pomoAvailable, setPomoAvailable] = useState(false);
+
+  const [timerValue, setTimerValue] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [timerTask, setTimerTask] = useState(null);
+  const [isTimerPomo, setIsTimerPomo] = useState(false)
+
+  const [timerSeconds, setTimerSeconds] = useState(0); // Initial timer duration for Pomodoro in seconds
+
+
 
   const isAuthenticated = localStorage.getItem('isAuthenticated');
-console.log("Is Authenticated: ", isAuthenticated);
+  console.log("Is Authenticated: ", isAuthenticated);
 
 if (!isAuthenticated) {
-        //console.log("Google sign in, code: ", code);
+        console.log("Google sign in, code: ");
    return <AuthorizeCell></AuthorizeCell>
   }
 
@@ -41,17 +51,61 @@ if (!isAuthenticated) {
   //const start = '2023-12-04T12:00:00Z'
   //const end = '2023-12-05T12:00:00Z'
 
+  const handleTimerOnDelete = ()=>{
+    setTimerTask(null);
+    setIsTimerRunning(false)   
+  }
+
+  // For timer
+  useEffect(() => {
+    let timer;
+    console.log("Timer seconds:", timerSeconds);
+
+    if (isTimerRunning && timerSeconds > 0) {
+      timer = setInterval(() => {
+        setTimerSeconds((prevSeconds) => prevSeconds - 1);
+      }, 1000);
+    }else if(isTimerRunning && timerSeconds == 0){
+      setIsTimerRunning(false);
+        console.log("Pomos completed");
+        // toggle focus timer for selected task
+        if(!showFocusTime)
+          toggleFocusTime(timerTask, timerTask.pomodoroTimers)
+        // setPomosCompleted(pomosCompleted+1);
+        // console.log("Pomos completed: ", pomosCompleted);
+        // updateTask({variables: {id: task.id, input: {pomodorosCompleted: task.pomodorosCompleted+1}}});
+
+        // handleOptionClick("shortBreak");
+      
+      //setIsTimerRunning(true);
+    }
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [isTimerRunning, timerSeconds]);
+
+  const handleStartTimer = (timeVal) => {
+    setIsTimerRunning(true);
+  };
+
+  const handleSelectTask = (task) => {
+    setSelectedTask(task);
+    setShowFocusTime(true);
+  };
+
 
   useEffect(() => {
-
+    console.log('uid:', uid);
     getUserUid()
       .then((uid) => {
         setUID(uid);
       })
       .catch((error) => {
-        console.error('Errorm:', error);
+        console.log('Errorm:', error);
       });
   }, []);
+
   useEffect(() => {
     console.log('current focus,', FocusTask)
   },[FocusTask]);
@@ -61,7 +115,9 @@ if (!isAuthenticated) {
   };
 
 
-  const toggleFocusTime = (task) => {
+  const toggleFocusTime = (task, pomoCount) => {
+    // console.log('POMO COUNT', pomoCount);
+    setPomoAvailable(pomoCount > 0);
     setFocusTask(task);
     setShowFocusTime(prevState => !prevState); // Toggle the state of showFocusTime
   };
@@ -109,11 +165,12 @@ if (!isAuthenticated) {
       <div>
         {uid ? (
           <>
-            <ToDoAndAppts userId={uid} day={day} month={month} year={year} start={start} end={end} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} />
+            <ToDoAndAppts userId={uid} day={day} month={month} year={year} start={start} end={end} toggleFocusTime={toggleFocusTime} setFocusTask={setFocusTask} isRunning={isTimerRunning} pomoTask={timerTask} setRunning={handleTimerOnDelete} />
             {showFocusTime && (
             <>
                <div style={overlayStyles}>
-                 <FocusTime userId={uid} onClose={handleClose} task={FocusTask} />
+                 <FocusTime userId={uid} onClose={handleClose} task={FocusTask} isPomoRunning={isTimerRunning} timerSeconds={timerSeconds} setTimerSeconds={setTimerSeconds} setIsPomoRunning={setIsTimerRunning} setPomoTask={setTimerTask} pomoTask={timerTask} isTimerPomo={isTimerPomo} setIsTimerPomo={setIsTimerPomo}></FocusTime>
+                 {/* handleSelectTask={handleSelectTask} selectedTask={selectedTask} */}
                </div>
             </>
           )}

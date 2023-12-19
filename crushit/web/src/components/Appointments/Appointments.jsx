@@ -147,6 +147,7 @@ const Appointments = ({start, end, uid, tasks}) => {
 
   const getNextTask = () => {
     let nextTask = null;
+    // console.log("STuff: " + taskIndices.TopPriority + ":" + tasks.TopPriority.length);
     if (taskIndices.TopPriority < tasks.TopPriority.length) {
       nextTask = tasks.TopPriority[taskIndices.TopPriority];
       taskIndices.TopPriority = taskIndices.TopPriority + 1;
@@ -187,7 +188,7 @@ const Appointments = ({start, end, uid, tasks}) => {
               (
                 (() => {
                   const task = getNextTask();
-                  console.log(task);
+                  {/* console.log(task); */}
                   if (task) {
                     return (
                       <div className={`${compareTime(parseTimeString(time, 0), parseTimeString(time, 1)) ? 'bg-transparent-blue' : 'bg-white'} border-2 border-bar-grey mt-2 mb-[-25px] p-2}`}>
